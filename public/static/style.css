@@ -1,1 +1,239 @@
-h1 { font-family: Arial, Helvetica, sans-serif; }
+/* ══════════════════════════════════════════════
+   노후설계 가이드 — 커스텀 스타일
+   ══════════════════════════════════════════════ */
+
+/* 폰트 */
+* { box-sizing: border-box; }
+body { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; }
+
+/* ── 스크롤바 ──────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+/* ── 선택 색상 ─────────────────────────────── */
+::selection { background: #bbf7d0; color: #14532d; }
+
+/* ── 애드센스 슬롯 CLS 방지 ────────────────── */
+.ad-slot {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.ad-slot--leaderboard  { min-height: 90px;  }
+.ad-slot--rectangle   { min-height: 250px; }
+.ad-slot--square      { min-height: 250px; }
+.ad-slot--in-article  { min-height: 280px; }
+
+/* ── 아티클 본문 스타일 ─────────────────────── */
+.prose-article {
+  color: #374151;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+.prose-article h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f0fdf4;
+}
+.prose-article h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 1.5rem 0 0.75rem;
+}
+.prose-article p {
+  margin: 1rem 0;
+  line-height: 1.85;
+}
+.prose-article strong {
+  font-weight: 700;
+  color: #111827;
+}
+.prose-article blockquote {
+  border-left: 4px solid #4ade80;
+  background: #f0fdf4;
+  padding: 0.75rem 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+/* 테이블 */
+.prose-article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.prose-article table thead tr {
+  background: #166a47;
+  color: white;
+}
+.prose-article table thead th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.prose-article table tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+.prose-article table tbody td {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #374151;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* 리스트 */
+.prose-article ul {
+  margin: 1rem 0;
+  padding: 0;
+  list-style: none;
+}
+.prose-article ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  font-size: 0.9rem;
+}
+.prose-article ol {
+  margin: 1rem 0;
+  padding-left: 1.25rem;
+}
+.prose-article ol li {
+  padding: 0.2rem 0;
+  font-size: 0.9rem;
+}
+
+/* ── 라인 클램프 ────────────────────────────── */
+.line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* ── 애니메이션 ─────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.animate-spin { animation: spin 1s linear infinite; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.animate-pulse { animation: pulse 2s ease-in-out infinite; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
+
+/* ── 진단기 결과 ─────────────────────────────── */
+.diagnosis-score-ring {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+.diagnosis-score-ring svg {
+  transform: rotate(-90deg);
+}
+.diagnosis-score-ring .score-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 포스트 카드 호버 ─────────────────────────── */
+.post-card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.post-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+}
+
+/* ── 스티키 사이드바 ─────────────────────────── */
+.sticky-sidebar {
+  position: sticky;
+  top: 5.5rem;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+}
+
+/* ── 목차 활성 ───────────────────────────────── */
+.toc-item.active { color: #1a5c3e; font-weight: 600; }
+.toc-item.active::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 14px;
+  background: #1a5c3e;
+  border-radius: 2px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* ── 프린트 스타일 ───────────────────────────── */
+@media print {
+  header, footer, .ad-slot, .sticky-sidebar, #faq-container + * { display: none !important; }
+  .prose-article { font-size: 12pt; }
+  .prose-article h2 { font-size: 14pt; }
+  body { background: white; }
+}
+
+/* ── 모바일 최적화 ───────────────────────────── */
+@media (max-width: 768px) {
+  .prose-article { font-size: 0.95rem; }
+  .prose-article h2 { font-size: 1.1rem; }
+  .prose-article table { font-size: 0.8rem; }
+  .prose-article table th,
+  .prose-article table td { padding: 0.5rem 0.75rem; }
+}
+
+/* ── 4070 접근성: 큰 터치 영역 ──────────────── */
+@media (max-width: 768px) {
+  button, a {
+    min-height: 44px;
+  }
+  nav a {
+    min-height: auto;
+  }
+}
+
+/* ── 진단 결과 그라데이션 ────────────────────── */
+.grade-A { background: linear-gradient(135deg, #059669, #10b981); }
+.grade-B { background: linear-gradient(135deg, #0284c7, #38bdf8); }
+.grade-C { background: linear-gradient(135deg, #d97706, #fbbf24); }
+.grade-D { background: linear-gradient(135deg, #dc2626, #f87171); }
+
+/* 상황별 탭 전환 애니메이션 */
+#situation-posts {
+  transition: opacity 0.2s ease;
+}
+#situation-posts.loading {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* 관리자 코드 블록 */
+code {
+  font-family: 'Fira Code', 'Consolas', monospace;
+  background: #f1f5f9;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
