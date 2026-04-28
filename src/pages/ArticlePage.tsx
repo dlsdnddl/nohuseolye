@@ -409,6 +409,16 @@ function markdownToHtml(markdown: string): string {
       continue
     }
 
+    // ── 위젯 태그 [[WIDGET:xxx]] ──────────────────────────────────────
+    if (/^\[\[WIDGET:(.+)\]\]$/.test(trimmed)) {
+      if (mode !== 'none') flushMode()
+      const widgetId = trimmed.match(/^\[\[WIDGET:(.+)\]\]$/)![1]
+      if (widgetId === 'income-calculator') {
+        result.push(buildIncomeCalculatorWidget())
+      }
+      continue
+    }
+
     // ── 인용구 ───────────────────────────────────────────────────────
     if (trimmed.startsWith('> ')) {
       if (mode !== 'none') flushMode()
@@ -485,4 +495,164 @@ function markdownToHtml(markdown: string): string {
   if (mode !== 'none') flushMode()
 
   return result.join('\n')
+}
+
+// ─── 소득인정액 계산기 위젯 HTML ──────────────────────────────────────────
+function buildIncomeCalculatorWidget(): string {
+  return `
+<div class="my-8 rounded-2xl border-2 border-primary-100 overflow-hidden shadow-md" id="income-calc-widget">
+
+  <!-- 위젯 헤더 -->
+  <div class="bg-gradient-to-r from-primary-700 to-primary-600 px-6 py-4 flex items-center gap-3">
+    <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+      <i class="fas fa-calculator text-white text-base"></i>
+    </div>
+    <div>
+      <p class="text-primary-200 text-xs font-semibold">2026 기준 · 무료 계산기</p>
+      <h3 class="text-white font-extrabold text-base leading-tight">소득인정액 간편 계산기</h3>
+    </div>
+    <span class="ml-auto text-xs bg-white/20 text-white px-2.5 py-1 rounded-full font-semibold">참고용</span>
+  </div>
+
+  <!-- 입력 폼 -->
+  <div class="bg-white px-6 py-6" id="ic-form">
+
+    <!-- STEP 1: 소득 -->
+    <div class="mb-5">
+      <p class="text-xs font-extrabold text-primary-700 uppercase tracking-wide mb-3 flex items-center gap-1.5">
+        <span class="w-5 h-5 rounded-full bg-primary-100 text-primary-700 text-xs flex items-center justify-center font-bold">1</span>
+        소득 입력
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">월 근로소득 <span class="text-gray-400 font-normal">(직장·사업 등)</span></label>
+          <div class="relative">
+            <input type="number" id="ic-labor" min="0" max="2000" placeholder="0"
+              oninput="calcIncome()"
+              class="w-full pl-3 pr-12 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-50 transition-all"/>
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">만원</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1">110만원 공제 후 70% 반영</p>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">월 기타소득 <span class="text-gray-400 font-normal">(임대·이자 등)</span></label>
+          <div class="relative">
+            <input type="number" id="ic-other-income" min="0" max="2000" placeholder="0"
+              oninput="calcIncome()"
+              class="w-full pl-3 pr-12 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-50 transition-all"/>
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">만원</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1">전액 반영</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: 재산 -->
+    <div class="mb-5">
+      <p class="text-xs font-extrabold text-primary-700 uppercase tracking-wide mb-3 flex items-center gap-1.5">
+        <span class="w-5 h-5 rounded-full bg-primary-100 text-primary-700 text-xs flex items-center justify-center font-bold">2</span>
+        재산 입력
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">일반재산 <span class="text-gray-400 font-normal">(주택·토지 공시가)</span></label>
+          <div class="relative">
+            <input type="number" id="ic-property" min="0" max="200000" placeholder="0"
+              oninput="calcIncome()"
+              class="w-full pl-3 pr-12 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-50 transition-all"/>
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">만원</span>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">금융재산 <span class="text-gray-400 font-normal">(예금·주식 등)</span></label>
+          <div class="relative">
+            <input type="number" id="ic-finance" min="0" max="200000" placeholder="0"
+              oninput="calcIncome()"
+              class="w-full pl-3 pr-12 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-50 transition-all"/>
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">만원</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1">2,000만원 공제 후 반영</p>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">차량가액 <span class="text-gray-400 font-normal">(시가표준액)</span></label>
+          <div class="relative">
+            <input type="number" id="ic-car" min="0" max="10000" placeholder="0"
+              oninput="calcIncome()"
+              class="w-full pl-3 pr-12 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-50 transition-all"/>
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">만원</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1">전액 소득환산 (월 100%÷12)</p>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">거주 지역</label>
+          <select id="ic-region" onchange="calcIncome()"
+            class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-50 transition-all bg-white">
+            <option value="대도시">대도시 (서울·광역시·특례시)</option>
+            <option value="중소도시">중소도시 (그 외 시 지역)</option>
+            <option value="농어촌">농어촌 (군 지역)</option>
+          </select>
+          <p class="text-xs text-gray-400 mt-1">기본재산액 공제에 사용</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 가구 유형 -->
+    <div class="mb-6">
+      <p class="text-xs font-extrabold text-primary-700 uppercase tracking-wide mb-3 flex items-center gap-1.5">
+        <span class="w-5 h-5 rounded-full bg-primary-100 text-primary-700 text-xs flex items-center justify-center font-bold">3</span>
+        가구 유형
+      </p>
+      <div class="flex gap-3">
+        <label class="flex items-center gap-2 cursor-pointer flex-1 border-2 border-gray-200 rounded-xl px-4 py-3 hover:border-primary-300 transition-all has-checked:border-primary-500 has-checked:bg-primary-50" id="ic-single-label">
+          <input type="radio" name="ic-household" value="single" id="ic-single" checked onchange="calcIncome()" class="accent-primary-600"/>
+          <span class="text-sm font-semibold text-gray-700">단독가구</span>
+          <span class="ml-auto text-xs text-gray-400">기준 247만원</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer flex-1 border-2 border-gray-200 rounded-xl px-4 py-3 hover:border-primary-300 transition-all has-checked:border-primary-500 has-checked:bg-primary-50" id="ic-couple-label">
+          <input type="radio" name="ic-household" value="couple" id="ic-couple" onchange="calcIncome()" class="accent-primary-600"/>
+          <span class="text-sm font-semibold text-gray-700">부부가구</span>
+          <span class="ml-auto text-xs text-gray-400">기준 395.2만원</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 실시간 계산 결과 미니 요약 -->
+    <div id="ic-live" class="bg-gray-50 rounded-xl px-5 py-4 mb-5 transition-all">
+      <div class="grid grid-cols-3 gap-2 text-center text-xs">
+        <div>
+          <p class="text-gray-400 mb-1">소득평가액</p>
+          <p class="font-extrabold text-gray-800 text-sm" id="ic-live-income">—</p>
+        </div>
+        <div class="border-x border-gray-200">
+          <p class="text-gray-400 mb-1">재산환산액</p>
+          <p class="font-extrabold text-gray-800 text-sm" id="ic-live-asset">—</p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-1">소득인정액</p>
+          <p class="font-extrabold text-primary-700 text-sm" id="ic-live-total">—</p>
+        </div>
+      </div>
+    </div>
+
+    <button onclick="runIncomeCalc()"
+      class="w-full py-3.5 bg-primary-700 hover:bg-primary-600 active:scale-95 text-white font-bold rounded-xl text-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+      <i class="fas fa-search-dollar"></i>
+      기초연금 수급 가능 여부 확인하기
+    </button>
+  </div>
+
+  <!-- 결과 패널 (초기 숨김) -->
+  <div id="ic-result" class="hidden bg-white border-t-2 border-dashed border-gray-100 px-6 py-6">
+    <!-- JS로 동적 렌더링 -->
+  </div>
+
+  <!-- 주의 문구 -->
+  <div class="bg-amber-50 border-t border-amber-100 px-5 py-3 flex items-start gap-2">
+    <i class="fas fa-info-circle text-amber-500 mt-0.5 flex-shrink-0 text-xs"></i>
+    <p class="text-xs text-amber-700 leading-relaxed">
+      이 계산기는 <strong>2026년 보건복지부 기준</strong>을 바탕으로 한 참고용 도구입니다. 실제 수급 여부는 재산 형태·부채·공제 등 세부 조건에 따라 달라질 수 있으므로, 정확한 확인은 주민센터 또는 <a href="https://www.bokjiro.go.kr" target="_blank" class="underline font-semibold">복지로</a>에서 받으세요.
+    </p>
+  </div>
+</div>
+`
 }
