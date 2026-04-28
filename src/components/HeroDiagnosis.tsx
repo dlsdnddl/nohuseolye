@@ -110,7 +110,7 @@ export const HeroDiagnosis = () => {
                 >
                   <i class="fas fa-chart-pie mr-2"></i>노후자금 충분지수 진단하기
                 </button>
-                <p class="text-center text-xs text-gray-400">국민연금공단 2024년 산정 기준 적용 · 참고용 결과입니다</p>
+                <p class="text-center text-xs text-gray-400">국민연금공단 2026년 A값(319만원) 기준 적용 · 참고용 결과입니다</p>
               </div>
             </div>
 

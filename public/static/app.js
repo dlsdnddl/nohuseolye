@@ -5,18 +5,20 @@
 // ─── 노후자금 충분지수 진단기 ─────────────────────────────────────────────────
 
 /**
- * 국민연금 예상 수령액 계산 (2024 기준)
- * 공식: (A값 + B값) × P/20 × 1.0
- * A값: 2024년 전체 가입자 평균소득 = 약 298만원
- * 간략화 공식 적용
+ * 국민연금 예상 수령액 계산 (2026년 기준)
+ * 공식: (A값 + B값) × P × 소득대체율보정계수
+ * A값: 2026년 전체 가입자 평균소득 = 319만 3,511원 (보건복지부 고시)
+ * 소득대체율: 2026년 43% 적용
+ * 간략화 공식: (A + B) × P × 0.00215 (43% / 20년 = 2.15%/년 기준)
  */
 function calcNationalPension(workYears, avgIncome) {
-  const A = 298; // 2024년 기준 전체 가입자 평균소득 (만원)
+  const A = 319.3511; // 2026년 기준 전체 가입자 평균소득 (만원, 보건복지부 고시)
   const B = avgIncome;
-  const P = workYears; // 가입기간
-  // 기본 산출식: (A + B) × P × 0.005 (간략 공식)
-  const base = (A + B) * P * 0.005;
-  return Math.round(base);
+  const P = workYears; // 가입기간(년)
+  // 2026년 소득대체율 43% 기반 간략 산출식
+  // 기준산식: (A+B)/2 × (P/20) × 0.43 를 만원 단위로 환산
+  const base = ((A + B) / 2) * (P / 20) * 0.43;
+  return Math.round(base * 10) / 10; // 소수점 1자리
 }
 
 /**
@@ -153,7 +155,7 @@ function buildResultHTML({ score, gradeInfo, pension, monthlyExpense, shortfall,
     <div class="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-5">
       <p class="text-xs text-amber-700 leading-relaxed">
         <i class="fas fa-info-circle mr-1"></i>
-        위 수치는 <strong>국민연금공단 2024년 산정 기준</strong>을 바탕으로 한 <strong>참고용 예상값</strong>입니다.
+        위 수치는 <strong>국민연금공단 2026년 A값(319만원)·소득대체율(43%) 기준</strong>을 바탕으로 한 <strong>참고용 예상값</strong>입니다.
         실제 수령액은 납부 이력·소득 변동에 따라 달라집니다.
         정확한 금액은 <a href="https://www.nps.or.kr" target="_blank" class="underline font-semibold">국민연금공단 공식 홈페이지</a>에서 확인하세요.
       </p>
@@ -198,12 +200,12 @@ function resetDiagnosis() {
 
 // 포스트 데이터 (서버 렌더링 된 카드와 연동)
 const ALL_POSTS_DATA = [
-  { id: '1', slug: 'national-pension-amount-calculation', situation: '은퇴 5년 전', type: 'pillar',     title: '국민연금 수령액, 내가 얼마나 받을 수 있을까?', category: 'pension-asset', readTime: 8 },
-  { id: '2', slug: 'housing-pension-calculation',         situation: '은퇴 5년 전', type: 'comparison', title: '주택연금 계산기 2024 — 내 집으로 매달 얼마나?',   category: 'pension-asset', readTime: 10 },
-  { id: '3', slug: 'basic-pension-eligibility',           situation: '은퇴 후 생활비 걱정될 때', type: 'checklist', title: '기초연금 자격조건 2024', category: 'pension-asset', readTime: 7 },
-  { id: '4', slug: 'long-term-care-grade-application',    situation: '부모님 돌봄이 필요할 때',   type: 'pillar',     title: '장기요양등급 신청 방법 총정리',               category: 'pension-asset', readTime: 9 },
-  { id: '5', slug: 'retirement-5years-checklist',         situation: '은퇴 5년 전', type: 'checklist', title: '은퇴 5년 전 반드시 해야 할 7가지 체크리스트',     category: 'pension-asset', readTime: 6 },
-  { id: '6', slug: 'medical-expense-support-parents',     situation: '부모님 병원비 걱정될 때',   type: 'comparison', title: '부모님 병원비 지원제도 5가지',                 category: 'pension-asset', readTime: 8 },
+  { id: '1', slug: 'national-pension-amount-calculation', situation: '은퇴 5년 전', type: 'pillar',     title: '국민연금 수령액 2026 완벽 계산법 — A값 319만원 기준', category: 'pension-asset', readTime: 8 },
+  { id: '2', slug: 'housing-pension-calculation',         situation: '은퇴 5년 전', type: 'comparison', title: '주택연금 계산기 2026 — 3월부터 3.13% 인상, 내 집으로 얼마?', category: 'pension-asset', readTime: 9 },
+  { id: '3', slug: 'basic-pension-eligibility',           situation: '은퇴 후 생활비 걱정될 때', type: 'checklist', title: '기초연금 자격조건 2026 — 월 최대 34만 9,700원', category: 'pension-asset', readTime: 7 },
+  { id: '4', slug: 'long-term-care-grade-application',    situation: '부모님 돌봄이 필요할 때',   type: 'pillar',     title: '장기요양등급 신청 방법 2026 총정리 — 재가급여 한도 대폭 인상', category: 'care', readTime: 10 },
+  { id: '5', slug: 'retirement-5years-checklist',         situation: '은퇴 5년 전', type: 'checklist', title: '은퇴 5년 전 반드시 해야 할 7가지 체크리스트 (2026 최신)', category: 'pension-asset', readTime: 7 },
+  { id: '6', slug: 'medical-expense-support-parents',     situation: '부모님 병원비 걱정될 때',   type: 'comparison', title: '부모님 병원비 지원제도 2026 — 몰라서 못 받는 5가지', category: 'care', readTime: 9 },
 ];
 
 const TYPE_BADGE = {
@@ -358,11 +360,55 @@ function buildTOC() {
 // ─── 공유 기능 ────────────────────────────────────────────────────────────────
 
 function shareKakao() {
-  const url = encodeURIComponent(location.href);
-  const text = encodeURIComponent(document.title);
-  // 카카오 SDK가 없을 경우 링크 공유로 대체
-  const kakaoUrl = `https://story.kakao.com/s/share?url=${url}`;
-  window.open(kakaoUrl, '_blank', 'width=600,height=450');
+  // Kakao SDK 방식으로 공유 (SDK 로드 여부 확인)
+  if (typeof Kakao !== 'undefined' && Kakao.isInitialized()) {
+    Kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: document.title,
+        description: document.querySelector('meta[name="description"]')?.content || '노후설계 가이드 — 4070 연금·복지 실전 정보',
+        imageUrl: 'https://nohuseolye.pages.dev/static/favicon.svg',
+        link: {
+          mobileWebUrl: location.href,
+          webUrl: location.href
+        }
+      },
+      buttons: [
+        {
+          title: '글 보러가기',
+          link: {
+            mobileWebUrl: location.href,
+            webUrl: location.href
+          }
+        }
+      ]
+    });
+  } else {
+    // Kakao SDK 미로드 시 카카오톡 앱 URL 스킴으로 대체
+    const url = encodeURIComponent(location.href);
+    const text = encodeURIComponent(document.title + ' - ' + location.href);
+    // 모바일 환경: 카카오톡 앱 직접 공유
+    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      window.location.href = `kakaolink://send?text=${text}`;
+      // 앱이 없을 경우 카카오 링크 페이지로 fallback
+      setTimeout(() => {
+        window.open(`https://sharer.kakao.com/talk/friends/picker/link?app_key=KAKAO_APP_KEY&url=${url}`, '_blank');
+      }, 500);
+    } else {
+      // PC 환경: 링크 복사 후 안내
+      navigator.clipboard.writeText(location.href).then(() => {
+        showToast('링크가 복사됐어요! 카카오톡에 붙여넣기하세요 📋');
+      }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = location.href;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('링크가 복사됐어요! 카카오톡에 붙여넣기하세요 📋');
+      });
+    }
+  }
 }
 
 function copyLink() {
