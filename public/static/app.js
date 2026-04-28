@@ -360,55 +360,57 @@ function buildTOC() {
 // ─── 공유 기능 ────────────────────────────────────────────────────────────────
 
 function shareKakao() {
-  // Kakao SDK 방식으로 공유 (SDK 로드 여부 확인)
-  if (typeof Kakao !== 'undefined' && Kakao.isInitialized()) {
-    Kakao.Share.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: document.title,
-        description: document.querySelector('meta[name="description"]')?.content || '노후설계 가이드 — 4070 연금·복지 실전 정보',
-        imageUrl: 'https://nohuseolye.pages.dev/static/favicon.svg',
-        link: {
-          mobileWebUrl: location.href,
-          webUrl: location.href
-        }
-      },
-      buttons: [
-        {
-          title: '글 보러가기',
-          link: {
-            mobileWebUrl: location.href,
-            webUrl: location.href
-          }
-        }
-      ]
-    });
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const pageUrl  = location.href;
+  const pageTitle = document.title;
+
+  if (isMobile) {
+    // ── 모바일: 카카오톡 앱 공유 인텐트 (앱 키 불필요)
+    // Android: 카카오톡 intent URL
+    // iOS: 카카오톡 앱이 설치된 경우 딥링크로 공유창 열기
+    const kakaoScheme = 'kakaotalk://forward?msg=' + encodeURIComponent(pageTitle + '\n' + pageUrl);
+    const anchor = document.createElement('a');
+    anchor.href = kakaoScheme;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+
+    // 앱이 없거나 실패 시 1초 후 링크 복사 fallback
+    setTimeout(() => {
+      // 페이지가 이동하지 않았으면 복사로 대체
+      _copyToClipboard(pageUrl);
+      showToast('카카오톡 앱이 없으면 링크를 복사해 카카오톡에 붙여넣기하세요 📋');
+    }, 1200);
   } else {
-    // Kakao SDK 미로드 시 카카오톡 앱 URL 스킴으로 대체
-    const url = encodeURIComponent(location.href);
-    const text = encodeURIComponent(document.title + ' - ' + location.href);
-    // 모바일 환경: 카카오톡 앱 직접 공유
-    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      window.location.href = `kakaolink://send?text=${text}`;
-      // 앱이 없을 경우 카카오 링크 페이지로 fallback
-      setTimeout(() => {
-        window.open(`https://sharer.kakao.com/talk/friends/picker/link?app_key=KAKAO_APP_KEY&url=${url}`, '_blank');
-      }, 500);
+    // ── PC: Web Share API 지원 시 사용 (Chrome 등)
+    if (navigator.share) {
+      navigator.share({ title: pageTitle, url: pageUrl }).catch(() => {});
     } else {
-      // PC 환경: 링크 복사 후 안내
-      navigator.clipboard.writeText(location.href).then(() => {
-        showToast('링크가 복사됐어요! 카카오톡에 붙여넣기하세요 📋');
-      }).catch(() => {
-        const ta = document.createElement('textarea');
-        ta.value = location.href;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        showToast('링크가 복사됐어요! 카카오톡에 붙여넣기하세요 📋');
-      });
+      // Web Share 미지원 → 링크 복사 + 안내
+      _copyToClipboard(pageUrl);
+      showToast('링크가 복사됐어요! 카카오톡에 붙여넣기해서 공유하세요 📋');
     }
   }
+}
+
+function _copyToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).catch(() => _fallbackCopy(text));
+  } else {
+    _fallbackCopy(text);
+  }
+}
+
+function _fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
 }
 
 function copyLink() {

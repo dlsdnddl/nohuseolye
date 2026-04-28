@@ -1,6 +1,5 @@
 import type { Post } from '../types'
 import { AdSlot } from '../components/AdSlot'
-import { PostCard } from '../components/PostCard'
 import { posts } from '../data/posts'
 
 interface ArticlePageProps {
@@ -18,6 +17,9 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
     { name: post.title, url: `/${post.category}/${post.slug}` },
   ]
 
+  // content에서 '이 글이 필요한 분' 섹션과 '3줄 요약' 섹션 추출
+  const { targetLines, summaryLines, bodyContent } = parseContentSections(post.content)
+
   return (
     <div class="max-w-6xl mx-auto px-4 py-10">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -26,7 +28,7 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
         <main class="lg:col-span-2">
 
           {/* 브레드크럼 */}
-          <nav class="flex items-center gap-2 text-sm text-gray-400 mb-6">
+          <nav class="flex items-center gap-2 text-sm text-gray-400 mb-6" aria-label="breadcrumb">
             {breadcrumbs.map((crumb, i) => (
               <span key={crumb.url} class="flex items-center gap-2">
                 {i < breadcrumbs.length - 1 ? (
@@ -63,7 +65,7 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
               {post.title}
             </h1>
 
-            <div class="flex items-center gap-4 text-sm text-gray-400">
+            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-400">
               <span><i class="fas fa-calendar-alt mr-1"></i>최초 작성: {post.publishedAt}</span>
               <span><i class="fas fa-sync-alt mr-1"></i>최종 업데이트: {post.updatedAt}</span>
               <span><i class="fas fa-clock mr-1"></i>약 {post.readTime}분</span>
@@ -72,38 +74,46 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
 
           {/* 이 글이 필요한 분 + 3줄 요약 */}
           <div class="bg-primary-50 border border-primary-100 rounded-2xl p-6 mb-8">
-            <h2 class="text-sm font-bold text-primary-700 mb-3 flex items-center gap-2">
-              <i class="fas fa-user-check"></i> 이 글이 필요한 분
-            </h2>
-            <ul class="space-y-1 text-sm text-gray-700 mb-5">
-              <li class="flex items-start gap-2"><span class="text-primary-500 mt-0.5">✓</span>{post.description.split('.')[0]}.</li>
-            </ul>
-            <div class="border-t border-primary-100 pt-4">
-              <h3 class="text-sm font-bold text-primary-700 mb-2 flex items-center gap-2">
-                <i class="fas fa-bolt"></i> 3줄 핵심 요약
-              </h3>
-              <div class="space-y-2 text-sm text-gray-700">
-                <div class="flex items-start gap-2">
-                  <span class="flex-shrink-0 w-5 h-5 rounded-full bg-primary-600 text-white text-xs flex items-center justify-center font-bold">1</span>
-                  <span>공식 기관 자료를 기반으로 한 정확한 정보입니다.</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <span class="flex-shrink-0 w-5 h-5 rounded-full bg-primary-600 text-white text-xs flex items-center justify-center font-bold">2</span>
-                  <span>개인 상황에 따라 실제 결과는 달라질 수 있습니다.</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <span class="flex-shrink-0 w-5 h-5 rounded-full bg-primary-600 text-white text-xs flex items-center justify-center font-bold">3</span>
-                  <span>중요한 결정 전에 해당 기관에 직접 확인하세요.</span>
+            {targetLines.length > 0 && (
+              <>
+                <h2 class="text-sm font-bold text-primary-700 mb-3 flex items-center gap-2">
+                  <i class="fas fa-user-check"></i> 이 글이 필요한 분
+                </h2>
+                <ul class="space-y-2 text-sm text-gray-700 mb-5">
+                  {targetLines.map((line, i) => (
+                    <li key={i} class="flex items-start gap-2">
+                      <span class="text-primary-500 mt-0.5 flex-shrink-0">✓</span>
+                      <span dangerouslySetInnerHTML={{ __html: inlineMarkdown(line) }} />
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            {summaryLines.length > 0 && (
+              <div class={targetLines.length > 0 ? 'border-t border-primary-100 pt-4' : ''}>
+                <h3 class="text-sm font-bold text-primary-700 mb-3 flex items-center gap-2">
+                  <i class="fas fa-bolt"></i> 3줄 핵심 요약
+                </h3>
+                <div class="space-y-2 text-sm text-gray-700">
+                  {summaryLines.map((line, i) => (
+                    <div key={i} class="flex items-start gap-2">
+                      <span class="flex-shrink-0 w-5 h-5 rounded-full bg-primary-600 text-white text-xs flex items-center justify-center font-bold">
+                        {i + 1}
+                      </span>
+                      <span dangerouslySetInnerHTML={{ __html: inlineMarkdown(line) }} />
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* 인아티클 광고 */}
           <AdSlot type="in-article" id="article-top-ad" className="mb-8" />
 
           {/* 본문 */}
-          <article class="prose-article" dangerouslySetInnerHTML={{ __html: markdownToHtml(post.content) }} />
+          <article class="prose-article" dangerouslySetInnerHTML={{ __html: markdownToHtml(bodyContent) }} />
 
           {/* 본문 중간 CTA */}
           {relatedPosts.length > 0 && (
@@ -159,12 +169,13 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
           {/* 공유 버튼 */}
           <div class="border-t border-gray-100 pt-6 mb-8">
             <p class="text-sm font-semibold text-gray-600 mb-3">이 글이 도움이 됐다면 공유해 주세요</p>
-            <div class="flex gap-3">
+            <div class="flex flex-wrap gap-3">
               <button
                 onclick="shareKakao()"
                 class="flex items-center gap-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 font-semibold text-sm rounded-lg transition-colors"
               >
-                <i class="fas fa-comment"></i> 카카오톡
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.69 2 11.25c0 2.91 1.82 5.47 4.58 6.96L5.5 21.5l4.32-2.89c.71.1 1.44.14 2.18.14 5.52 0 10-3.69 10-8.25S17.52 3 12 3z"/></svg>
+                카카오톡 공유
               </button>
               <button
                 onclick="copyLink()"
@@ -201,7 +212,7 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
                       <i id={`faq-icon-${i}`} class="fas fa-chevron-down text-gray-400 flex-shrink-0 transition-transform text-sm"></i>
                     </button>
                     <div id={`faq-answer-${i}`} class="hidden px-5 pb-4 bg-gray-50">
-                      <p class="text-sm text-gray-600 leading-relaxed">
+                      <p class="text-sm text-gray-600 leading-relaxed pt-3">
                         <span class="text-primary-600 font-bold mr-2">A.</span>{item.answer}
                       </p>
                     </div>
@@ -272,19 +283,206 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
   )
 }
 
-// 간단한 마크다운 → HTML 변환 (서버사이드)
+// ─── content 섹션 파서 ──────────────────────────────────────────────────────
+// content에서 '이 글이 필요한 분', '3줄 요약', 본문(body) 세 부분으로 분리
+function parseContentSections(content: string) {
+  const lines = content.split('\n')
+  const targetLines: string[] = []
+  const summaryLines: string[] = []
+  const bodyLines: string[] = []
+
+  type Section = 'none' | 'target' | 'summary' | 'body'
+  let section: Section = 'none'
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    const trimmed = line.trim()
+
+    if (trimmed === '## 이 글이 필요한 분') { section = 'target'; continue }
+    if (trimmed === '## 3줄 요약') { section = 'summary'; continue }
+    // 세 번째 ## 섹션부터 body
+    if (/^## .+/.test(trimmed) && section !== 'none') { section = 'body' }
+
+    if (section === 'target') {
+      if (trimmed.startsWith('- ')) targetLines.push(trimmed.slice(2))
+    } else if (section === 'summary') {
+      const m = trimmed.match(/^\d+\.\s+(.+)/)
+      if (m) summaryLines.push(m[1])
+    } else if (section === 'body') {
+      bodyLines.push(line)
+    }
+  }
+
+  return {
+    targetLines,
+    summaryLines,
+    bodyContent: bodyLines.join('\n'),
+  }
+}
+
+// ─── 인라인 마크다운 (bold, 링크) ─────────────────────────────────────────
+function inlineMarkdown(text: string): string {
+  return text
+    .replace(/\[(.+?)\]\((https?:\/\/[^\)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-primary-600 underline hover:text-primary-800">$1</a>')
+    .replace(/\*\*(.+?)\*\*/g,
+      '<strong class="font-semibold text-gray-900">$1</strong>')
+}
+
+// ─── 마크다운 → HTML 변환 (본문 전용) ─────────────────────────────────────
 function markdownToHtml(markdown: string): string {
-  return markdown
-    .replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold text-gray-900 mt-10 mb-4 pb-2 border-b border-gray-100">$1</h2>')
-    .replace(/^### (.+)$/gm, '<h3 class="text-lg font-bold text-gray-800 mt-6 mb-3">$1</h3>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
-    .replace(/^\| (.+) \|$/gm, (line) => {
-      const cells = line.split('|').slice(1, -1).map(c => c.trim())
-      const isHeader = false
-      return `<tr>${cells.map(c => `<td class="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">${c}</td>`).join('')}</tr>`
-    })
-    .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-primary-300 bg-primary-50 pl-4 py-2 rounded-r-lg my-4 text-sm text-gray-600">$1</blockquote>')
-    .replace(/^- (.+)$/gm, '<li class="flex items-start gap-2 text-sm text-gray-700 my-1"><span class="text-primary-500 mt-1">•</span><span>$1</span></li>')
-    .replace(/\n\n/g, '</p><p class="text-gray-700 text-base leading-relaxed my-4">')
-    .replace(/^\d+\. (.+)$/gm, '<li class="text-sm text-gray-700 my-1 ml-4 list-decimal">$1</li>')
+  const lines = markdown.split('\n')
+  const result: string[] = []
+
+  type Mode = 'none' | 'table' | 'ul' | 'ol' | 'p'
+  let mode: Mode = 'none'
+  let tableHasHeader = false
+
+  const flushMode = () => {
+    if (mode === 'table') { result.push('</tbody></table></div>') }
+    else if (mode === 'ul') { result.push('</ul>') }
+    else if (mode === 'ol') { result.push('</ol>') }
+    else if (mode === 'p') { result.push('</p>') }
+    mode = 'none'
+    tableHasHeader = false
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const raw = lines[i]
+    const trimmed = raw.trim()
+
+    // ── 빈 줄 ────────────────────────────────────────────────────────
+    if (trimmed === '') {
+      if (mode !== 'none') flushMode()
+      continue
+    }
+
+    // ── H2 ──────────────────────────────────────────────────────────
+    if (/^## .+/.test(trimmed)) {
+      if (mode !== 'none') flushMode()
+      const text = trimmed.slice(3)
+      result.push(
+        `<h2 class="text-xl font-bold text-gray-900 mt-12 mb-4 pb-2 border-b-2 border-primary-100">${inlineMarkdown(text)}</h2>`
+      )
+      continue
+    }
+
+    // ── H3 ──────────────────────────────────────────────────────────
+    if (/^### .+/.test(trimmed)) {
+      if (mode !== 'none') flushMode()
+      const text = trimmed.slice(4)
+      result.push(
+        `<h3 class="text-base font-bold text-gray-800 mt-8 mb-3 flex items-center gap-2"><span class="w-1 h-5 bg-primary-500 rounded-full inline-block"></span>${inlineMarkdown(text)}</h3>`
+      )
+      continue
+    }
+
+    // ── 테이블 행 ────────────────────────────────────────────────────
+    if (/^\|.+\|$/.test(trimmed)) {
+      // 구분선 행 (|---|---| 형태) → 다음 행부터 tbody
+      if (/^\|[\s\-\|:]+\|$/.test(trimmed)) {
+        tableHasHeader = true
+        continue
+      }
+      const cells = trimmed.split('|').slice(1, -1).map(c => c.trim())
+
+      if (mode !== 'table') {
+        if (mode !== 'none') flushMode()
+        mode = 'table'
+        result.push('<div class="overflow-x-auto my-6 rounded-xl border border-gray-200 shadow-sm"><table class="w-full text-sm">')
+        result.push('<thead>')
+        result.push(
+          `<tr>${cells.map(c =>
+            `<th class="px-4 py-3 text-left text-xs font-bold text-white bg-primary-700 first:rounded-tl-xl last:rounded-tr-xl">${inlineMarkdown(c)}</th>`
+          ).join('')}</tr>`
+        )
+        result.push('</thead><tbody>')
+        tableHasHeader = true
+      } else {
+        // tbody 행
+        result.push(
+          `<tr class="even:bg-gray-50 hover:bg-primary-50 transition-colors">${cells.map(c =>
+            `<td class="px-4 py-3 text-sm text-gray-700 border-t border-gray-100">${inlineMarkdown(c)}</td>`
+          ).join('')}</tr>`
+        )
+      }
+      continue
+    }
+
+    // ── 인용구 ───────────────────────────────────────────────────────
+    if (trimmed.startsWith('> ')) {
+      if (mode !== 'none') flushMode()
+      const text = trimmed.slice(2)
+      result.push(
+        `<blockquote class="border-l-4 border-primary-400 bg-primary-50 pl-4 pr-3 py-3 rounded-r-xl my-5 text-sm text-gray-600 leading-relaxed">${inlineMarkdown(text)}</blockquote>`
+      )
+      continue
+    }
+
+    // ── 체크리스트 항목 (- [ ]) ───────────────────────────────────────
+    if (/^- \[[ x]\] /.test(trimmed)) {
+      if (mode !== 'ul') {
+        if (mode !== 'none') flushMode()
+        mode = 'ul'
+        result.push('<ul class="space-y-2 my-4">')
+      }
+      const checked = trimmed[3] === 'x'
+      const text = trimmed.slice(6)
+      result.push(
+        `<li class="flex items-start gap-2 text-sm text-gray-700">
+          <span class="flex-shrink-0 w-4 h-4 mt-0.5 rounded border-2 ${checked ? 'bg-primary-600 border-primary-600' : 'border-gray-300'} flex items-center justify-center">
+            ${checked ? '<i class="fas fa-check text-white text-xs"></i>' : ''}
+          </span>
+          <span>${inlineMarkdown(text)}</span>
+        </li>`
+      )
+      continue
+    }
+
+    // ── 비정렬 목록 (- ) ─────────────────────────────────────────────
+    if (/^- .+/.test(trimmed)) {
+      if (mode !== 'ul') {
+        if (mode !== 'none') flushMode()
+        mode = 'ul'
+        result.push('<ul class="space-y-2 my-4 pl-1">')
+      }
+      const text = trimmed.slice(2)
+      result.push(
+        `<li class="flex items-start gap-2 text-sm text-gray-700 leading-relaxed">
+          <span class="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-primary-500 mt-2"></span>
+          <span>${inlineMarkdown(text)}</span>
+        </li>`
+      )
+      continue
+    }
+
+    // ── 정렬 목록 (1. 2. 3.) ─────────────────────────────────────────
+    const olMatch = trimmed.match(/^(\d+)\. (.+)/)
+    if (olMatch) {
+      if (mode !== 'ol') {
+        if (mode !== 'none') flushMode()
+        mode = 'ol'
+        result.push('<ol class="space-y-2 my-4 pl-1">')
+      }
+      result.push(
+        `<li class="flex items-start gap-3 text-sm text-gray-700 leading-relaxed">
+          <span class="flex-shrink-0 w-5 h-5 rounded-full bg-primary-100 text-primary-700 text-xs font-bold flex items-center justify-center mt-0.5">${olMatch[1]}</span>
+          <span>${inlineMarkdown(olMatch[2])}</span>
+        </li>`
+      )
+      continue
+    }
+
+    // ── 일반 단락 ────────────────────────────────────────────────────
+    if (mode !== 'p') {
+      if (mode !== 'none') flushMode()
+      mode = 'p'
+      result.push('<p class="text-gray-700 text-base leading-relaxed my-4">')
+    }
+    result.push(inlineMarkdown(trimmed))
+  }
+
+  if (mode !== 'none') flushMode()
+
+  return result.join('\n')
 }

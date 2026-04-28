@@ -78,15 +78,6 @@ export const renderer = jsxRenderer(({ children, title, description, ogImage, js
       </head>
       <body class="font-sans bg-gray-50 text-gray-800 antialiased">
         {children}
-        {/* 카카오 SDK */}
-        <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
-          integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4"
-          crossorigin="anonymous"></script>
-        <script dangerouslySetInnerHTML={{__html: `
-          if (typeof Kakao !== 'undefined') {
-            Kakao.init('fe5cf1d21e98e8cc3a36dd52f7527e18');
-          }
-        `}} />
         {/* 공통 JS */}
         <script src="/static/app.js"></script>
       </body>

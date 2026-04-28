@@ -256,7 +256,7 @@ export const posts: Post[] = [
 
 ## 신청 방법
 
-- **온라인**: 복지로(www.bokjiro.go.kr) 또는 정부24
+- **온라인**: [복지로(bokjiro.go.kr)](https://www.bokjiro.go.kr) 또는 [정부24(gov.kr)](https://www.gov.kr)
 - **오프라인**: 주소지 관할 읍·면·동 주민센터 방문
 - **대리 신청**: 자녀 등 대리인도 위임장 지참 후 신청 가능
 
@@ -336,9 +336,9 @@ export const posts: Post[] = [
 ## 장기요양 신청부터 이용까지 4단계
 
 ### 1단계: 신청
-- 국민건강보험공단 지사 방문 또는 전화(1577-1000)
-- 복지로(www.bokjiro.go.kr) 온라인 신청
-- 정부24 온라인 신청
+- [국민건강보험공단](https://www.nhis.or.kr) 지사 방문 또는 전화(1577-1000)
+- [복지로(bokjiro.go.kr)](https://www.bokjiro.go.kr) 온라인 신청
+- [정부24(gov.kr)](https://www.gov.kr) 온라인 신청
 - **대상**: 65세 이상 노인 또는 65세 미만 노인성 질환자
 
 ### 2단계: 방문 조사
