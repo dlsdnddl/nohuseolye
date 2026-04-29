@@ -43,6 +43,8 @@ export const renderer = jsxRenderer(({ children, title, description, ogImage, js
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
         {/* Custom CSS */}
         <link rel="stylesheet" href="/static/style.css" />
+        {/* Google Search Console 소유권 확인 */}
+        <meta name="google-site-verification" content="a57r9VKSo4eR77ebK5nrIlr0-mCJYnpZSn-Oovxrte4" />
         {/* Google AdSense */}
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5237218812452624" crossorigin="anonymous"></script>
         <script dangerouslySetInnerHTML={{__html: `
