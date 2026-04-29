@@ -340,4 +340,47 @@ app.get('/care/:slug', (c) => {
   )
 })
 
+// ─── sitemap.xml ─────────────────────────────────────────────────────────────
+app.get('/sitemap.xml', (c) => {
+  const BASE = 'https://www.luckyu.co.kr'
+  const now = new Date().toISOString().split('T')[0]
+
+  const staticPages = [
+    { url: '/',              changefreq: 'weekly',  priority: '1.0' },
+    { url: '/pension-asset', changefreq: 'weekly',  priority: '0.8' },
+    { url: '/care',          changefreq: 'weekly',  priority: '0.8' },
+  ]
+
+  const postPages = posts.map(post => ({
+    url: `/${post.category}/${post.slug}`,
+    changefreq: 'monthly',
+    priority: post.featured ? '0.9' : '0.7',
+    lastmod: post.updatedAt || now,
+  }))
+
+  const allPages = [...staticPages, ...postPages]
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${allPages.map(p => `  <url>
+    <loc>${BASE}${p.url}</loc>
+    <lastmod>${p.lastmod || now}</lastmod>
+    <changefreq>${p.changefreq}</changefreq>
+    <priority>${p.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`
+
+  return c.text(xml, 200, { 'Content-Type': 'application/xml; charset=utf-8' })
+})
+
+// ─── robots.txt ───────────────────────────────────────────────────────────────
+app.get('/robots.txt', (c) => {
+  const txt = `User-agent: *
+Allow: /
+
+Sitemap: https://www.luckyu.co.kr/sitemap.xml`
+
+  return c.text(txt, 200, { 'Content-Type': 'text/plain; charset=utf-8' })
+})
+
 export default app
