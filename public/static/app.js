@@ -22,6 +22,125 @@ function calcNationalPension(workYears, avgIncome) {
 }
 
 /**
+ * 최적 수령 시기 계산
+ * - 출생연도별 노령연금 수급 개시 연령 반영 (1969년생 이후 → 65세)
+ * - 조기수령: 최대 5년 앞당김, 월 0.5% 감액 (연 6%)
+ * - 연기수령: 최대 5년 연기, 월 0.6% 증액 (연 7.2%)
+ * - 손익분기점 비교로 최적 시점 제안
+ */
+function calcOptimalReceiveAge(age, workYears, avgIncome) {
+  // 출생연도 추정 (현재 2026년 기준)
+  const birthYear = 2026 - age;
+  // 노령연금 기본 수급 개시 연령
+  let normalAge;
+  if (birthYear <= 1952) normalAge = 60;
+  else if (birthYear <= 1956) normalAge = 61;
+  else if (birthYear <= 1960) normalAge = 62;
+  else if (birthYear <= 1964) normalAge = 63;
+  else if (birthYear <= 1968) normalAge = 64;
+  else normalAge = 65; // 1969년생 이후
+
+  const basePension = calcNationalPension(workYears, avgIncome); // 기본 수령액(만원)
+
+  // 시나리오별 계산
+  const scenarios = [];
+
+  // 조기수령: 1~5년 앞당김 (가입기간 10년 이상 필요)
+  if (workYears >= 10) {
+    for (let early = 1; early <= 5; early++) {
+      const receiveAge = normalAge - early;
+      if (receiveAge < 55 || receiveAge <= age) continue; // 현재 나이보다 과거면 skip
+      const reductionRate = early * 6; // 연 6% 감액
+      const monthlyAmt = Math.round(basePension * (1 - reductionRate / 100) * 10) / 10;
+      // 조기 vs 정상 손익분기점: 줄어든 금액을 만회하는 월 수
+      const monthsEarly = early * 12; // 더 일찍 받는 개월 수
+      const monthlyDiff = basePension - monthlyAmt; // 월 차이
+      const breakEvenMonths = monthlyDiff > 0 ? Math.round((monthlyAmt * monthsEarly) / monthlyDiff) : 0;
+      const breakEvenAge = Math.round((normalAge + breakEvenMonths / 12) * 10) / 10;
+      scenarios.push({
+        type: 'early',
+        label: `조기수령 (${receiveAge}세)`,
+        receiveAge,
+        monthlyAmt,
+        reductionRate,
+        breakEvenAge,
+        note: `정상 대비 월 ${reductionRate}% 감액 → 손익분기: ${breakEvenAge}세`
+      });
+    }
+  }
+
+  // 정상수령
+  scenarios.push({
+    type: 'normal',
+    label: `정상수령 (${normalAge}세)`,
+    receiveAge: normalAge,
+    monthlyAmt: basePension,
+    reductionRate: 0,
+    breakEvenAge: null,
+    note: '기준 수령액'
+  });
+
+  // 연기수령: 1~5년 연기
+  for (let delay = 1; delay <= 5; delay++) {
+    const receiveAge = normalAge + delay;
+    const increaseRate = delay * 7.2; // 연 7.2% 증액
+    const monthlyAmt = Math.round(basePension * (1 + increaseRate / 100) * 10) / 10;
+    // 연기 vs 정상 손익분기점
+    const monthsDelay = delay * 12;
+    const monthlyDiff = monthlyAmt - basePension;
+    const breakEvenMonths = monthlyDiff > 0 ? Math.round((basePension * monthsDelay) / monthlyDiff) : 0;
+    const breakEvenAge = Math.round((receiveAge + breakEvenMonths / 12) * 10) / 10;
+    scenarios.push({
+      type: 'delay',
+      label: `연기수령 (${receiveAge}세)`,
+      receiveAge,
+      monthlyAmt,
+      increaseRate,
+      breakEvenAge,
+      note: `정상 대비 월 ${increaseRate.toFixed(1)}% 증액 → 손익분기: ${breakEvenAge}세`
+    });
+  }
+
+  // 최적 시나리오 판단 (기대수명 85세 기준 총수령액 비교)
+  const EXPECTED_DEATH_AGE = 85;
+  let bestScenario = null;
+  let bestTotal = -1;
+  scenarios.forEach(s => {
+    if (s.receiveAge >= EXPECTED_DEATH_AGE) return;
+    const totalMonths = (EXPECTED_DEATH_AGE - s.receiveAge) * 12;
+    const total = s.monthlyAmt * totalMonths;
+    if (total > bestTotal) {
+      bestTotal = total;
+      bestScenario = s;
+    }
+  });
+
+  return { normalAge, basePension, scenarios, bestScenario, birthYear };
+}
+
+/**
+ * 목표 연금액 달성을 위한 추가 납부 기간 계산
+ * - 현재 예상 수령액이 목표(생활비)에 미달 시, 몇 년 더 내야 목표를 달성하는지 계산
+ */
+function calcAdditionalYearsNeeded(currentYears, avgIncome, targetMonthly) {
+  const A = 319.3511;
+  const B = avgIncome;
+  // 목표 연금액을 달성하는 가입기간 역산
+  // target = (A+B)/2 × (P/20) × 0.43
+  // P = target × 20 / ((A+B)/2 × 0.43)
+  const targetYears = (targetMonthly * 20) / (((A + B) / 2) * 0.43);
+  const additionalYears = Math.max(0, Math.ceil(targetYears - currentYears));
+  const maxYears = Math.max(0, Math.min(additionalYears, 45 - currentYears)); // 최대 45년
+  const pensionAfterAdd = calcNationalPension(Math.min(currentYears + additionalYears, 45), avgIncome);
+  return {
+    additionalYears: maxYears,
+    targetYearsRaw: Math.ceil(targetYears),
+    pensionAfterAdd: Math.round(pensionAfterAdd * 10) / 10,
+    isAlreadyMet: targetMonthly <= calcNationalPension(currentYears, avgIncome)
+  };
+}
+
+/**
  * 노후자금 충분지수 계산
  * - 예상 국민연금 수령액 vs 목표 생활비 비율
  * - 추가 자산 여부, 주거 형태 등 가중치
@@ -78,11 +197,14 @@ function runDiagnosis() {
     const score = calcSufficiencyIndex(pension, monthlyExpense);
     const gradeInfo = getGrade(score);
     const shortfall = Math.max(0, monthlyExpense - pension);
-    const retirementAge = Math.max(65, 65 + Math.floor((65 - age) * 0.1));
+    // 최적 수령 시기 & 추가 납부 계산
+    const optimalInfo = calcOptimalReceiveAge(age, years, income);
+    const additionalInfo = calcAdditionalYearsNeeded(years, income, monthlyExpense);
 
     // 결과 HTML 생성
     result.innerHTML = buildResultHTML({
-      score, gradeInfo, pension, monthlyExpense, shortfall, age, years
+      score, gradeInfo, pension, monthlyExpense, shortfall, age, years,
+      optimalInfo, additionalInfo
     });
 
     loading.classList.add('hidden');
@@ -91,7 +213,7 @@ function runDiagnosis() {
   }, 1500);
 }
 
-function buildResultHTML({ score, gradeInfo, pension, monthlyExpense, shortfall, age, years }) {
+function buildResultHTML({ score, gradeInfo, pension, monthlyExpense, shortfall, age, years, optimalInfo, additionalInfo }) {
   const circumference = 2 * Math.PI * 48;
   const offset = circumference - (score / 100) * circumference;
 
@@ -150,6 +272,109 @@ function buildResultHTML({ score, gradeInfo, pension, monthlyExpense, shortfall,
         </span>
       </div>
     </div>
+
+    <!-- 최적 수령 시기 카드 -->
+    ${optimalInfo ? (() => {
+      const best = optimalInfo.bestScenario;
+      const normal = optimalInfo.scenarios.find(s => s.type === 'normal');
+      const isBestNormal = best && best.type === 'normal';
+      const isBestDelay = best && best.type === 'delay';
+      const bestColor = isBestDelay ? '#059669' : isBestNormal ? '#0284c7' : '#d97706';
+      const bestBg   = isBestDelay ? '#ecfdf5'  : isBestNormal ? '#eff6ff'  : '#fffbeb';
+
+      // 주요 시나리오 3개만 표시: 조기 1년, 정상, 연기 1년~2년
+      const showScenarios = optimalInfo.scenarios.filter(s =>
+        s.type === 'normal' ||
+        (s.type === 'early' && s.receiveAge === optimalInfo.normalAge - 1) ||
+        (s.type === 'delay' && (s.receiveAge === optimalInfo.normalAge + 1 || s.receiveAge === optimalInfo.normalAge + 3))
+      );
+
+      return `
+      <div class="rounded-xl border-2 mb-4 overflow-hidden" style="border-color:${bestColor}20; background:${bestBg}">
+        <div class="flex items-center gap-2 px-4 pt-4 pb-2">
+          <i class="fas fa-calendar-check" style="color:${bestColor}"></i>
+          <span class="text-sm font-extrabold" style="color:${bestColor}">최적 수령 시기</span>
+          ${ best ? `<span class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full text-white" style="background:${bestColor}">추천 ★ ${best.label}</span>` : '' }
+        </div>
+        <div class="px-4 pb-2">
+          <p class="text-xs text-gray-500 mb-3">기대수명 85세 기준 총 수령액이 가장 많은 시나리오를 추천합니다.</p>
+          <div class="space-y-2">
+            ${showScenarios.map(s => {
+              const isRec = best && s.receiveAge === best.receiveAge;
+              const sc = s.type === 'delay' ? '#059669' : s.type === 'normal' ? '#0284c7' : '#d97706';
+              const lifeTotal = Math.round(s.monthlyAmt * (85 - s.receiveAge) * 12);
+              return `
+              <div class="flex items-center gap-2 p-2.5 rounded-xl ${ isRec ? 'ring-2' : 'bg-white/60' }" style="${ isRec ? `ring-color:${sc}; background:white` : '' }">
+                <div class="w-2 h-2 rounded-full flex-shrink-0" style="background:${sc}"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-1">
+                    <span class="text-xs font-bold" style="color:${sc}">${s.label}</span>
+                    ${ isRec ? '<span class="text-xs text-white font-bold px-1.5 py-0.5 rounded" style="background:'+sc+'">추천</span>' : '' }
+                  </div>
+                  <span class="text-xs text-gray-400">${s.note}</span>
+                </div>
+                <div class="text-right flex-shrink-0">
+                  <div class="text-sm font-extrabold" style="color:${sc}">월 ${s.monthlyAmt.toLocaleString()}만원</div>
+                  <div class="text-xs text-gray-400">총 ${lifeTotal.toLocaleString()}만원</div>
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+        <div class="px-4 py-2 border-t" style="border-color:${bestColor}20">
+          <p class="text-xs text-gray-400"><i class="fas fa-info-circle mr-1"></i>정확한 수령 시기는 <a href="https://www.nps.or.kr" target="_blank" class="underline">국민연금공단</a>에서 확인하세요.</p>
+        </div>
+      </div>`;
+    })() : ''}
+
+    <!-- 몇 년 더 내야 할까 카드 -->
+    ${additionalInfo ? (() => {
+      if (additionalInfo.isAlreadyMet) {
+        return `
+        <div class="rounded-xl border border-green-200 bg-green-50 p-4 mb-4">
+          <div class="flex items-center gap-2 mb-1">
+            <i class="fas fa-check-circle text-green-600"></i>
+            <span class="text-sm font-extrabold text-green-700">몇 년 더 내야 할까?</span>
+          </div>
+          <p class="text-sm text-green-700">현재 납부 기간(${years}년)만으로 <strong>목표 생활비(${monthlyExpense}만원)를 이미 달성</strong>했습니다! 🎉</p>
+          <p class="text-xs text-green-500 mt-1">예상 수령액 <strong>${pension.toLocaleString()}만원</strong> ≥ 목표 생활비 <strong>${monthlyExpense.toLocaleString()}만원</strong></p>
+        </div>`;
+      } else if (additionalInfo.additionalYears === 0) {
+        return `
+        <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 mb-4">
+          <div class="flex items-center gap-2 mb-1">
+            <i class="fas fa-hourglass-half text-amber-600"></i>
+            <span class="text-sm font-extrabold text-amber-700">몇 년 더 내야 할까?</span>
+          </div>
+          <p class="text-sm text-amber-700">최대 납부 기간(45년)을 채워도 목표 생활비 달성이 어렵습니다.</p>
+          <p class="text-xs text-amber-500 mt-1">개인연금·퇴직연금 등 추가 노후 소득원을 검토해보세요.</p>
+        </div>`;
+      } else {
+        return `
+        <div class="rounded-xl border border-blue-200 bg-blue-50 p-4 mb-4">
+          <div class="flex items-center gap-2 mb-2">
+            <i class="fas fa-plus-circle text-blue-600"></i>
+            <span class="text-sm font-extrabold text-blue-700">몇 년 더 내야 할까?</span>
+          </div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-gray-600">현재 납부 기간</span>
+            <span class="font-bold text-gray-800">${years}년</span>
+          </div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-gray-600">목표 달성까지 추가 필요</span>
+            <span class="text-lg font-extrabold text-blue-700">+ ${additionalInfo.additionalYears}년</span>
+          </div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs text-gray-600">${years + additionalInfo.additionalYears}년 납부 후 예상 수령액</span>
+            <span class="font-extrabold text-blue-700">월 ${additionalInfo.pensionAfterAdd.toLocaleString()}만원</span>
+          </div>
+          <div class="w-full bg-blue-100 rounded-full h-2 mb-1">
+            <div class="bg-blue-500 h-2 rounded-full transition-all" style="width:${Math.min(100, Math.round((years / (years + additionalInfo.additionalYears)) * 100))}%"></div>
+          </div>
+          <p class="text-xs text-blue-400">${years}년 완료 / 목표 ${years + additionalInfo.additionalYears}년 (${Math.round((years / (years + additionalInfo.additionalYears)) * 100)}% 달성)</p>
+        </div>`;
+      }
+    })() : ''}
 
     <!-- 안내 -->
     <div class="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-5">
