@@ -120,23 +120,61 @@ function calcOptimalReceiveAge(age, workYears, avgIncome) {
 
 /**
  * 목표 연금액 달성을 위한 추가 납부 기간 계산
- * - 현재 예상 수령액이 목표(생활비)에 미달 시, 몇 년 더 내야 목표를 달성하는지 계산
+ * - 국민연금 제도적 납부 가능 연령 반영
+ *   · 의무가입: ~만 59세까지
+ *   · 임의계속가입: 60세~64세 (65세 미만까지)
+ *   · 실제 최대 납부 가능 나이: 64세 (만 64세 도달 시까지)
+ * - 나이(age)를 반드시 전달받아 제도적 한계 내에서 계산
  */
-function calcAdditionalYearsNeeded(currentYears, avgIncome, targetMonthly) {
+function calcAdditionalYearsNeeded(currentYears, avgIncome, targetMonthly, age) {
   const A = 319.3511;
   const B = avgIncome;
-  // 목표 연금액을 달성하는 가입기간 역산
-  // target = (A+B)/2 × (P/20) × 0.43
-  // P = target × 20 / ((A+B)/2 × 0.43)
-  const targetYears = (targetMonthly * 20) / (((A + B) / 2) * 0.43);
-  const additionalYears = Math.max(0, Math.ceil(targetYears - currentYears));
-  const maxYears = Math.max(0, Math.min(additionalYears, 45 - currentYears)); // 최대 45년
-  const pensionAfterAdd = calcNationalPension(Math.min(currentYears + additionalYears, 45), avgIncome);
+  const currentPension = calcNationalPension(currentYears, avgIncome);
+
+  // ① 이미 달성한 경우
+  if (targetMonthly <= currentPension) {
+    return {
+      status: 'already_met',
+      additionalYears: 0,
+      maxAdditionalYears: 0,
+      pensionAfterAdd: currentPension,
+      targetYearsRaw: currentYears,
+      isAlreadyMet: true
+    };
+  }
+
+  // ② 제도적으로 납부 가능한 최대 추가 기간 계산
+  // 최대 납부 가능 나이: 64세 (임의계속가입 포함, 65세 미만)
+  const MAX_CONTRIBUTION_AGE = 64;
+  const maxAdditionalByAge = Math.max(0, MAX_CONTRIBUTION_AGE - age); // 나이 기준 한계
+  const maxAdditionalByRule = Math.max(0, 45 - currentYears);          // 45년 상한 기준
+  const maxAdditional = Math.min(maxAdditionalByAge, maxAdditionalByRule); // 둘 중 작은 값
+
+  // ③ 목표 달성에 필요한 이론적 납부 기간 역산
+  // target = (A+B)/2 × (P/20) × 0.43  →  P = target × 20 / ((A+B)/2 × 0.43)
+  const targetYearsRaw = (targetMonthly * 20) / (((A + B) / 2) * 0.43);
+  const neededAdditional = Math.max(0, Math.ceil(targetYearsRaw - currentYears));
+
+  // ④ 제도적으로 달성 가능한지 판별
+  const canAchieve = neededAdditional <= maxAdditional;
+  const actualAdditional = Math.min(neededAdditional, maxAdditional);
+  const pensionAfterAdd = calcNationalPension(currentYears + actualAdditional, avgIncome);
+  const pensionAtMax    = calcNationalPension(currentYears + maxAdditional, avgIncome);
+
   return {
-    additionalYears: maxYears,
-    targetYearsRaw: Math.ceil(targetYears),
-    pensionAfterAdd: Math.round(pensionAfterAdd * 10) / 10,
-    isAlreadyMet: targetMonthly <= calcNationalPension(currentYears, avgIncome)
+    // 'achievable' | 'impossible_by_age' | 'impossible_by_cap'
+    status: canAchieve ? 'achievable'
+          : maxAdditional === 0 ? 'impossible_by_age'
+          : 'impossible_by_age',
+    additionalYears: actualAdditional,       // 실제 추가 납부 권장 기간
+    maxAdditionalYears: maxAdditional,        // 제도적으로 추가 가능한 최대 기간
+    neededAdditional,                         // 이론적으로 필요한 추가 기간
+    pensionAfterAdd: Math.round(pensionAfterAdd * 10) / 10,  // 추가 납부 후 예상 수령액
+    pensionAtMax:    Math.round(pensionAtMax * 10) / 10,     // 최대까지 납부 시 수령액
+    targetYearsRaw:  Math.ceil(targetYearsRaw),
+    maxContributeAge: Math.min(age + maxAdditional, MAX_CONTRIBUTION_AGE),
+    canAchieve,
+    isAlreadyMet: false
   };
 }
 
@@ -199,7 +237,7 @@ function runDiagnosis() {
     const shortfall = Math.max(0, monthlyExpense - pension);
     // 최적 수령 시기 & 추가 납부 계산
     const optimalInfo = calcOptimalReceiveAge(age, years, income);
-    const additionalInfo = calcAdditionalYearsNeeded(years, income, monthlyExpense);
+    const additionalInfo = calcAdditionalYearsNeeded(years, income, monthlyExpense, age);
 
     // 결과 HTML 생성
     result.innerHTML = buildResultHTML({
@@ -329,7 +367,10 @@ function buildResultHTML({ score, gradeInfo, pension, monthlyExpense, shortfall,
 
     <!-- 몇 년 더 내야 할까 카드 -->
     ${additionalInfo ? (() => {
-      if (additionalInfo.isAlreadyMet) {
+      const ai = additionalInfo;
+
+      // ── 케이스 1: 이미 목표 달성 ─────────────────────────────────────────
+      if (ai.status === 'already_met') {
         return `
         <div class="rounded-xl border border-green-200 bg-green-50 p-4 mb-4">
           <div class="flex items-center gap-2 mb-1">
@@ -339,20 +380,14 @@ function buildResultHTML({ score, gradeInfo, pension, monthlyExpense, shortfall,
           <p class="text-sm text-green-700">현재 납부 기간(${years}년)만으로 <strong>목표 생활비(${monthlyExpense}만원)를 이미 달성</strong>했습니다! 🎉</p>
           <p class="text-xs text-green-500 mt-1">예상 수령액 <strong>${pension.toLocaleString()}만원</strong> ≥ 목표 생활비 <strong>${monthlyExpense.toLocaleString()}만원</strong></p>
         </div>`;
-      } else if (additionalInfo.additionalYears === 0) {
-        return `
-        <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 mb-4">
-          <div class="flex items-center gap-2 mb-1">
-            <i class="fas fa-hourglass-half text-amber-600"></i>
-            <span class="text-sm font-extrabold text-amber-700">몇 년 더 내야 할까?</span>
-          </div>
-          <p class="text-sm text-amber-700">최대 납부 기간(45년)을 채워도 목표 생활비 달성이 어렵습니다.</p>
-          <p class="text-xs text-amber-500 mt-1">개인연금·퇴직연금 등 추가 노후 소득원을 검토해보세요.</p>
-        </div>`;
-      } else {
+
+      // ── 케이스 2: 더 납부해도 목표 달성 가능 ────────────────────────────
+      } else if (ai.status === 'achievable') {
+        const totalYears = years + ai.additionalYears;
+        const progressPct = Math.round((years / totalYears) * 100);
         return `
         <div class="rounded-xl border border-blue-200 bg-blue-50 p-4 mb-4">
-          <div class="flex items-center gap-2 mb-2">
+          <div class="flex items-center gap-2 mb-3">
             <i class="fas fa-plus-circle text-blue-600"></i>
             <span class="text-sm font-extrabold text-blue-700">몇 년 더 내야 할까?</span>
           </div>
@@ -362,16 +397,83 @@ function buildResultHTML({ score, gradeInfo, pension, monthlyExpense, shortfall,
           </div>
           <div class="flex items-center justify-between mb-2">
             <span class="text-xs text-gray-600">목표 달성까지 추가 필요</span>
-            <span class="text-lg font-extrabold text-blue-700">+ ${additionalInfo.additionalYears}년</span>
+            <span class="text-lg font-extrabold text-blue-700">+ ${ai.additionalYears}년</span>
           </div>
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs text-gray-600">${years + additionalInfo.additionalYears}년 납부 후 예상 수령액</span>
-            <span class="font-extrabold text-blue-700">월 ${additionalInfo.pensionAfterAdd.toLocaleString()}만원</span>
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs text-gray-600">${totalYears}년 납부 후 예상 수령액</span>
+            <span class="font-extrabold text-blue-700">월 ${ai.pensionAfterAdd.toLocaleString()}만원</span>
           </div>
-          <div class="w-full bg-blue-100 rounded-full h-2 mb-1">
-            <div class="bg-blue-500 h-2 rounded-full transition-all" style="width:${Math.min(100, Math.round((years / (years + additionalInfo.additionalYears)) * 100))}%"></div>
+          <div class="w-full bg-blue-100 rounded-full h-2 mt-2 mb-1">
+            <div class="bg-blue-500 h-2 rounded-full transition-all" style="width:${progressPct}%"></div>
           </div>
-          <p class="text-xs text-blue-400">${years}년 완료 / 목표 ${years + additionalInfo.additionalYears}년 (${Math.round((years / (years + additionalInfo.additionalYears)) * 100)}% 달성)</p>
+          <p class="text-xs text-blue-400">${years}년 완료 / 목표 ${totalYears}년 (${progressPct}% 달성)</p>
+        </div>`;
+
+      // ── 케이스 3: 나이 제한으로 목표 달성 불가 ──────────────────────────
+      } else {
+        // maxAdditionalYears = 0 이면 이미 64세 이상 → 납부 자체 불가
+        const hasRoom = ai.maxAdditionalYears > 0;
+        const totalMaxYears = years + ai.maxAdditionalYears;
+        const progressPct = ai.neededAdditional > 0
+          ? Math.round((ai.maxAdditionalYears / ai.neededAdditional) * 100)
+          : 100;
+        const shortfallAtMax = Math.max(0, monthlyExpense - ai.pensionAtMax);
+
+        return `
+        <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 mb-4">
+          <div class="flex items-center gap-2 mb-3">
+            <i class="fas fa-exclamation-triangle text-amber-500"></i>
+            <span class="text-sm font-extrabold text-amber-700">몇 년 더 내야 할까?</span>
+          </div>
+
+          ${ hasRoom ? `
+          <!-- 납부 가능한 최대치 표시 -->
+          <div class="bg-white rounded-xl p-3 mb-3 border border-amber-100">
+            <p class="text-xs font-bold text-amber-600 mb-2">📌 국민연금 제도적 납부 한계</p>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs text-gray-600">현재 납부 기간</span>
+              <span class="font-bold text-gray-800">${years}년</span>
+            </div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs text-gray-600">제도상 최대 추가 납부 가능</span>
+              <span class="font-bold text-amber-700">+ ${ai.maxAdditionalYears}년 (최대 ${ai.maxContributeAge}세까지)</span>
+            </div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs text-gray-600">최대 납부 후 예상 수령액</span>
+              <span class="font-extrabold text-amber-700">월 ${ai.pensionAtMax.toLocaleString()}만원</span>
+            </div>
+            <div class="w-full bg-amber-100 rounded-full h-2 mb-1">
+              <div class="bg-amber-400 h-2 rounded-full" style="width:${Math.min(100, progressPct)}%"></div>
+            </div>
+            <p class="text-xs text-amber-500">목표 달성에 ${ai.neededAdditional}년 필요 / 실제 납부 가능 ${ai.maxAdditionalYears}년 (${Math.min(100,progressPct)}%)</p>
+          </div>
+
+          <!-- 부족분 안내 -->
+          <div class="bg-red-50 border border-red-100 rounded-xl p-3 mb-3">
+            <p class="text-xs font-bold text-red-600 mb-1">⚠️ 국민연금만으로는 월 <strong>${shortfallAtMax.toLocaleString()}만원</strong> 부족</p>
+            <p class="text-xs text-red-500">최대한 납부해도 목표 생활비에 미달합니다. 아래 3층 연금 전략으로 보완하세요.</p>
+          </div>` : `
+          <!-- 납부 가능 기간 없음 -->
+          <div class="bg-white rounded-xl p-3 mb-3 border border-amber-100">
+            <p class="text-xs text-amber-700">만 64세 이상으로 국민연금 추가 납부가 불가합니다.</p>
+          </div>` }
+
+          <!-- 3층 연금 전략 안내 -->
+          <div class="space-y-2">
+            <p class="text-xs font-bold text-gray-600">💡 3층 연금으로 부족분 채우기</p>
+            <div class="flex items-start gap-2 text-xs text-gray-600">
+              <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center flex-shrink-0 text-xs">1</span>
+              <div><strong class="text-blue-700">국민연금</strong> — 최대한 납부 (의무 59세, 임의계속 64세)</div>
+            </div>
+            <div class="flex items-start gap-2 text-xs text-gray-600">
+              <span class="w-5 h-5 rounded-full bg-green-100 text-green-700 font-bold flex items-center justify-center flex-shrink-0 text-xs">2</span>
+              <div><strong class="text-green-700">퇴직연금(IRP)</strong> — 연 700만원 한도 세액공제 혜택</div>
+            </div>
+            <div class="flex items-start gap-2 text-xs text-gray-600">
+              <span class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 font-bold flex items-center justify-center flex-shrink-0 text-xs">3</span>
+              <div><strong class="text-purple-700">연금저축·개인연금</strong> — 세액공제 + 노후 현금흐름 보완</div>
+            </div>
+          </div>
         </div>`;
       }
     })() : ''}
