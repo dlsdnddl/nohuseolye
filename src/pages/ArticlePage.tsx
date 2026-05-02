@@ -109,9 +109,6 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
             )}
           </div>
 
-          {/* 인아티클 광고 */}
-          <AdSlot type="in-article" id="article-top-ad" className="mb-8" />
-
           {/* 본문 */}
           <article class="prose-article" dangerouslySetInnerHTML={{ __html: markdownToHtml(bodyContent) }} />
 

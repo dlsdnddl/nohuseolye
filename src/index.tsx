@@ -35,23 +35,13 @@ app.get('/', (c) => {
         {/* Hero - 진단기 */}
         <HeroDiagnosis />
 
-        {/* 리더보드 광고 — Hero 바로 아래 */}
-        <div class="max-w-6xl mx-auto px-4 py-6">
-          <AdSlot type="leaderboard" id="home-top-ad" />
-        </div>
-
         {/* 퀵링크 */}
         <QuickLinks />
-
-        {/* 광고 슬롯 - 퀵링크 아래 */}
-        <div class="max-w-6xl mx-auto px-4 pb-4">
-          <AdSlot type="rectangle" id="home-mid-ad" />
-        </div>
 
         {/* 콘텐츠 큐레이션 */}
         <ContentCuration posts={posts} />
 
-        {/* 하단 광고 */}
+        {/* 하단 광고 — 콘텐츠 다 읽은 후 1개만 */}
         <div class="max-w-6xl mx-auto px-4 py-8">
           <AdSlot type="leaderboard" id="home-bottom-ad" />
         </div>
@@ -80,9 +70,6 @@ app.get('/pension-asset', (c) => {
           <h1 class="text-3xl font-extrabold text-gray-900 mb-2">연금·자산</h1>
           <p class="text-gray-500">국민연금, 주택연금, 기초연금 등 노후 소득 관련 핵심 정보</p>
         </div>
-
-        {/* 광고 */}
-        <AdSlot type="leaderboard" id="category-top-ad" className="mb-10" />
 
         {/* 포스트 그리드 */}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -236,8 +223,6 @@ app.get('/care', (c) => {
           <h1 class="text-3xl font-extrabold text-gray-900 mb-2">부모님 돌봄</h1>
           <p class="text-gray-500">장기요양등급, 병원비 지원 등 부모님 돌봄 관련 핵심 정보</p>
         </div>
-
-        <AdSlot type="leaderboard" id="category-top-ad" className="mb-10" />
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {categoryPosts.map(post => {
