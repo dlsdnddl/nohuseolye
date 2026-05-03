@@ -43,7 +43,8 @@ app.get('/', (c) => {
 
         {/* 하단 광고 — 콘텐츠 다 읽은 후 1개만 */}
         <div class="max-w-6xl mx-auto px-4 py-8">
-          <AdSlot type="leaderboard" id="home-bottom-ad" />
+          {/* slotId: 애드센스 '노후설계-홈하단' 광고 단위 ID 입력 */}
+          <AdSlot type="leaderboard" id="home-bottom-ad" slotId="9401725799" />
         </div>
       </main>
       <Footer />

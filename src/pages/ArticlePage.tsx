@@ -133,8 +133,8 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
             </div>
           )}
 
-          {/* 인아티클 하단 광고 */}
-          <AdSlot type="rectangle" id="article-bottom-ad" className="my-8" />
+          {/* 인아티클 하단 광고 — slotId: 애드센스 '노후설계-본문하단' 광고 단위 ID */}
+          <AdSlot type="rectangle" id="article-bottom-ad" slotId="8161719756" className="my-8" />
 
           {/* 공식 출처 */}
           {post.sources && post.sources.length > 0 && (
@@ -235,8 +235,8 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
               </nav>
             </div>
 
-            {/* 사이드바 광고 */}
-            <AdSlot type="rectangle" id="sidebar-ad" />
+            {/* 사이드바 광고 — slotId: 애드센스 '노후설계-사이드바' 광고 단위 ID */}
+            <AdSlot type="rectangle" id="sidebar-ad" slotId="8049115674" />
 
             {/* 관련 글 */}
             {relatedPosts.length > 0 && (
