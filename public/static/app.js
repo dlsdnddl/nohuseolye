@@ -5,20 +5,49 @@
 // ─── 노후자금 충분지수 진단기 ─────────────────────────────────────────────────
 
 /**
- * 국민연금 예상 수령액 계산 (2026년 기준)
- * 공식: (A값 + B값) × P × 소득대체율보정계수
+ * 국민연금 예상 수령액 계산 (2026년 5월 기준)
+ * 공식: BPA = C × (A + B)  →  P = 0.5 + (totalMonths - 120) × 0.05/12
  * A값: 2026년 전체 가입자 평균소득 = 319만 3,511원 (보건복지부 고시)
- * 소득대체율: 2026년 43% 적용
- * 간략화 공식: (A + B) × P × 0.00215 (43% / 20년 = 2.15%/년 기준)
+ * C값: 2026년 소득대체율 보정계수 = 1.29 (소득대체율 43% 적용 기준)
+ * B값: 본인 평균소득 (상한 637만원, 하한 40만원 적용)
+ * MIN_MONTHS: 최소 수급 요건 = 120개월(10년)
+ *
+ * 출처: https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0048M0.do
  */
+const NPS_A       = 319.3511; // 2026년 전체 가입자 평균소득 (만원)
+const NPS_C       = 1.29;     // 2026년 소득대체율 보정계수
+const NPS_B_MAX   = 637.0;    // 기준소득월액 상한 (2026년, 만원)
+const NPS_B_MIN   = 40.0;     // 기준소득월액 하한 (2026년, 만원)
+const NPS_MIN_MONTHS = 120;   // 최소 수급 요건 (개월)
+
 function calcNationalPension(workYears, avgIncome) {
-  const A = 319.3511; // 2026년 기준 전체 가입자 평균소득 (만원, 보건복지부 고시)
-  const B = avgIncome;
-  const P = workYears; // 가입기간(년)
-  // 2026년 소득대체율 43% 기반 간략 산출식
-  // 기준산식: (A+B)/2 × (P/20) × 0.43 를 만원 단위로 환산
-  const base = ((A + B) / 2) * (P / 20) * 0.43;
-  return Math.round(base * 10) / 10; // 소수점 1자리
+  const A = NPS_A;
+  // B 상·하한 적용
+  const B = Math.min(NPS_B_MAX, Math.max(NPS_B_MIN, avgIncome));
+  const totalMonths = workYears * 12;
+  // 최소 가입 기간(10년) 미만이면 수령 불가
+  if (totalMonths < NPS_MIN_MONTHS) return 0;
+  // 지급률 P: 10년(기본 0.5) + 초과 개월 × 0.05/12
+  const P = 0.5 + (totalMonths - NPS_MIN_MONTHS) * (0.05 / 12);
+  // 기본연금액(만원/년) → 월액으로 환산
+  const bpaAnnual  = NPS_C * (A + B); // 만원/년
+  const monthly    = (bpaAnnual * P) / 12;
+  return Math.round(monthly * 10) / 10; // 소수점 1자리 (만원)
+}
+
+/**
+ * 수령 시기 조정 함수
+ * - 조기수령: 월 0.5% 감액 (연 6%)
+ * - 연기수령: 월 0.6% 증액 (연 7.2%)
+ * @param {number} basePension  기준 수령액 (만원)
+ * @param {number} monthsDelta  양수=연기, 음수=조기 (개월 수)
+ * @returns {number} 조정된 월 수령액 (만원)
+ */
+function adjustForTiming(basePension, monthsDelta) {
+  if (monthsDelta === 0) return basePension;
+  const rate = monthsDelta > 0 ? 0.006 : 0.005; // 연기 0.6%/월, 조기 0.5%/월
+  const factor = 1 + rate * monthsDelta;          // monthsDelta < 0 이면 감액
+  return Math.round(basePension * factor * 10) / 10;
 }
 
 /**
@@ -51,7 +80,7 @@ function calcOptimalReceiveAge(age, workYears, avgIncome) {
       const receiveAge = normalAge - early;
       if (receiveAge < 55 || receiveAge <= age) continue; // 현재 나이보다 과거면 skip
       const reductionRate = early * 6; // 연 6% 감액
-      const monthlyAmt = Math.round(basePension * (1 - reductionRate / 100) * 10) / 10;
+      const monthlyAmt = adjustForTiming(basePension, -early * 12);
       // 조기 vs 정상 손익분기점: 줄어든 금액을 만회하는 월 수
       const monthsEarly = early * 12; // 더 일찍 받는 개월 수
       const monthlyDiff = basePension - monthlyAmt; // 월 차이
@@ -84,7 +113,7 @@ function calcOptimalReceiveAge(age, workYears, avgIncome) {
   for (let delay = 1; delay <= 5; delay++) {
     const receiveAge = normalAge + delay;
     const increaseRate = delay * 7.2; // 연 7.2% 증액
-    const monthlyAmt = Math.round(basePension * (1 + increaseRate / 100) * 10) / 10;
+    const monthlyAmt = adjustForTiming(basePension, delay * 12);
     // 연기 vs 정상 손익분기점
     const monthsDelay = delay * 12;
     const monthlyDiff = monthlyAmt - basePension;
@@ -122,12 +151,12 @@ function calcOptimalReceiveAge(age, workYears, avgIncome) {
  * 목표 연금액 달성을 위한 추가 납부 기간 계산
  * - 국민연금 제도적 납부 가능 연령 반영
  *   · 의무가입: ~만 59세까지
- *   · 임의계속가입: 60세~64세 (65세 미만까지)
- *   · 실제 최대 납부 가능 나이: 64세 (만 64세 도달 시까지)
+ *   · 임의계속가입: 60세~64세 (65세 생일 이전까지)
+ *   · 실제 최대 납부 가능 나이: MAX_AGE=65 (65세 생일 직전까지)
  * - 나이(age)를 반드시 전달받아 제도적 한계 내에서 계산
  */
 function calcAdditionalYearsNeeded(currentYears, avgIncome, targetMonthly, age) {
-  const A = 319.3511;
+  const A = NPS_A;  // 전역 상수 사용
   const B = avgIncome;
   const currentPension = calcNationalPension(currentYears, avgIncome);
 
@@ -144,15 +173,19 @@ function calcAdditionalYearsNeeded(currentYears, avgIncome, targetMonthly, age) 
   }
 
   // ② 제도적으로 납부 가능한 최대 추가 기간 계산
-  // 최대 납부 가능 나이: 64세 (임의계속가입 포함, 65세 미만)
-  const MAX_CONTRIBUTION_AGE = 64;
+  // 최대 납부 가능 나이: 65세 생일 이전까지 (임의계속가입 포함)
+  const MAX_CONTRIBUTION_AGE = 65;
   const maxAdditionalByAge = Math.max(0, MAX_CONTRIBUTION_AGE - age); // 나이 기준 한계
   const maxAdditionalByRule = Math.max(0, 45 - currentYears);          // 45년 상한 기준
   const maxAdditional = Math.min(maxAdditionalByAge, maxAdditionalByRule); // 둘 중 작은 값
 
   // ③ 목표 달성에 필요한 이론적 납부 기간 역산
-  // target = (A+B)/2 × (P/20) × 0.43  →  P = target × 20 / ((A+B)/2 × 0.43)
-  const targetYearsRaw = (targetMonthly * 20) / (((A + B) / 2) * 0.43);
+  // 새 공식 역산: monthly = C×(A+B)×P/12  →  P = target×12/(C×(A+B))  →  months = ...
+  // totalMonths = MIN_MONTHS + (P - 0.5) × 12/0.05
+  const Bclamp = Math.min(NPS_B_MAX, Math.max(NPS_B_MIN, B));
+  const targetP = (targetMonthly * 12) / (NPS_C * (A + Bclamp));
+  const targetTotalMonths = NPS_MIN_MONTHS + Math.max(0, (targetP - 0.5) * (12 / 0.05));
+  const targetYearsRaw = targetTotalMonths / 12;
   const neededAdditional = Math.max(0, Math.ceil(targetYearsRaw - currentYears));
 
   // ④ 제도적으로 달성 가능한지 판별
@@ -172,7 +205,7 @@ function calcAdditionalYearsNeeded(currentYears, avgIncome, targetMonthly, age) 
     pensionAfterAdd: Math.round(pensionAfterAdd * 10) / 10,  // 추가 납부 후 예상 수령액
     pensionAtMax:    Math.round(pensionAtMax * 10) / 10,     // 최대까지 납부 시 수령액
     targetYearsRaw:  Math.ceil(targetYearsRaw),
-    maxContributeAge: Math.min(age + maxAdditional, MAX_CONTRIBUTION_AGE),
+    maxContributeAge: Math.min(age + maxAdditional, MAX_CONTRIBUTION_AGE - 1),
     canAchieve,
     isAlreadyMet: false
   };
@@ -482,9 +515,10 @@ function buildResultHTML({ score, gradeInfo, pension, monthlyExpense, shortfall,
     <div class="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-5">
       <p class="text-xs text-amber-700 leading-relaxed">
         <i class="fas fa-info-circle mr-1"></i>
-        위 수치는 <strong>국민연금공단 2026년 A값(319만원)·소득대체율(43%) 기준</strong>을 바탕으로 한 <strong>참고용 예상값</strong>입니다.
+        위 수치는 <strong>2026년 5월 기준 A값 319만원·C값 1.29·소득대체율 43%</strong>를 바탕으로 한 <strong>참고용 예상값</strong>입니다.
         실제 수령액은 납부 이력·소득 변동에 따라 달라집니다.
-        정확한 금액은 <a href="https://www.nps.or.kr" target="_blank" class="underline font-semibold">국민연금공단 공식 홈페이지</a>에서 확인하세요.
+        정확한 금액은 <a href="https://www.nps.or.kr" target="_blank" class="underline font-semibold">국민연금공단 공식 홈페이지</a> 또는
+        <a href="https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0048M0.do" target="_blank" class="underline font-semibold">연금액 계산 안내</a>에서 확인하세요.
       </p>
     </div>
 
