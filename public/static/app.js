@@ -1214,137 +1214,118 @@ function runIncomeCalc() {
   const textColor   = isEligible ? '#065f46' : '#991b1b';
   const borderColor = isEligible ? '#6ee7b7' : '#fca5a5';
 
-  resultEl.innerHTML = `
-    <!-- 최종 판정 배너 -->
-    <div class="rounded-xl px-5 py-4 mb-5 flex items-center gap-4" style="background:${bgColor}; border: 1.5px solid ${borderColor}">
-      <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background:${barColor}20">
-        <i class="fas fa-${isEligible ? 'circle-check' : 'circle-xmark'} text-2xl" style="color:${barColor}"></i>
-      </div>
-      <div class="flex-1">
-        <p class="font-extrabold text-lg leading-tight" style="color:${barColor}">
-          ${isEligible ? '수급 가능 가능성 높음' : '수급 어려울 수 있음'}
-        </p>
-        <p class="text-sm mt-0.5" style="color:${textColor}">
-          소득인정액 <strong>${d.total.toFixed(1)}만원</strong> vs 선정기준액 <strong>${threshold}만원</strong>
-          (${isEligible ? `기준보다 ${gap.toFixed(1)}만원 낮음` : `기준보다 ${gap.toFixed(1)}만원 초과`})
-        </p>
-      </div>
-    </div>
+  // ① 소득평가액 상세
+  var laborDetail = '';
+  if (d.labor > 0) {
+    laborDetail += '<div class="flex justify-between text-xs text-gray-500 pl-2">' +
+      '<span>근로소득 (' + d.labor + '만원 - 110만원) × 70%</span>' +
+      '<span>' + (d.laborDeducted * 0.7).toFixed(1) + '만원</span></div>';
+  }
+  if (d.otherIncome > 0) {
+    laborDetail += '<div class="flex justify-between text-xs text-gray-500 pl-2 mt-1">' +
+      '<span>기타소득 (전액)</span>' +
+      '<span>' + d.otherIncome.toFixed(1) + '만원</span></div>';
+  }
+  if (d.labor === 0 && d.otherIncome === 0) {
+    laborDetail = '<p class="text-xs text-gray-400 pl-2">소득 입력값 없음 → 0원</p>';
+  }
 
-    <!-- 진행 바 -->
-    <div class="mb-5">
-      <div class="flex justify-between text-xs text-gray-500 mb-1.5">
-        <span>내 소득인정액</span>
-        <span>${d.total.toFixed(1)}만원 / ${threshold}만원 (${pct}%)</span>
-      </div>
-      <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
-        <div class="h-full rounded-full transition-all duration-700"
-          style="width:${Math.min(pct,100)}%; background:${barColor}"></div>
-      </div>
-      <div class="flex justify-between text-xs mt-1">
-        <span class="text-gray-400">0</span>
-        <span class="font-semibold" style="color:${barColor}">선정기준: ${threshold}만원</span>
-      </div>
-    </div>
+  // ② 재산환산액 상세
+  var assetDetail = '';
+  if (d.property > 0) {
+    assetDetail += '<div class="flex justify-between text-xs text-gray-500 pl-2">' +
+      '<span>일반재산 (' + d.property + '만원 - ' + IC_BASE_PROPERTY[d.region] + '만원) × 4%÷12</span>' +
+      '<span>' + (d.propertyNet * IC_PROPERTY_RATE).toFixed(1) + '만원</span></div>';
+  }
+  if (d.finance > 0) {
+    assetDetail += '<div class="flex justify-between text-xs text-gray-500 pl-2 mt-1">' +
+      '<span>금융재산 (' + d.finance + '만원 - 2,000만원) × 4%÷12</span>' +
+      '<span>' + (d.financeNet * IC_PROPERTY_RATE).toFixed(1) + '만원</span></div>';
+  }
+  if (d.car > 0) {
+    assetDetail += '<div class="flex justify-between text-xs text-gray-500 pl-2 mt-1">' +
+      '<span>차량 ' + d.car + '만원 ÷ 12개월</span>' +
+      '<span>' + d.carMonthly.toFixed(1) + '만원</span></div>';
+  }
+  if (d.property === 0 && d.finance === 0 && d.car === 0) {
+    assetDetail = '<p class="text-xs text-gray-400 pl-2">재산 입력값 없음 → 0원</p>';
+  }
 
-    <!-- 계산 내역 -->
-    <div class="bg-gray-50 rounded-xl p-4 mb-5">
-      <p class="text-xs font-bold text-gray-600 mb-3 flex items-center gap-1.5">
-        <i class="fas fa-list-ol text-gray-400"></i> 계산 상세 내역
-      </p>
-      <div class="space-y-2.5 text-sm">
+  // 감액 안내
+  var pensionNote = '';
+  if (d.total <= threshold) {
+    pensionNote = '<div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-5">' +
+      '<p class="text-xs font-bold text-blue-700 mb-2 flex items-center gap-1.5">' +
+        '<i class="fas fa-lightbulb text-blue-500"></i> 국민연금 수령자라면 확인하세요</p>' +
+      '<p class="text-xs text-blue-600 leading-relaxed">국민연금을 월 <strong>' +
+        pensionReduceThreshold.toFixed(1) + '만원(52만 4,550원)</strong> 이상 받으신다면 ' +
+        '기초연금이 최대 50%까지 감액될 수 있습니다. 주민센터에 문의하세요.</p></div>';
+  } else {
+    pensionNote = '<div class="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-5">' +
+      '<p class="text-xs font-bold text-amber-700 mb-2 flex items-center gap-1.5">' +
+        '<i class="fas fa-lightbulb text-amber-500"></i> 줄일 수 있는 방법이 있습니다</p>' +
+      '<ul class="text-xs text-amber-700 space-y-1 leading-relaxed">' +
+        '<li>• 금융재산 중 <strong>생활비 목적 예금</strong>은 일부 공제 가능 (주민센터 확인)</li>' +
+        '<li>• <strong>부채(대출)</strong>가 있으면 재산에서 차감 가능</li>' +
+        '<li>• <strong>10년 이상 노후 차량</strong>은 일반재산 완화 규정 적용 가능 (2026년 개정)</li>' +
+      '</ul></div>';
+  }
 
-        <!-- 소득평가액 -->
-        <div class="bg-white rounded-lg p-3 border border-gray-100">
-          <div class="flex justify-between items-center mb-2">
-            <span class="font-semibold text-gray-700 text-xs">① 소득평가액</span>
-            <span class="font-extrabold text-primary-700">${d.incomeEval.toFixed(1)}만원</span>
-          </div>
-          ${d.labor > 0 ? `
-          <div class="flex justify-between text-xs text-gray-500 pl-2">
-            <span>근로소득 (${d.labor}만원 - 110만원) × 70%</span>
-            <span>${(d.laborDeducted * 0.7).toFixed(1)}만원</span>
-          </div>` : ''}
-          ${d.otherIncome > 0 ? `
-          <div class="flex justify-between text-xs text-gray-500 pl-2 mt-1">
-            <span>기타소득 (전액)</span>
-            <span>${d.otherIncome.toFixed(1)}만원</span>
-          </div>` : ''}
-          ${d.labor === 0 && d.otherIncome === 0 ? `
-          <p class="text-xs text-gray-400 pl-2">소득 입력값 없음 → 0원</p>` : ''}
-        </div>
+  var gapText = isEligible
+    ? '기준보다 ' + gap.toFixed(1) + '만원 낮음'
+    : '기준보다 ' + gap.toFixed(1) + '만원 초과';
+  var statusText = isEligible ? '수급 가능 가능성 높음' : '수급 어려울 수 있음';
+  var iconName   = isEligible ? 'circle-check' : 'circle-xmark';
 
-        <!-- 재산의 소득환산액 -->
-        <div class="bg-white rounded-lg p-3 border border-gray-100">
-          <div class="flex justify-between items-center mb-2">
-            <span class="font-semibold text-gray-700 text-xs">② 재산의 소득환산액</span>
-            <span class="font-extrabold text-primary-700">${d.assetEval.toFixed(1)}만원</span>
-          </div>
-          ${d.property > 0 ? `
-          <div class="flex justify-between text-xs text-gray-500 pl-2">
-            <span>일반재산 (${d.property}만원 - 기본재산액 ${IC_BASE_PROPERTY[d.region]}만원) × 4%÷12</span>
-            <span>${(d.propertyNet * IC_PROPERTY_RATE).toFixed(1)}만원</span>
-          </div>` : ''}
-          ${d.finance > 0 ? `
-          <div class="flex justify-between text-xs text-gray-500 pl-2 mt-1">
-            <span>금융재산 (${d.finance}만원 - 2,000만원 공제) × 4%÷12</span>
-            <span>${(d.financeNet * IC_PROPERTY_RATE).toFixed(1)}만원</span>
-          </div>` : ''}
-          ${d.car > 0 ? `
-          <div class="flex justify-between text-xs text-gray-500 pl-2 mt-1">
-            <span>차량 ${d.car}만원 ÷ 12개월</span>
-            <span>${d.carMonthly.toFixed(1)}만원</span>
-          </div>` : ''}
-          ${d.property === 0 && d.finance === 0 && d.car === 0 ? `
-          <p class="text-xs text-gray-400 pl-2">재산 입력값 없음 → 0원</p>` : ''}
-        </div>
-
-        <!-- 합계 -->
-        <div class="flex justify-between items-center px-3 py-2.5 rounded-lg font-extrabold" style="background:${bgColor}">
-          <span class="text-sm" style="color:${textColor}">① + ② 소득인정액 합계</span>
-          <span class="text-base" style="color:${barColor}">${d.total.toFixed(1)}만원</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 국민연금 감액 안내 -->
-    ${d.total <= threshold ? `
-    <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-5">
-      <p class="text-xs font-bold text-blue-700 mb-2 flex items-center gap-1.5">
-        <i class="fas fa-lightbulb text-blue-500"></i> 국민연금 수령자라면 확인하세요
-      </p>
-      <p class="text-xs text-blue-600 leading-relaxed">
-        국민연금을 월 <strong>${pensionReduceThreshold.toFixed(1)}만원(52만 4,550원)</strong> 이상 받으신다면
-        기초연금이 최대 50%까지 감액될 수 있습니다. 국민연금 수령액을 확인 후 주민센터에 문의하세요.
-      </p>
-    </div>` : `
-    <div class="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-5">
-      <p class="text-xs font-bold text-amber-700 mb-2 flex items-center gap-1.5">
-        <i class="fas fa-lightbulb text-amber-500"></i> 줄일 수 있는 방법이 있습니다
-      </p>
-      <ul class="text-xs text-amber-700 space-y-1 leading-relaxed">
-        <li>• 금융재산 중 <strong>생활비 목적 예금</strong>은 일부 공제 가능 (주민센터 확인)</li>
-        <li>• <strong>부채(대출)</strong>가 있으면 재산에서 차감 가능</li>
-        <li>• <strong>10년 이상 노후 차량</strong>은 일반재산 완화 규정 적용 가능 (2026년 개정)</li>
-      </ul>
-    </div>`}
-
-    <!-- 액션 버튼 -->
-    <div class="flex flex-col sm:flex-row gap-2.5">
-      <a href="https://www.bokjiro.go.kr" target="_blank" rel="noopener noreferrer"
-        class="flex-1 flex items-center justify-center gap-2 py-3 bg-primary-700 hover:bg-primary-600 text-white font-semibold text-sm rounded-xl transition-colors">
-        <i class="fas fa-arrow-right"></i> 복지로에서 정식 신청
-      </a>
-      <button onclick="resetIncomeCalc()"
-        class="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-semibold text-sm rounded-xl transition-colors">
-        <i class="fas fa-redo"></i> 다시 계산하기
-      </button>
-    </div>
-  `;
+  resultEl.innerHTML =
+    '<div class="rounded-xl px-5 py-4 mb-5 flex items-center gap-4" style="background:' + bgColor + '; border:1.5px solid ' + borderColor + '">' +
+      '<div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background:' + barColor + '20">' +
+        '<i class="fas fa-' + iconName + ' text-2xl" style="color:' + barColor + '"></i></div>' +
+      '<div class="flex-1">' +
+        '<p class="font-extrabold text-lg leading-tight" style="color:' + barColor + '">' + statusText + '</p>' +
+        '<p class="text-sm mt-0.5" style="color:' + textColor + '">소득인정액 <strong>' + d.total.toFixed(1) + '만원</strong> vs 선정기준액 <strong>' + threshold + '만원</strong> (' + gapText + ')</p>' +
+      '</div></div>' +
+    '<div class="mb-5">' +
+      '<div class="flex justify-between text-xs text-gray-500 mb-1.5"><span>내 소득인정액</span>' +
+        '<span>' + d.total.toFixed(1) + '만원 / ' + threshold + '만원 (' + pct + '%)</span></div>' +
+      '<div class="h-3 bg-gray-100 rounded-full overflow-hidden">' +
+        '<div class="h-full rounded-full transition-all duration-700" style="width:' + Math.min(pct,100) + '%; background:' + barColor + '"></div></div>' +
+      '<div class="flex justify-between text-xs mt-1"><span class="text-gray-400">0</span>' +
+        '<span class="font-semibold" style="color:' + barColor + '">선정기준: ' + threshold + '만원</span></div></div>' +
+    '<div class="bg-gray-50 rounded-xl p-4 mb-5">' +
+      '<p class="text-xs font-bold text-gray-600 mb-3 flex items-center gap-1.5"><i class="fas fa-list-ol text-gray-400"></i> 계산 상세 내역</p>' +
+      '<div class="space-y-2.5 text-sm">' +
+        '<div class="bg-white rounded-lg p-3 border border-gray-100">' +
+          '<div class="flex justify-between items-center mb-2">' +
+            '<span class="font-semibold text-gray-700 text-xs">① 소득평가액</span>' +
+            '<span class="font-extrabold text-primary-700">' + d.incomeEval.toFixed(1) + '만원</span></div>' +
+          laborDetail + '</div>' +
+        '<div class="bg-white rounded-lg p-3 border border-gray-100">' +
+          '<div class="flex justify-between items-center mb-2">' +
+            '<span class="font-semibold text-gray-700 text-xs">② 재산의 소득환산액</span>' +
+            '<span class="font-extrabold text-primary-700">' + d.assetEval.toFixed(1) + '만원</span></div>' +
+          assetDetail + '</div>' +
+        '<div class="flex justify-between items-center px-3 py-2.5 rounded-lg font-extrabold" style="background:' + bgColor + '">' +
+          '<span class="text-sm" style="color:' + textColor + '">① + ② 소득인정액 합계</span>' +
+          '<span class="text-base" style="color:' + barColor + '">' + d.total.toFixed(1) + '만원</span></div>' +
+      '</div></div>' +
+    pensionNote +
+    '<div class="flex flex-col sm:flex-row gap-2.5">' +
+      '<a href="https://www.bokjiro.go.kr" target="_blank" rel="noopener noreferrer" ' +
+        'class="flex-1 flex items-center justify-center gap-2 py-3 bg-primary-700 hover:bg-primary-600 text-white font-semibold text-sm rounded-xl transition-colors">' +
+        '<i class="fas fa-arrow-right"></i> 복지로에서 정식 신청</a>' +
+      '<button id="ic-reset-btn" ' +
+        'class="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-semibold text-sm rounded-xl transition-colors">' +
+        '<i class="fas fa-redo"></i> 다시 계산하기</button>' +
+    '</div>';
 
   resultEl.classList.remove('hidden');
   // 부드럽게 스크롤
-  setTimeout(() => resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+  setTimeout(function() { resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+
+  // 다시 계산하기 버튼 이벤트 바인딩
+  var resetBtn = document.getElementById('ic-reset-btn');
+  if (resetBtn) resetBtn.addEventListener('click', resetIncomeCalc);
 }
 
 function resetIncomeCalc() {
