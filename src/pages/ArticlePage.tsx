@@ -266,7 +266,7 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
               <p class="text-primary-200 text-xs mb-4">1분 진단으로 확인하세요</p>
               <a
                 href="/"
-                onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;"
+                onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"
                 class="block text-center py-2.5 bg-white text-primary-800 font-bold text-sm rounded-xl hover:bg-primary-50 transition-colors"
               >
                 진단 시작하기
