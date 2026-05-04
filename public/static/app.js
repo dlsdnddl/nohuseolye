@@ -810,6 +810,284 @@ function showToast(message, duration = 2500) {
 }
 
 
+// ─── 주택연금 월지급금 계산기 ─────────────────────────────────────────────────
+/**
+ * 한국주택금융공사 공식 요율표 (2026.03.01 기준, 단위: 천원/월)
+ * 출처: https://www.hf.go.kr/ko/sub03/sub03_01_01_02.do
+ *
+ * 구조: HP_TABLE[houseType][methodKey][age] = 1억원당 월지급금(천원)
+ * age 키: 55,60,65,70,75,80  (보간은 선형)
+ * 주택가격 상한: 일반·오피스텔 12억, 노인복지 12억 (상한 초과분 cap)
+ *
+ * 공식 표는 1억~12억 절댓값이므로, 1억당 단가(rate)로 변환해 내장
+ * rate = 표의 1억원 열 값  (1억 당 천원/월)
+ * 비례 계산: 월지급금 = rate × (주택가격억) — 단, 상한 cap 적용
+ */
+
+// ── 종신지급 정액형 (일반주택) ────────────────────────────────────────────────
+// 표 원본 1억원 열 값(천원), 상한 cap(천원) [55,60,65,70,75,80]
+const HP_GENERAL_FIXED = {
+  rate: { 55:156, 60:210, 65:252, 70:307, 75:381, 80:483 },
+  // 상한: 표상 12억 값 (이 이상으로 cap)
+  cap:  { 55:1872, 60:2528, 65:3035, 70:3414, 75:3666, 80:4060 }
+};
+
+// ── 종신지급 정액형 (노인복지주택) ───────────────────────────────────────────
+const HP_SENIOR_FIXED = {
+  rate: { 55:122, 60:170, 65:211, 70:263, 75:334, 80:434 },
+  cap:  { 55:1473, 60:2048, 65:2532, 70:3158, 75:3658, 80:4054 }
+};
+
+// ── 종신지급 정액형 (주거목적 오피스텔) ──────────────────────────────────────
+const HP_OFFICETEL_FIXED = {
+  rate: { 55:112, 60:158, 65:197, 70:248, 75:319, 80:418 },
+  cap:  { 55:1354, 60:1901, 65:2366, 70:2984, 75:3655, 80:4052 }
+};
+
+/**
+ * 초기증액형 배율 (정액형 대비)
+ * 초기 기간: 정액형보다 더 받다가 → 이후 정액형의 약 70%
+ * 공사 안내 기준 초기 배율 역산 (초기 월지급금 ÷ 정액형 ≈ 아래 값)
+ * 실제로는 나이·주택가격마다 미세하게 다르나, 공식 안내 대표치 사용
+ */
+const HP_BOOST_RATE = {
+  '41': 1.19,  // 초기증액형 3년
+  '42': 1.15,  // 초기증액형 5년
+  '43': 1.12,  // 초기증액형 7년
+  '44': 1.09,  // 초기증액형 10년
+  '31': 0.85,  // 정기증가형 (초기 정액형보다 낮게 시작 → 매 3년 4.5% 증가)
+};
+
+/** 만원 → 한글 표기 변환 */
+function wonToKorean(manwon) {
+  if (!manwon || manwon <= 0) return '';
+  const eok  = Math.floor(manwon / 10000);
+  const rest = manwon % 10000;
+  const chun = Math.floor(rest / 1000);
+  const baek = Math.floor((rest % 1000) / 100);
+
+  let s = '';
+  if (eok > 0)  s += eok  + '억';
+  if (chun > 0) s += (s ? ' ' : '') + chun + '천만원';
+  else if (baek > 0 && eok === 0) s += (s ? ' ' : '') + baek + '백만원';
+  else if (s)   s += '원';
+  else           s = manwon.toLocaleString() + '만원';
+
+  // 억 단위만 있고 rest가 0이면 이미 '억원' 표기 필요
+  // (위에서 chun/baek 없으면 s = eok+'억' 만 있는 상태 → '원' 추가)
+  if (eok > 0 && rest === 0 && !s.includes('원')) s += '원';
+  return s;
+}
+
+/** 주택가격 입력 시 한글 미리보기 */
+function hpOnPriceInput() {
+  const val = parseInt(document.getElementById('hp-price')?.value || '0');
+  const el  = document.getElementById('hp-price-korean');
+  if (el) el.textContent = val > 0 ? '→ ' + wonToKorean(val) : '';
+}
+
+/** 나이 입력 시 유효성 힌트 */
+function hpOnAgeInput() {
+  const age = parseInt(document.getElementById('hp-age')?.value || '0');
+  // 실시간 피드백은 별도 표시 없음 (버튼 누를 때 검사)
+}
+
+/** 나이를 표 기준 키(5세 단위)로 내삽 */
+function _hpGetAgeKeys(age) {
+  const steps = [55, 60, 65, 70, 75, 80];
+  const clamped = Math.min(84, Math.max(55, age));
+
+  // 정확히 일치하는 키
+  if (steps.includes(clamped)) return { lo: clamped, hi: clamped, t: 0 };
+
+  // 사이 보간
+  for (let i = 0; i < steps.length - 1; i++) {
+    if (clamped >= steps[i] && clamped < steps[i + 1]) {
+      const t = (clamped - steps[i]) / (steps[i + 1] - steps[i]);
+      return { lo: steps[i], hi: steps[i + 1], t };
+    }
+  }
+  return { lo: 80, hi: 80, t: 0 };
+}
+
+/** 보간된 1억당 단가(천원) 반환 */
+function _hpRate(table, lo, hi, t) {
+  const rLo = table.rate[lo];
+  const rHi = table.rate[hi];
+  return rLo + (rHi - rLo) * t;
+}
+
+/** 보간된 cap(천원) 반환 */
+function _hpCap(table, lo, hi, t) {
+  const cLo = table.cap[lo];
+  const cHi = table.cap[hi];
+  return cLo + (cHi - cLo) * t;
+}
+
+/**
+ * 핵심 계산
+ * @param {number} priceManwon  주택 시세 (만원)
+ * @param {number} age          부부 연소자 나이
+ * @param {string} houseType    'general'|'senior'|'officetel'
+ * @param {string} method       '01'|'41'|'42'|'43'|'44'|'31'
+ * @returns {{ monthly: number, methodLabel: string, note: string }}  monthly: 만원
+ */
+function calcHousingPension(priceManwon, age, houseType, method) {
+  const tableMap = {
+    general:   HP_GENERAL_FIXED,
+    senior:    HP_SENIOR_FIXED,
+    officetel: HP_OFFICETEL_FIXED,
+  };
+  const table = tableMap[houseType] || HP_GENERAL_FIXED;
+
+  const { lo, hi, t } = _hpGetAgeKeys(age);
+  const rate1eok = _hpRate(table, lo, hi, t);  // 천원/월 per 1억
+  const capThousand = _hpCap(table, lo, hi, t); // 천원/월 cap
+
+  // 주택가격(억 단위)
+  const priceEok = priceManwon / 10000;
+
+  // 정액형 월지급금 (천원)
+  let monthlyThousand = rate1eok * priceEok;
+  // 상한 적용
+  monthlyThousand = Math.min(monthlyThousand, capThousand);
+
+  // 지급방식 배율 적용
+  let boost = 1.0;
+  let methodLabel = '종신지급 — 정액형';
+  let note = '평생 동일 금액을 수령합니다.';
+
+  if (method === '41') {
+    boost = HP_BOOST_RATE['41'];
+    methodLabel = '종신지급 — 초기증액형 (3년)';
+    note = '처음 3년간 정액형보다 많이 받고, 이후 초기 월지급금의 약 70% 수준으로 줄어듭니다.';
+  } else if (method === '42') {
+    boost = HP_BOOST_RATE['42'];
+    methodLabel = '종신지급 — 초기증액형 (5년)';
+    note = '처음 5년간 정액형보다 많이 받고, 이후 초기 월지급금의 약 70% 수준으로 줄어듭니다.';
+  } else if (method === '43') {
+    boost = HP_BOOST_RATE['43'];
+    methodLabel = '종신지급 — 초기증액형 (7년)';
+    note = '처음 7년간 정액형보다 많이 받고, 이후 초기 월지급금의 약 70% 수준으로 줄어듭니다.';
+  } else if (method === '44') {
+    boost = HP_BOOST_RATE['44'];
+    methodLabel = '종신지급 — 초기증액형 (10년)';
+    note = '처음 10년간 정액형보다 많이 받고, 이후 초기 월지급금의 약 70% 수준으로 줄어듭니다.';
+  } else if (method === '31') {
+    boost = HP_BOOST_RATE['31'];
+    methodLabel = '종신지급 — 정기증가형';
+    note = '최초 월지급금은 정액형보다 적지만, 매 3년마다 4.5%씩 자동 인상됩니다.';
+  }
+
+  monthlyThousand = monthlyThousand * boost;
+
+  // 만원 단위로 반환 (소수 1자리)
+  // monthlyThousand 단위: 천원  →  ÷10 = 만원 (소수 1자리)
+  const monthly = Math.round(monthlyThousand) / 10; // 천원 → 만원
+  return { monthly, methodLabel, note };
+}
+
+/** 계산 실행 */
+function runHpCalc() {
+  const priceManwon = parseInt(document.getElementById('hp-price')?.value || '0');
+  const age         = parseInt(document.getElementById('hp-age')?.value || '0');
+  const houseType   = document.getElementById('hp-house-type')?.value || 'general';
+  const method      = document.getElementById('hp-method')?.value || '01';
+
+  // 유효성 검사
+  if (!priceManwon || priceManwon < 5000) {
+    showToast('주택 시세를 5,000만원 이상으로 입력해 주세요.');
+    return;
+  }
+  if (priceManwon > 120000) {
+    showToast('주택연금 산정 상한은 시세 12억원입니다. 12억원으로 계산합니다.');
+  }
+  if (!age || age < 55 || age > 84) {
+    showToast('나이를 55~84세 사이로 입력해 주세요.');
+    return;
+  }
+
+  const effectivePrice = Math.min(priceManwon, 120000);
+  const { monthly, methodLabel, note } = calcHousingPension(effectivePrice, age, houseType, method);
+
+  // 정액형 비교값 (방식 선택과 무관하게 항상 보여줌)
+  const fixedRef = calcHousingPension(effectivePrice, age, houseType, '01');
+
+  const houseTypeLabel = { general: '일반주택', senior: '노인복지주택', officetel: '주거목적 오피스텔' }[houseType];
+
+  // 한글 가격
+  const priceKor = wonToKorean(effectivePrice);
+  const monthlyWon = Math.round(monthly * 10000); // 원 단위
+
+  const resultEl = document.getElementById('hp-result');
+  if (!resultEl) return;
+
+  resultEl.innerHTML = \`
+    <!-- 메인 결과 -->
+    <div class="text-center mb-6">
+      <p class="text-xs text-gray-500 mb-1">\${houseTypeLabel} · \${age}세 · \${methodLabel}</p>
+      <div class="inline-flex flex-col items-center bg-blue-600 text-white rounded-2xl px-8 py-5 shadow-lg">
+        <span class="text-xs font-semibold text-blue-200 mb-1">예상 월지급금</span>
+        <span class="text-4xl font-extrabold tracking-tight">\${monthly.toFixed(1)}<span class="text-xl ml-1">만원</span></span>
+        <span class="text-sm text-blue-100 mt-1">월 \${monthlyWon.toLocaleString()}원</span>
+      </div>
+    </div>
+
+    <!-- 상세 정보 -->
+    <div class="space-y-2.5 mb-5">
+      <div class="flex justify-between items-center py-2.5 px-4 bg-white rounded-xl border border-gray-100">
+        <span class="text-xs text-gray-500 flex items-center gap-1.5"><i class="fas fa-home text-blue-400"></i>주택 시세 (적용)</span>
+        <span class="font-bold text-gray-800 text-sm">\${priceKor}</span>
+      </div>
+      <div class="flex justify-between items-center py-2.5 px-4 bg-white rounded-xl border border-gray-100">
+        <span class="text-xs text-gray-500 flex items-center gap-1.5"><i class="fas fa-user text-blue-400"></i>기준 나이 (연소자)</span>
+        <span class="font-bold text-gray-800 text-sm">\${age}세</span>
+      </div>
+      \${method !== '01' ? \`
+      <div class="flex justify-between items-center py-2.5 px-4 bg-blue-50 rounded-xl border border-blue-100">
+        <span class="text-xs text-gray-500 flex items-center gap-1.5"><i class="fas fa-exchange-alt text-blue-400"></i>정액형 대비</span>
+        <span class="font-bold text-blue-700 text-sm">정액형 \${fixedRef.monthly.toFixed(1)}만원 → 선택방식 \${monthly.toFixed(1)}만원</span>
+      </div>\` : ''}
+    </div>
+
+    <!-- 방식 설명 -->
+    <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-4">
+      <p class="text-xs font-bold text-blue-700 mb-1"><i class="fas fa-lightbulb mr-1"></i>\${methodLabel}</p>
+      <p class="text-xs text-blue-600 leading-relaxed">\${note}</p>
+      \${method === '31' ? \`<p class="text-xs text-blue-500 mt-1.5">예: 현재 \${monthly.toFixed(1)}만원 → 3년 후 \${(monthly*1.045).toFixed(1)}만원 → 6년 후 \${(monthly*1.045*1.045).toFixed(1)}만원...</p>\` : ''}
+      \${method !== '01' && method !== '31' ? \`<p class="text-xs text-blue-500 mt-1.5">초기 기간 종료 후 예상 수령액: 약 \${(monthly * 0.70 / boost).toFixed(1)}만원 (정액형의 70% 수준)</p>\` : ''}
+    </div>
+
+    <!-- 연간·기대수명 기준 총수령액 -->
+    <div class="grid grid-cols-2 gap-2 mb-5">
+      <div class="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
+        <p class="text-xs text-gray-500 mb-1">연간 수령액</p>
+        <p class="font-extrabold text-gray-800">\${(monthly * 12).toFixed(0)}만원</p>
+      </div>
+      <div class="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
+        <p class="text-xs text-gray-500 mb-1">20년 총수령액 (참고)</p>
+        <p class="font-extrabold text-gray-800">\${(monthly * 12 * 20).toFixed(0)}만원</p>
+      </div>
+    </div>
+
+    <!-- 우대형 안내 -->
+    \${effectivePrice <= 25000 ? \`
+    <div class="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-4">
+      <p class="text-xs font-bold text-amber-700 mb-1"><i class="fas fa-star mr-1 text-amber-500"></i>우대형 주택연금 해당 여부 확인하세요!</p>
+      <p class="text-xs text-amber-600 leading-relaxed">주택 시세 <strong>2억 5천만원 미만</strong> + 부부 중 1인 기초연금 수급자라면 일반형보다 월 수령액을 <strong>약 20% 이상 더</strong> 받는 우대지급방식을 신청할 수 있습니다. 공사에 직접 문의하세요.</p>
+    </div>\` : ''}
+
+    <!-- 재계산 버튼 -->
+    <button onclick="document.getElementById('hp-result').classList.add('hidden')"
+      class="w-full py-2.5 border-2 border-blue-200 text-blue-600 hover:border-blue-400 font-semibold text-sm rounded-xl transition-colors">
+      <i class="fas fa-redo mr-1"></i> 다시 계산하기
+    </button>
+  \`;
+  resultEl.classList.remove('hidden');
+  // 결과 영역으로 부드럽게 스크롤
+  setTimeout(() => resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
 // ─── 읽기 진행바 ─────────────────────────────────────────────────────────────
 
 function initReadingProgress() {
