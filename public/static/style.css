@@ -237,3 +237,11 @@ code {
   border-radius: 4px;
   font-size: 0.85em;
 }
+
+/* ── FAQ 아코디언 — Tailwind hidden 클래스 !important 우회용 ── */
+.faq-hidden {
+  display: none !important;
+}
+.faq-visible {
+  display: block !important;
+}

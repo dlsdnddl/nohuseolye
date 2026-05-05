@@ -650,13 +650,25 @@ function loadMorePosts() {
 // ─── FAQ 아코디언 ─────────────────────────────────────────────────────────────
 
 function toggleFaq(index) {
-  const answer = document.getElementById(`faq-answer-${index}`);
-  const icon = document.getElementById(`faq-icon-${index}`);
+  const answer = document.getElementById('faq-answer-' + index);
+  const icon   = document.getElementById('faq-icon-'   + index);
   if (!answer || !icon) return;
 
-  const isOpen = !answer.classList.contains('hidden');
-  answer.classList.toggle('hidden', isOpen);
-  icon.style.transform = isOpen ? '' : 'rotate(180deg)';
+  // faq-hidden / faq-visible 커스텀 클래스로 토글
+  // (Tailwind CDN의 hidden 클래스 display:none !important 우회)
+  const isOpen = answer.classList.contains('faq-visible');
+
+  if (isOpen) {
+    // 열려있음 → 닫기
+    answer.classList.remove('faq-visible');
+    answer.classList.add('faq-hidden');
+    icon.style.transform = '';
+  } else {
+    // 닫혀있음 → 열기
+    answer.classList.remove('faq-hidden');
+    answer.classList.add('faq-visible');
+    icon.style.transform = 'rotate(180deg)';
+  }
 }
 
 
@@ -1374,29 +1386,8 @@ document.addEventListener('DOMContentLoaded', function() {
     hpPriceEl.addEventListener('input', function() { hpOnPriceInput(); });
   }
 
-  // ── FAQ 아코디언: 이벤트 위임 (onclick 속성 파싱 방식 → 직접 버튼 탐색)
-  // Hono JSX SSR에서 onclick 속성은 그대로 렌더링되지만,
-  // 이벤트 위임을 통해 버튼 클릭을 확실히 처리합니다.
-  var faqContainer = document.getElementById('faq-container');
-  if (faqContainer) {
-    faqContainer.addEventListener('click', function(e) {
-      // 클릭 대상 또는 가장 가까운 button 찾기 (아이콘 클릭 대응)
-      var btn = e.target.closest('button');
-      if (!btn) return;
-      // data-index 속성 또는 onclick 속성에서 인덱스 추출
-      var idx = btn.getAttribute('data-faq-index');
-      if (idx === null) {
-        var onclickVal = btn.getAttribute('onclick') || '';
-        var m = onclickVal.match(/toggleFaq\((\d+)\)/);
-        if (m) idx = m[1];
-      }
-      if (idx !== null) {
-        e.preventDefault();
-        e.stopPropagation();
-        toggleFaq(parseInt(idx, 10));
-      }
-    });
-  }
+  // ── FAQ 아코디언: onclick="toggleFaq(n)" 이 HTML에 직접 렌더링되므로
+  // 이벤트 위임 불필요. 이중 실행 방지를 위해 위임 코드 제거.
 
   // ── 사이드바 "진단 시작하기" 버튼 — onclick="window.scrollTo(..." 이스케이프 우회
   // JSX SSR에서 onclick 속성 내 작은따옴표가 &#39; 로 이스케이프되어 미작동

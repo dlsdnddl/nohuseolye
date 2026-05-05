@@ -225,7 +225,7 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
                       </span>
                       <i id={`faq-icon-${i}`} class="fas fa-chevron-down text-gray-400 flex-shrink-0 transition-transform text-sm"></i>
                     </button>
-                    <div id={`faq-answer-${i}`} class="hidden px-5 pb-4 bg-gray-50">
+                    <div id={`faq-answer-${i}`} class="faq-hidden px-5 pb-4 bg-gray-50">
                       <p class="text-sm text-gray-600 leading-relaxed pt-3">
                         <span class="text-primary-600 font-bold mr-2">A.</span>{item.answer}
                       </p>
