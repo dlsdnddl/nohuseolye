@@ -163,12 +163,29 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
             </div>
           )}
 
+          {/* ─── 노후자금 충분지수 진단 CTA ─── */}
+          <div class="my-8 bg-gradient-to-r from-primary-700 to-primary-600 rounded-2xl p-6 text-white">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <p class="text-primary-200 text-xs font-semibold mb-1">🔍 무료 · 1분 진단</p>
+                <h3 class="text-lg font-extrabold mb-1">내 노후자금, 지금 충분한가요?</h3>
+                <p class="text-primary-200 text-sm">국민연금 예상 수령액과 노후자금 충분지수를<br class="hidden sm:block"/> 나이·납부기간·소득 입력만으로 바로 확인하세요.</p>
+              </div>
+              <a
+                href="/"
+                class="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-800 font-bold text-sm rounded-xl hover:bg-primary-50 transition-colors shadow-lg whitespace-nowrap"
+              >
+                <i class="fas fa-chart-pie"></i> 지금 진단하기
+              </a>
+            </div>
+          </div>
+
           {/* 공유 버튼 */}
           <div class="border-t border-gray-100 pt-6 mb-8">
             <p class="text-sm font-semibold text-gray-600 mb-3">이 글이 도움이 됐다면 공유해 주세요</p>
             <div class="flex flex-wrap gap-3">
               <button
-                onclick="shareKakao()"
+                id="kakao-share-btn"
                 class="flex items-center gap-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 font-semibold text-sm rounded-lg transition-colors"
               >
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.69 2 11.25c0 2.91 1.82 5.47 4.58 6.96L5.5 21.5l4.32-2.89c.71.1 1.44.14 2.18.14 5.52 0 10-3.69 10-8.25S17.52 3 12 3z"/></svg>
@@ -264,10 +281,10 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
               <p class="text-primary-300 text-xs font-semibold mb-2">🔍 무료 진단</p>
               <h4 class="font-bold mb-2 text-sm">내 노후자금 지금 충분한가요?</h4>
               <p class="text-primary-200 text-xs mb-4">1분 진단으로 확인하세요</p>
+              {/* onclick 내 작은따옴표가 &#39; 로 이스케이프되므로 href만 사용 */}
               <a
                 href="/"
-                onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"
-                class="block text-center py-2.5 bg-white text-primary-800 font-bold text-sm rounded-xl hover:bg-primary-50 transition-colors"
+                class="block text-center py-2.5 bg-white text-primary-800 font-bold text-sm rounded-xl hover:bg-primary-50 transition-colors sidebar-diag-cta"
               >
                 진단 시작하기
               </a>

@@ -81,22 +81,41 @@ export const ContentCuration = ({ posts }: ContentCurationProps) => {
         </div>
       </section>
 
-      {/* ─── 미니 진단기 CTA 배너 ─── */}
-      <section class="bg-gradient-to-r from-primary-800 to-primary-700 rounded-2xl p-8 md:p-10">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div class="text-white">
-            <p class="text-primary-300 text-sm font-semibold mb-2">🔍 무료 진단 서비스</p>
-            <h3 class="text-2xl font-extrabold mb-2">국민연금, 지금 몇 년 더 내야 할까요?</h3>
-            <p class="text-primary-200 text-sm">납부 기간과 소득 입력만으로 예상 수령액과 최적 수령 시기를 알려드립니다.</p>
+      {/* ─── CTA 배너: 2개 나란히 (노후자금 충분지수 진단 + 국민연금 수령액 계산) ─── */}
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        {/* CTA 1: 노후자금 충분지수 진단 (메인 진단기) */}
+        <div class="bg-gradient-to-br from-primary-800 to-primary-700 rounded-2xl p-7 text-white flex flex-col justify-between gap-5">
+          <div>
+            <p class="text-primary-300 text-xs font-semibold mb-2">🔍 무료 · 1분 진단</p>
+            <h3 class="text-xl font-extrabold mb-2">노후자금 충분지수<br/>지금 진단해보세요</h3>
+            <p class="text-primary-200 text-sm">나이·납부기간·소득 입력만으로<br/>국민연금 수령액과 노후 충분도를 바로 확인</p>
           </div>
+          {/* href만 사용 — onclick 작은따옴표 이스케이프 문제 우회, JS에서 scroll 처리 */}
           <a
-            href="#diagnosis-form"
-            onclick="window.scrollTo({top:0,behavior:'smooth'})"
-            class="flex-shrink-0 px-8 py-4 bg-white text-primary-800 font-bold rounded-xl hover:bg-primary-50 transition-colors shadow-lg whitespace-nowrap"
+            href="/"
+            id="main-diag-cta-btn"
+            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-primary-800 font-bold text-sm rounded-xl hover:bg-primary-50 transition-colors shadow-md"
           >
-            <i class="fas fa-calculator mr-2"></i>지금 진단하기
+            <i class="fas fa-chart-pie"></i>지금 진단하기
           </a>
         </div>
+
+        {/* CTA 2: 국민연금 수령액 계산법 칼럼으로 이동 */}
+        <div class="bg-gradient-to-br from-emerald-700 to-emerald-600 rounded-2xl p-7 text-white flex flex-col justify-between gap-5">
+          <div>
+            <p class="text-emerald-200 text-xs font-semibold mb-2">📋 2026 공식 계산법</p>
+            <h3 class="text-xl font-extrabold mb-2">국민연금 수령액<br/>얼마나 받을 수 있을까?</h3>
+            <p class="text-emerald-100 text-sm">A값 319만원 기준 2026 완벽 계산법<br/>조기·연기수령 손익분기점까지 한눈에</p>
+          </div>
+          <a
+            href="/pension-asset/national-pension-amount-calculation"
+            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-emerald-800 font-bold text-sm rounded-xl hover:bg-emerald-50 transition-colors shadow-md"
+          >
+            <i class="fas fa-calculator"></i>수령액 계산법 보기
+          </a>
+        </div>
+
       </section>
 
       {/* ─── 최신 업데이트 섹션 ─── */}

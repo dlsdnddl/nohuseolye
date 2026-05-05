@@ -723,37 +723,36 @@ function buildTOC() {
 // ─── 공유 기능 ────────────────────────────────────────────────────────────────
 
 function shareKakao() {
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const pageUrl  = location.href;
+  const pageUrl   = location.href;
   const pageTitle = document.title;
 
-  if (isMobile) {
-    // ── 모바일: 카카오톡 앱 공유 인텐트 (앱 키 불필요)
-    // Android: 카카오톡 intent URL
-    // iOS: 카카오톡 앱이 설치된 경우 딥링크로 공유창 열기
-    const kakaoScheme = 'kakaotalk://forward?msg=' + encodeURIComponent(pageTitle + '\n' + pageUrl);
-    const anchor = document.createElement('a');
-    anchor.href = kakaoScheme;
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-
-    // 앱이 없거나 실패 시 1초 후 링크 복사 fallback
-    setTimeout(() => {
-      // 페이지가 이동하지 않았으면 복사로 대체
-      _copyToClipboard(pageUrl);
-      showToast('카카오톡 앱이 없으면 링크를 복사해 카카오톡에 붙여넣기하세요 📋');
-    }, 1200);
-  } else {
-    // ── PC: Web Share API 지원 시 사용 (Chrome 등)
-    if (navigator.share) {
-      navigator.share({ title: pageTitle, url: pageUrl }).catch(() => {});
-    } else {
-      // Web Share 미지원 → 링크 복사 + 안내
-      _copyToClipboard(pageUrl);
-      showToast('링크가 복사됐어요! 카카오톡에 붙여넣기해서 공유하세요 📋');
-    }
+  // ① Web Share API — 모바일 Chrome/Safari에서 카카오톡을 포함한 앱 공유 시트 열기
+  if (navigator.share) {
+    navigator.share({ title: pageTitle, text: pageTitle, url: pageUrl })
+      .catch(function(err) {
+        // 사용자가 취소하거나 실패 시 링크 복사 fallback
+        if (err && err.name !== 'AbortError') {
+          _copyToClipboard(pageUrl);
+          showToast('링크가 복사됐어요! 카카오톡에 붙여넣기해서 공유하세요 📋');
+        }
+      });
+    return;
   }
+
+  // ② kakaolink 스킴 — SDK 없이 앱이 설치된 모바일에서만 작동
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (isMobile) {
+    // kakaotalk://forward?msg= 는 앱 버전에 따라 미지원이므로
+    // 대신 send.kakao.com 카카오 나눔 페이지로 리다이렉트 (앱 설치 여부와 무관하게 동작)
+    const sharePageUrl = 'https://send.kakao.com/ko/share?url=' + encodeURIComponent(pageUrl)
+      + '&text=' + encodeURIComponent(pageTitle);
+    window.open(sharePageUrl, '_blank', 'noopener');
+    return;
+  }
+
+  // ③ PC fallback — 링크 복사 + 안내
+  _copyToClipboard(pageUrl);
+  showToast('링크가 복사됐어요! 카카오톡에 붙여넣기해서 공유하세요 📋');
 }
 
 function _copyToClipboard(text) {
@@ -1354,7 +1353,7 @@ function resetIncomeCalc() {
 
 // ─── 초기화 ──────────────────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
   initMobileSearch();
   buildTOC();
   initReadingProgress();
@@ -1375,33 +1374,76 @@ document.addEventListener('DOMContentLoaded', () => {
     hpPriceEl.addEventListener('input', function() { hpOnPriceInput(); });
   }
 
-  // 사이드바 "진단 시작하기" 버튼 — onclick 속성 작은따옴표 이스케이프 우회
-  var diagBtn = document.querySelector('a[href="/"][class*="text-primary-800"]');
-  if (diagBtn) {
-    diagBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.location.href = '/';
-    });
-  }
-
-  // FAQContainer 이벤트 위임 (toggleFaq 보조)
+  // ── FAQ 아코디언: 이벤트 위임 (onclick 속성 파싱 방식 → 직접 버튼 탐색)
+  // Hono JSX SSR에서 onclick 속성은 그대로 렌더링되지만,
+  // 이벤트 위임을 통해 버튼 클릭을 확실히 처리합니다.
   var faqContainer = document.getElementById('faq-container');
   if (faqContainer) {
     faqContainer.addEventListener('click', function(e) {
-      var btn = e.target.closest('button[onclick^="toggleFaq"]');
-      if (btn) {
-        var m = btn.getAttribute('onclick').match(/toggleFaq\((\d+)\)/);
-        if (m) toggleFaq(parseInt(m[1]));
+      // 클릭 대상 또는 가장 가까운 button 찾기 (아이콘 클릭 대응)
+      var btn = e.target.closest('button');
+      if (!btn) return;
+      // data-index 속성 또는 onclick 속성에서 인덱스 추출
+      var idx = btn.getAttribute('data-faq-index');
+      if (idx === null) {
+        var onclickVal = btn.getAttribute('onclick') || '';
+        var m = onclickVal.match(/toggleFaq\((\d+)\)/);
+        if (m) idx = m[1];
+      }
+      if (idx !== null) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleFaq(parseInt(idx, 10));
       }
     });
   }
 
-  // 재계산 버튼도 이벤트 위임
+  // ── 사이드바 "진단 시작하기" 버튼 — onclick="window.scrollTo(..." 이스케이프 우회
+  // JSX SSR에서 onclick 속성 내 작은따옴표가 &#39; 로 이스케이프되어 미작동
+  // → href="/" 링크로 동작하되, 부드러운 스크롤 대신 페이지 이동 사용
+  var sidebarDiagBtns = document.querySelectorAll('a[href="/"].block.text-center');
+  sidebarDiagBtns.forEach(function(btn) {
+    // onclick 속성 제거 후 정상 href 이동으로 대체
+    btn.removeAttribute('onclick');
+  });
+
+  // ── 메인 CTA 배너 "지금 진단하기" 버튼도 동일 처리
+  var mainCtaBtns = document.querySelectorAll('a[href="#diagnosis-form"]');
+  mainCtaBtns.forEach(function(btn) {
+    btn.removeAttribute('onclick');
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // ── 메인 노후자금 충분지수 CTA 버튼 (id="main-diag-cta-btn")
+  // 메인 페이지에서는 스크롤 top, 다른 페이지에서는 메인 페이지로 이동
+  var mainDiagBtn = document.getElementById('main-diag-cta-btn');
+  if (mainDiagBtn) {
+    mainDiagBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (location.pathname === '/') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        window.location.href = '/';
+      }
+    });
+  }
+
+  // ── 카카오톡 공유 버튼 (id="kakao-share-btn") 이벤트 바인딩
+  // onclick 속성 대신 addEventListener 사용하여 이스케이프 문제 우회
+  var kakaoBtn = document.getElementById('kakao-share-btn');
+  if (kakaoBtn) {
+    kakaoBtn.addEventListener('click', function() { shareKakao(); });
+  }
+
+  // ── 재계산 버튼 이벤트 위임 (주택연금 계산기)
   var hpWidget = document.getElementById('hp-calc-widget');
   if (hpWidget) {
     hpWidget.addEventListener('click', function(e) {
       var btn = e.target.closest('button');
-      if (btn && btn.getAttribute('onclick') && btn.getAttribute('onclick').includes('runHpCalc')) {
+      if (btn && btn.getAttribute('onclick') && btn.getAttribute('onclick').indexOf('runHpCalc') !== -1) {
         runHpCalc();
       }
     });
