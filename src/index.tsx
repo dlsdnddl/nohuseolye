@@ -359,6 +359,15 @@ ${allPages.map(p => `  <url>
   return c.text(xml, 200, { 'Content-Type': 'application/xml; charset=utf-8' })
 })
 
+// ─── ads.txt ──────────────────────────────────────────────────────────────────
+app.get('/ads.txt', (c) => {
+  return c.text(
+    'google.com, pub-5237218812452624, DIRECT, f08c47fec0942fa0',
+    200,
+    { 'Content-Type': 'text/plain; charset=utf-8' }
+  )
+})
+
 // ─── robots.txt ───────────────────────────────────────────────────────────────
 app.get('/robots.txt', (c) => {
   const txt = `User-agent: *
