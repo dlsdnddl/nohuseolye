@@ -289,7 +289,7 @@ function buildResultHTML({ score, gradeInfo, pension, monthlyExpense, shortfall,
   const offset = circumference - (score / 100) * circumference;
 
   return `
-    <div class="text-center mb-6">
+    <div class="text-center mb-6" data-grade="${gradeInfo.grade}" data-shortfall="${shortfall}">
       <div class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1 rounded-full mb-4"
         style="background:${gradeInfo.bg}; color:${gradeInfo.color}">
         <span class="w-2 h-2 rounded-full" style="background:${gradeInfo.color}"></span>
@@ -478,7 +478,7 @@ function buildResultHTML({ score, gradeInfo, pension, monthlyExpense, shortfall,
             <div class="w-full bg-amber-100 rounded-full h-2 mb-1">
               <div class="bg-amber-400 h-2 rounded-full" style="width:${Math.min(100, progressPct)}%"></div>
             </div>
-            <p class="text-xs text-amber-500">목표 달성에 ${ai.neededAdditional}년 필요 / 실제 납부 가능 ${ai.maxAdditionalYears}년 (${Math.min(100,progressPct)}%)</p>
+            <p class="text-xs text-amber-500">최대 납부 시 목표의 ${Math.min(100,progressPct)}% 달성 · 나머지 ${Math.max(0, 100-Math.min(100,progressPct))}%는 다른 연금으로 보완 필요</p>
           </div>
 
           <!-- 부족분 안내 -->
@@ -535,6 +535,18 @@ function buildResultHTML({ score, gradeInfo, pension, monthlyExpense, shortfall,
         <i class="fas fa-arrow-right text-primary-500 text-xs group-hover:translate-x-1 transition-transform"></i>
         <span class="text-sm text-gray-700 group-hover:text-primary-700">기초연금 자격 조건 확인하기</span>
       </a>
+    </div>
+
+    <!-- 카카오톡 공유 -->
+    <div class="mb-4">
+      <p class="text-xs font-bold text-gray-500 mb-2 text-center">📢 결과 공유하기</p>
+      <button id="diag-kakao-share-btn"
+        class="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors"
+        style="background:#FEE500; color:#3A1D1D;"
+        onclick="shareDiagnosisKakao()">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="9" cy="8.5" rx="9" ry="7.5" fill="#3A1D1D"/><path d="M4.5 11.5L6 8.5L7.5 10.5L9 7L11 11L12.5 8.5L14 11.5" stroke="#FEE500" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        카카오톡으로 공유하기
+      </button>
     </div>
 
     <button onclick="resetDiagnosis()"
@@ -733,6 +745,49 @@ function buildTOC() {
 
 
 // ─── 공유 기능 ────────────────────────────────────────────────────────────────
+
+// 진단 결과 카카오톡 공유
+function shareDiagnosisKakao() {
+  const url = location.origin + '/';
+
+  // 결과에서 등급/점수/부족분 읽기
+  const resultDiv  = document.querySelector('#diagnosis-result .text-center[data-grade]');
+  const scoreEl    = document.querySelector('#diagnosis-result .text-3xl');
+
+  const grade      = resultDiv  ? resultDiv.dataset.grade     : '';
+  const score      = scoreEl    ? scoreEl.textContent.trim()  : '';
+  const shortfall  = resultDiv  ? resultDiv.dataset.shortfall : '0';
+
+  // 등급별 이모지·문구
+  const gradeEmoji = { A:'✅', B:'🟡', C:'⚠️', D:'🚨', F:'🆘' };
+  const emoji = gradeEmoji[grade] || '📊';
+
+  let shareText = `[노후자금 긴급 진단]\n`;
+  shareText += `${emoji} 내 노후 준비 상태: ${grade ? `'${grade}등급'` : `${score}점`}\n`;
+  if (shortfall && Number(shortfall) > 0) {
+    shareText += `국민연금만으로는 매월 ${Number(shortfall).toLocaleString()}만원 부족합니다.\n`;
+  }
+  shareText += `지금 1분 만에 내 노후 생존율을 확인해 보세요!\n👉 ${url}`;
+
+  // Web Share API (모바일)
+  if (navigator.share) {
+    navigator.share({
+      title: '노후자금 충분지수 진단 — 내 노후는 몇 점?',
+      text: shareText,
+      url: url
+    }).catch(function(err) {
+      if (err && err.name !== 'AbortError') {
+        _copyToClipboard(shareText);
+        showToast('링크가 복사됐어요! 카카오톡에 붙여넣기해서 공유하세요 📋');
+      }
+    });
+    return;
+  }
+
+  // 데스크탑 fallback — 클립보드 복사
+  _copyToClipboard(shareText);
+  showToast('공유 문구가 복사됐어요! 카카오톡에 붙여넣기해서 공유하세요 📋');
+}
 
 function shareKakao() {
   const pageUrl   = location.href;
