@@ -447,8 +447,10 @@ function buildResultHTML({ score, gradeInfo, pension, monthlyExpense, shortfall,
         // maxAdditionalYears = 0 이면 이미 64세 이상 → 납부 자체 불가
         const hasRoom = ai.maxAdditionalYears > 0;
         const totalMaxYears = years + ai.maxAdditionalYears;
-        const progressPct = ai.neededAdditional > 0
-          ? Math.round((ai.maxAdditionalYears / ai.neededAdditional) * 100)
+        // 진행바 = "최대 납부 후 수령액이 목표 생활비의 몇 %인가"
+        // (이전: 추가납부기간/필요기간 비율 → 의미없는 수치였음)
+        const progressPct = monthlyExpense > 0
+          ? Math.round((ai.pensionAtMax / monthlyExpense) * 100)
           : 100;
         const shortfallAtMax = Math.max(0, monthlyExpense - ai.pensionAtMax);
 
