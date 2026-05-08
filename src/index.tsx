@@ -15,15 +15,16 @@ app.use(renderer)
 
 // ─── 홈 ───────────────────────────────────────────────────────────────────────
 app.get('/', (c) => {
+  const SITE_URL = 'https://www.luckyu.co.kr'
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: '노후설계 가이드',
     description: '4070 세대를 위한 연금·복지·노후 현금흐름 설계 정보 플랫폼',
-    url: 'https://nohuseolye.pages.dev',
+    url: SITE_URL,
     potentialAction: {
       '@type': 'SearchAction',
-      target: 'https://nohuseolye.pages.dev/search?q={search_term_string}',
+      target: `${SITE_URL}/search?q={search_term_string}`,
       'query-input': 'required name=search_term_string'
     }
   }
@@ -49,7 +50,7 @@ app.get('/', (c) => {
       </main>
       <Footer />
     </>,
-    { title: null, description: null, jsonLd }
+    { title: null, description: null, jsonLd, canonicalUrl: SITE_URL }
   )
 })
 
@@ -101,7 +102,7 @@ app.get('/pension-asset', (c) => {
       </main>
       <Footer />
     </>,
-    { title: '연금·자산 정보', description: '국민연금, 주택연금, 기초연금 등 노후 소득 관련 핵심 정보를 공식 자료 기반으로 제공합니다.' }
+    { title: '연금·자산 정보', description: '국민연금, 주택연금, 기초연금 등 노후 소득 관련 핵심 정보를 공식 자료 기반으로 제공합니다.', canonicalUrl: 'https://www.luckyu.co.kr/pension-asset' }
   )
 })
 
@@ -144,17 +145,17 @@ app.get('/pension-asset/:slug', (c) => {
       publisher: {
         '@type': 'Organization',
         name: '노후설계 가이드',
-        logo: { '@type': 'ImageObject', url: 'https://nohuseolye.pages.dev/static/favicon.svg' }
+        logo: { '@type': 'ImageObject', url: 'https://www.luckyu.co.kr/static/favicon.svg' }
       },
-      image: `https://nohuseolye.pages.dev${post.thumbnail}`
+      image: `https://www.luckyu.co.kr${post.thumbnail}`
     },
     {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: '홈', item: 'https://nohuseolye.pages.dev' },
-        { '@type': 'ListItem', position: 2, name: post.categoryLabel, item: `https://nohuseolye.pages.dev/${post.category}` },
-        { '@type': 'ListItem', position: 3, name: post.title, item: `https://nohuseolye.pages.dev/${post.category}/${post.slug}` }
+        { '@type': 'ListItem', position: 1, name: '홈', item: 'https://www.luckyu.co.kr' },
+        { '@type': 'ListItem', position: 2, name: post.categoryLabel, item: `https://www.luckyu.co.kr/${post.category}` },
+        { '@type': 'ListItem', position: 3, name: post.title, item: `https://www.luckyu.co.kr/${post.category}/${post.slug}` }
       ]
     },
     ...(post.faq ? [{
@@ -174,7 +175,7 @@ app.get('/pension-asset/:slug', (c) => {
       <ArticlePage post={post} />
       <Footer />
     </>,
-    { title: post.title, description: post.description, jsonLd }
+    { title: post.title, description: post.description, jsonLd, canonicalUrl: `https://www.luckyu.co.kr/${post.category}/${post.slug}` }
   )
 })
 
@@ -253,7 +254,7 @@ app.get('/care', (c) => {
       </main>
       <Footer />
     </>,
-    { title: '부모님 돌봄 정보', description: '장기요양등급, 병원비 지원 등 부모님 돌봄 관련 핵심 정보를 공식 자료 기반으로 제공합니다.' }
+    { title: '부모님 돌봄 정보', description: '장기요양등급, 병원비 지원 등 부모님 돌봄 관련 핵심 정보를 공식 자료 기반으로 제공합니다.', canonicalUrl: 'https://www.luckyu.co.kr/care' }
   )
 })
 
@@ -292,17 +293,17 @@ app.get('/care/:slug', (c) => {
       publisher: {
         '@type': 'Organization',
         name: '노후설계 가이드',
-        logo: { '@type': 'ImageObject', url: 'https://nohuseolye.pages.dev/static/favicon.svg' }
+        logo: { '@type': 'ImageObject', url: 'https://www.luckyu.co.kr/static/favicon.svg' }
       },
-      image: `https://nohuseolye.pages.dev${post.thumbnail}`
+      image: `https://www.luckyu.co.kr${post.thumbnail}`
     },
     {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: '홈', item: 'https://nohuseolye.pages.dev' },
-        { '@type': 'ListItem', position: 2, name: post.categoryLabel, item: `https://nohuseolye.pages.dev/${post.category}` },
-        { '@type': 'ListItem', position: 3, name: post.title, item: `https://nohuseolye.pages.dev/${post.category}/${post.slug}` }
+        { '@type': 'ListItem', position: 1, name: '홈', item: 'https://www.luckyu.co.kr' },
+        { '@type': 'ListItem', position: 2, name: post.categoryLabel, item: `https://www.luckyu.co.kr/${post.category}` },
+        { '@type': 'ListItem', position: 3, name: post.title, item: `https://www.luckyu.co.kr/${post.category}/${post.slug}` }
       ]
     },
     ...(post.faq ? [{
@@ -322,7 +323,7 @@ app.get('/care/:slug', (c) => {
       <ArticlePage post={post} />
       <Footer />
     </>,
-    { title: post.title, description: post.description, jsonLd }
+    { title: post.title, description: post.description, jsonLd, canonicalUrl: `https://www.luckyu.co.kr/${post.category}/${post.slug}` }
   )
 })
 
