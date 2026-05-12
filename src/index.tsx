@@ -386,7 +386,8 @@ app.get('/robots.txt', (c) => {
   const txt = `User-agent: *
 Allow: /
 
-Sitemap: https://www.luckyu.co.kr/sitemap.xml`
+Sitemap: https://www.luckyu.co.kr/sitemap.xml
+`
 
   return c.text(txt, 200, { 'Content-Type': 'text/plain; charset=utf-8' })
 })
