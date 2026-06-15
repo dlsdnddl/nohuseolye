@@ -64,6 +64,10 @@ export const Header = () => {
 
         {/* GNB 메뉴 */}
         <nav class="flex items-center gap-1 pb-0 border-t border-gray-50">
+          {/* 홈 */}
+          <a href="/" class="relative px-4 py-3 text-sm font-semibold text-gray-500 hover:text-primary-700 transition-colors">
+            홈
+          </a>
           {navItems.map(item => (
             item.active ? (
               <a
@@ -84,6 +88,23 @@ export const Header = () => {
               </span>
             )
           ))}
+          {/* 우측 보조 링크 */}
+          <div class="ml-auto flex items-center gap-1">
+            <a
+              href="/pension-asset"
+              class="px-4 py-3 text-sm text-gray-500 hover:text-primary-700 transition-colors flex items-center gap-1"
+            >
+              <i class="fas fa-list text-xs"></i>
+              전체 글
+            </a>
+            <a
+              href="/#diagnosis-form"
+              class="ml-1 px-4 py-2 text-sm font-semibold text-white bg-primary-700 hover:bg-primary-600 rounded-full transition-colors flex items-center gap-1.5"
+            >
+              <i class="fas fa-chart-pie text-xs"></i>
+              무료 진단
+            </a>
+          </div>
         </nav>
       </div>
 

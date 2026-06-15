@@ -346,6 +346,150 @@ app.get('/care/:slug', (c) => {
   )
 })
 
+// ─── 정보 페이지 (애드센스·신뢰도용) ─────────────────────────────────────────────
+app.get('/about', (c) => {
+  return c.render(
+    <>
+      <Header />
+      <main class="max-w-3xl mx-auto px-4 py-16">
+        <nav class="flex items-center gap-2 text-sm text-gray-400 mb-8">
+          <a href="/" class="hover:text-primary-600">홈</a>
+          <i class="fas fa-chevron-right text-xs"></i>
+          <span class="text-gray-700">운영자 소개</span>
+        </nav>
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-8">운영자 소개</h1>
+        <div class="prose prose-gray max-w-none space-y-6 text-gray-700 leading-relaxed">
+          <p>
+            <strong>노후설계 가이드</strong>는 4070 세대가 복잡한 연금·복지 제도를 쉽게 이해하고 올바른 결정을 내릴 수 있도록 돕기 위해 만들어진 정보 플랫폼입니다.
+          </p>
+          <p>
+            보건복지부·금융감독원·국민연금공단·한국주택금융공사 등 공신력 있는 기관의 공식 자료를 바탕으로,
+            전문 용어를 일상 언어로 풀어 제공합니다.
+          </p>
+          <h2 class="text-xl font-bold text-gray-900 mt-8 mb-4">운영 방침</h2>
+          <ul class="list-disc list-inside space-y-2">
+            <li>모든 정보는 공식 기관 발표 자료를 출처로 합니다.</li>
+            <li>법령·고시 변경 시 최대한 빠르게 내용을 업데이트합니다.</li>
+            <li>본 사이트의 정보는 참고용이며, 개인별 상황은 반드시 해당 기관에 직접 확인하시기 바랍니다.</li>
+          </ul>
+          <h2 class="text-xl font-bold text-gray-900 mt-8 mb-4">문의</h2>
+          <p>오류 제보 및 문의는 <a href="/contact" class="text-primary-600 hover:underline">문의하기</a> 페이지를 이용해 주세요.</p>
+        </div>
+      </main>
+      <Footer />
+    </>,
+    { title: '운영자 소개 | 노후설계 가이드', description: '노후설계 가이드의 운영 방침과 정보 출처 기준을 안내합니다.', canonicalUrl: 'https://www.luckyu.co.kr/about' }
+  )
+})
+
+app.get('/privacy', (c) => {
+  return c.render(
+    <>
+      <Header />
+      <main class="max-w-3xl mx-auto px-4 py-16">
+        <nav class="flex items-center gap-2 text-sm text-gray-400 mb-8">
+          <a href="/" class="hover:text-primary-600">홈</a>
+          <i class="fas fa-chevron-right text-xs"></i>
+          <span class="text-gray-700">개인정보처리방침</span>
+        </nav>
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-2">개인정보처리방침</h1>
+        <p class="text-sm text-gray-400 mb-8">최종 업데이트: 2026년 1월 1일</p>
+        <div class="space-y-8 text-gray-700 leading-relaxed">
+          <section>
+            <h2 class="text-lg font-bold text-gray-900 mb-3">1. 수집하는 개인정보 항목</h2>
+            <p>본 사이트는 뉴스레터 구독 신청 시 이메일 주소를 수집합니다. 그 외 서비스 이용 과정에서 IP 주소, 쿠키, 방문 기록 등이 자동으로 생성될 수 있습니다.</p>
+          </section>
+          <section>
+            <h2 class="text-lg font-bold text-gray-900 mb-3">2. 개인정보의 수집 및 이용 목적</h2>
+            <p>수집된 이메일 주소는 뉴스레터 발송 목적으로만 사용되며, 제3자에게 제공되지 않습니다.</p>
+          </section>
+          <section>
+            <h2 class="text-lg font-bold text-gray-900 mb-3">3. 광고 및 쿠키</h2>
+            <p>본 사이트는 Google 애드센스를 통해 광고를 게재합니다. Google은 쿠키를 사용하여 방문자에게 맞춤 광고를 제공할 수 있습니다. Google의 광고 쿠키 사용에 대한 자세한 내용은 <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:underline">Google 개인정보처리방침</a>에서 확인할 수 있습니다.</p>
+          </section>
+          <section>
+            <h2 class="text-lg font-bold text-gray-900 mb-3">4. 개인정보의 보유 및 이용 기간</h2>
+            <p>뉴스레터 구독 해지 시 즉시 이메일 주소를 삭제합니다.</p>
+          </section>
+          <section>
+            <h2 class="text-lg font-bold text-gray-900 mb-3">5. 문의</h2>
+            <p>개인정보 관련 문의는 <a href="/contact" class="text-primary-600 hover:underline">문의하기</a> 페이지를 이용해 주세요.</p>
+          </section>
+        </div>
+      </main>
+      <Footer />
+    </>,
+    { title: '개인정보처리방침 | 노후설계 가이드', description: '노후설계 가이드의 개인정보처리방침을 안내합니다.', canonicalUrl: 'https://www.luckyu.co.kr/privacy' }
+  )
+})
+
+app.get('/disclaimer', (c) => {
+  return c.render(
+    <>
+      <Header />
+      <main class="max-w-3xl mx-auto px-4 py-16">
+        <nav class="flex items-center gap-2 text-sm text-gray-400 mb-8">
+          <a href="/" class="hover:text-primary-600">홈</a>
+          <i class="fas fa-chevron-right text-xs"></i>
+          <span class="text-gray-700">면책 고지</span>
+        </nav>
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-2">면책 고지</h1>
+        <p class="text-sm text-gray-400 mb-8">최종 업데이트: 2026년 1월 1일</p>
+        <div class="space-y-6 text-gray-700 leading-relaxed">
+          <p>
+            본 사이트(<strong>노후설계 가이드</strong>, luckyu.co.kr)의 모든 정보는 보건복지부·금융감독원·국민연금공단·한국주택금융공사 등의 공식 발표 자료를 기반으로 작성된 <strong>참고용 정보</strong>입니다.
+          </p>
+          <p>
+            연금 수령액, 기초연금 자격, 장기요양 등급 등은 개인의 가입 이력, 재산 상황, 소득 수준에 따라 실제 결과가 달라질 수 있습니다.
+            중요한 의사결정(연금 신청 시기 결정, 자산 처분 등) 전에는 반드시 <strong>해당 공식 기관에 직접 확인</strong>하시기 바랍니다.
+          </p>
+          <p>
+            본 사이트는 법령·고시 변경 시 내용을 업데이트하기 위해 노력하나, 업데이트 지연으로 인한 정보 불일치에 대한 법적 책임을 지지 않습니다.
+          </p>
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mt-6">
+            <p class="font-semibold text-amber-800 mb-2">⚠️ 반드시 직접 확인이 필요한 사항</p>
+            <ul class="list-disc list-inside space-y-1 text-amber-700 text-sm">
+              <li>국민연금 예상 수령액 → 국민연금공단(1355) 또는 nps.or.kr</li>
+              <li>기초연금 신청 자격 → 주민센터 또는 복지로(bokjiro.go.kr)</li>
+              <li>장기요양 등급 → 국민건강보험공단(1577-1000)</li>
+              <li>주택연금 수령액 → 한국주택금융공사(1688-8114)</li>
+            </ul>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </>,
+    { title: '면책 고지 | 노후설계 가이드', description: '노후설계 가이드의 면책 고지 사항을 안내합니다.', canonicalUrl: 'https://www.luckyu.co.kr/disclaimer' }
+  )
+})
+
+app.get('/contact', (c) => {
+  return c.render(
+    <>
+      <Header />
+      <main class="max-w-3xl mx-auto px-4 py-16">
+        <nav class="flex items-center gap-2 text-sm text-gray-400 mb-8">
+          <a href="/" class="hover:text-primary-600">홈</a>
+          <i class="fas fa-chevron-right text-xs"></i>
+          <span class="text-gray-700">문의하기</span>
+        </nav>
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-4">문의하기</h1>
+        <p class="text-gray-500 mb-10">오류 제보, 정보 수정 요청, 제휴 문의 등 아래 이메일로 연락해 주세요. 영업일 기준 2~3일 내에 답변 드립니다.</p>
+        <div class="bg-gray-50 rounded-2xl p-8 text-center">
+          <i class="fas fa-envelope text-4xl text-primary-600 mb-4"></i>
+          <p class="text-lg font-semibold text-gray-800">이메일 문의</p>
+          <p class="text-gray-500 mt-2 text-sm">오류 제보 및 수정 요청 시 해당 URL과 함께 내용을 보내주시면 빠르게 처리하겠습니다.</p>
+          <div class="mt-6 p-4 bg-white rounded-xl border border-gray-200 inline-block">
+            <p class="text-primary-700 font-bold text-lg">admin@luckyu.co.kr</p>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </>,
+    { title: '문의하기 | 노후설계 가이드', description: '노후설계 가이드에 오류 제보, 정보 수정 요청, 제휴 문의를 보내주세요.', canonicalUrl: 'https://www.luckyu.co.kr/contact' }
+  )
+})
+
 // ─── sitemap.xml ─────────────────────────────────────────────────────────────
 app.get('/sitemap.xml', (c) => {
   const BASE = 'https://www.luckyu.co.kr'

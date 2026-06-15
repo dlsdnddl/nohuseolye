@@ -80,8 +80,8 @@ export const Footer = () => {
           <div>
             <h4 class="text-white font-semibold text-sm mb-4">부모님 돌봄</h4>
             <ul class="space-y-2 text-sm">
-              <li><a href="/pension-asset/long-term-care-grade-application" class="hover:text-white transition-colors">장기요양등급 신청</a></li>
-              <li><a href="/pension-asset/medical-expense-support-parents" class="hover:text-white transition-colors">부모님 병원비 지원</a></li>
+              <li><a href="/care/long-term-care-grade-application" class="hover:text-white transition-colors">장기요양등급 신청</a></li>
+              <li><a href="/care/medical-expense-support-parents" class="hover:text-white transition-colors">부모님 병원비 지원</a></li>
             </ul>
           </div>
 

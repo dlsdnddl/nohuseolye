@@ -17,7 +17,7 @@ export const PostCard = ({ post, variant = 'default' }: PostCardProps) => {
   if (variant === 'compact') {
     return (
       <a
-        href={`/pension-asset/${post.slug}`}
+        href={`/${post.category}/${post.slug}`}
         class="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group border border-transparent hover:border-gray-100"
       >
         <div class="w-16 h-16 rounded-xl bg-gray-100 flex-shrink-0 overflow-hidden">
@@ -42,7 +42,7 @@ export const PostCard = ({ post, variant = 'default' }: PostCardProps) => {
   if (variant === 'featured') {
     return (
       <a
-        href={`/pension-asset/${post.slug}`}
+        href={`/${post.category}/${post.slug}`}
         class="group block bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
       >
         {/* 썸네일 */}
@@ -83,7 +83,7 @@ export const PostCard = ({ post, variant = 'default' }: PostCardProps) => {
   // default
   return (
     <a
-      href={`/pension-asset/${post.slug}`}
+      href={`/${post.category}/${post.slug}`}
       class="group flex flex-col bg-white rounded-xl border border-gray-100 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 overflow-hidden"
     >
       <div class="h-2 bg-gradient-to-r from-primary-600 to-primary-400"></div>
