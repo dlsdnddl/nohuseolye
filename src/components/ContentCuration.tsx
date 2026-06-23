@@ -14,7 +14,10 @@ export const ContentCuration = ({ posts }: ContentCurationProps) => {
   ]
 
   const featuredPosts = posts.filter(p => p.featured).slice(0, 4)
-  const recentPosts = posts.slice(0, 6)
+  // 최신 publishedAt 기준 내림차순 정렬 후 상위 6개 표시
+  const recentPosts = [...posts]
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+    .slice(0, 6)
 
   return (
     <div class="max-w-6xl mx-auto px-4 space-y-16">
