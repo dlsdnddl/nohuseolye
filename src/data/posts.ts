@@ -100,6 +100,33 @@ export const posts: Post[] = [
       }
     ],
     relatedPosts: ['housing-pension-calculation', 'basic-pension-eligibility'],
+    nextStep: 'basic-pension-eligibility',
+    nextQuestions: [
+      {
+        question: '기초연금도 함께 받을 수 있나요?',
+        href: '/pension-asset/basic-pension-eligibility',
+        contentType: 'next-step',
+        description: '국민연금과 기초연금 동시 수령 조건 · 2026년 선정기준액 확인'
+      },
+      {
+        question: '조기수령 vs 정상수령, 1967년생은 어떻게 해야 하나요?',
+        href: '/pension-asset/early-pension-1967',
+        contentType: 'related-article',
+        description: '1967년생 손익분기점 · 감액률 · 소득 기준 완전 정리'
+      },
+      {
+        question: '1968년생 조기수령은 언제부터 가능한가요?',
+        href: '/pension-asset/early-pension-1968',
+        contentType: 'related-article',
+        description: '2027년 신청 가능 · 만 64세 정상수령과 비교 분석'
+      },
+      {
+        question: '은퇴 전 5년, 지금 뭘 해야 하나요?',
+        href: '/pension-asset/retirement-5years-checklist',
+        contentType: 'related-article',
+        description: '연금 전략·IRP·기초연금 시뮬레이션 7가지 체크리스트'
+      }
+    ],
     sources: [
       { name: '국민연금공단 공식 홈페이지', url: 'https://www.nps.or.kr' },
       { name: '보건복지부 2026년 연금 인상 발표', url: 'https://www.mohw.go.kr' }
@@ -230,6 +257,27 @@ export const posts: Post[] = [
       }
     ],
     relatedPosts: ['national-pension-amount-calculation', 'basic-pension-eligibility'],
+    nextStep: 'national-pension-amount-calculation',
+    nextQuestions: [
+      {
+        question: '국민연금은 얼마나 받을 수 있나요?',
+        href: '/pension-asset/national-pension-amount-calculation',
+        contentType: 'next-step',
+        description: '2026년 A값 기준 가입기간별 예상 수령액 · 조기/연기수령 비교'
+      },
+      {
+        question: '기초연금 받으면 주택연금에 유리한가요?',
+        href: '/pension-asset/basic-pension-eligibility',
+        contentType: 'related-article',
+        description: '2026년 기초연금 우대지급방식 조건 · 소득인정액 계산'
+      },
+      {
+        question: '은퇴 5년 전 주택연금 가입, 언제가 좋을까요?',
+        href: '/pension-asset/retirement-5years-checklist',
+        contentType: 'related-article',
+        description: '주택연금 타이밍 · IRP · 연금저축 7가지 은퇴 체크리스트'
+      }
+    ],
     sources: [
       { name: '한국주택금융공사 공식 발표', url: 'https://www.hf.go.kr' },
       { name: '금융위원회 2026년 주택연금 개선방안', url: 'https://www.fsc.go.kr' }
@@ -332,6 +380,27 @@ export const posts: Post[] = [
       }
     ],
     relatedPosts: ['national-pension-amount-calculation', 'retirement-5years-checklist'],
+    nextStep: 'national-pension-amount-calculation',
+    nextQuestions: [
+      {
+        question: '국민연금과 기초연금을 동시에 받으면 감액되나요?',
+        href: '/pension-asset/national-pension-amount-calculation',
+        contentType: 'next-step',
+        description: '국민연금 수령액이 52만원 초과 시 기초연금 감액 구조 이해'
+      },
+      {
+        question: '부모님 장기요양등급 신청, 어떻게 하나요?',
+        href: '/care/long-term-care-grade-application',
+        contentType: 'related-article',
+        description: '2026년 재가급여 한도액 인상 · 등급 신청 4단계'
+      },
+      {
+        question: '은퇴 전 기초연금 수급 가능 여부를 미리 시뮬레이션하려면?',
+        href: '/pension-asset/retirement-5years-checklist',
+        contentType: 'related-article',
+        description: '은퇴 5년 전 소득인정액 사전 계산 · 자산 전략 체크리스트'
+      }
+    ],
     sources: [
       { name: '보건복지부 2026년 기초연금 고시', url: 'https://www.mohw.go.kr' },
       { name: '복지로 기초연금 안내', url: 'https://www.bokjiro.go.kr' }
@@ -343,7 +412,7 @@ export const posts: Post[] = [
     category: 'care',
     categoryLabel: '부모님 돌봄',
     title: '장기요양등급 신청 방법 2026 총정리 — 재가급여 한도액 대폭 인상',
-    description: '2026년 장기요양 재가급여 월 한도액이 20만원 이상 인상됐습니다. 1등급부터 인지지원등급까지 신청 절차, 등급별 혜택, 본인부담금을 국민건강보험공단 기준으로 정리했습니다.',
+    description: '2026년 장기요양 재가급여 월 한도액이 등급별 7~25만원 인상됐습니다. 1등급부터 인지지원등급까지 신청 절차, 등급별 혜택, 본인부담금을 국민건강보험공단 기준으로 정리했습니다.',
     content: `
 ## 이 글이 필요한 분
 - 부모님 거동이 불편해져 장기요양 신청을 처음 고려하는 40~50대 자녀
@@ -351,7 +420,7 @@ export const posts: Post[] = [
 - 요양원 vs 재가서비스 중 어떤 게 유리한지 비교하고 싶은 분
 
 ## 3줄 요약
-1. 2026년 재가급여 월 한도액이 전 등급 **20만원 이상 대폭 인상**됐습니다
+1. 2026년 재가급여 월 한도액이 등급별 **7~25만원 인상**됐습니다 (1등급 +206,500원, 5등급 +145,600원, 인지지원등급 +74,420원)
 2. 요양원(시설급여) 이용 시 비용의 **80%를 국가가 부담**, 본인은 20%만 내면 됩니다
 3. 신청은 **국민건강보험공단(1577-1000)** 또는 복지로·정부24 온라인으로 가능
 
@@ -440,6 +509,27 @@ export const posts: Post[] = [
       }
     ],
     relatedPosts: ['medical-expense-support-parents'],
+    nextStep: 'medical-expense-support-parents',
+    nextQuestions: [
+      {
+        question: '장기요양 외에 부모님 병원비를 줄이는 방법이 있나요?',
+        href: '/care/medical-expense-support-parents',
+        contentType: 'next-step',
+        description: '본인부담상한제·산정특례·재난적 의료비 지원 2026년 완전 정리'
+      },
+      {
+        question: '기초연금 수급자면 장기요양 본인부담이 줄어드나요?',
+        href: '/pension-asset/basic-pension-eligibility',
+        contentType: 'related-article',
+        description: '기초연금 수급 조건 · 우대지급방식 혜택 확인'
+      },
+      {
+        question: '부모님 돌봄 비용, 국민연금으로 어느 정도 충당할 수 있나요?',
+        href: '/pension-asset/national-pension-amount-calculation',
+        contentType: 'related-article',
+        description: '2026년 연금 수령액 계산 · 가입기간별 예상액 확인'
+      }
+    ],
     sources: [
       { name: '국민건강보험공단 노인장기요양보험', url: 'https://www.longtermcare.or.kr' },
       { name: '보건복지부 2026년 장기요양 수가 고시', url: 'https://www.mohw.go.kr' }
@@ -535,6 +625,27 @@ export const posts: Post[] = [
       }
     ],
     relatedPosts: ['national-pension-amount-calculation', 'housing-pension-calculation', 'basic-pension-eligibility'],
+    nextStep: 'national-pension-amount-calculation',
+    nextQuestions: [
+      {
+        question: '국민연금 예상 수령액을 지금 바로 계산할 수 있나요?',
+        href: '/pension-asset/national-pension-amount-calculation',
+        contentType: 'next-step',
+        description: '2026년 A값 기준 수령액 · 조기/연기수령 손익 계산법'
+      },
+      {
+        question: '기초연금 수급 가능한지 미리 확인하려면?',
+        href: '/pension-asset/basic-pension-eligibility',
+        contentType: 'related-article',
+        description: '2026년 선정기준액 247만원 · 소득인정액 간편 계산기'
+      },
+      {
+        question: '내 집으로 노후 생활비를 만들 수 있나요?',
+        href: '/pension-asset/housing-pension-calculation',
+        contentType: 'related-article',
+        description: '2026년 3월 주택연금 3.13% 인상 · 나이·집값별 수령액 계산기'
+      }
+    ],
     sources: [
       { name: '금융감독원 금융소비자정보포털', url: 'https://www.fss.or.kr' },
       { name: '국민연금공단', url: 'https://www.nps.or.kr' },
@@ -652,6 +763,21 @@ export const posts: Post[] = [
       }
     ],
     relatedPosts: ['long-term-care-grade-application'],
+    nextStep: 'long-term-care-grade-application',
+    nextQuestions: [
+      {
+        question: '장기요양등급 신청은 어떻게 하나요?',
+        href: '/care/long-term-care-grade-application',
+        contentType: 'next-step',
+        description: '2026년 재가급여 한도액 인상 · 등급별 서비스 · 신청 4단계'
+      },
+      {
+        question: '기초연금 수급자면 의료비 혜택이 더 있나요?',
+        href: '/pension-asset/basic-pension-eligibility',
+        contentType: 'related-article',
+        description: '기초연금 수급 조건 · 선정기준액 2026년 기준'
+      }
+    ],
     sources: [
       { name: '국민건강보험공단', url: 'https://www.nhis.or.kr' },
       { name: '보건복지부', url: 'https://www.mohw.go.kr' },
@@ -873,6 +999,33 @@ export const posts: Post[] = [
       }
     ],
     relatedPosts: ['early-pension-1968', 'national-pension-amount-calculation', 'basic-pension-eligibility', 'retirement-5years-checklist'],
+    nextStep: 'national-pension-amount-calculation',
+    nextQuestions: [
+      {
+        question: '1967년생 국민연금, 얼마나 받을 수 있나요?',
+        href: '/pension-asset/national-pension-amount-calculation',
+        contentType: 'next-step',
+        description: '2026년 A값 기준 가입기간별 예상 수령액 · 수령 전략 비교'
+      },
+      {
+        question: '기초연금도 함께 받을 수 있나요?',
+        href: '/pension-asset/basic-pension-eligibility',
+        contentType: 'related-article',
+        description: '조기수령으로 국민연금이 줄면 기초연금 전액 수령 가능성 확인'
+      },
+      {
+        question: '1968년생과 수령 시기가 다른가요?',
+        href: '/pension-asset/early-pension-1968',
+        contentType: 'related-article',
+        description: '1968년생 조기수령 2027년 시작 · 1967년생과 차이 비교'
+      },
+      {
+        question: '조기수령 결정 전 은퇴 준비 체크리스트가 있나요?',
+        href: '/pension-asset/retirement-5years-checklist',
+        contentType: 'related-article',
+        description: 'IRP·연금저축·기초연금 시뮬레이션 7가지 은퇴 전 필수 확인'
+      }
+    ],
     sources: [
       { name: '국민연금공단 — 노령연금 지급개시연령', url: 'https://www.nps.or.kr' },
       { name: '보건복지부 2026년 국민연금 수가 고시', url: 'https://www.mohw.go.kr' }
@@ -1107,6 +1260,33 @@ export const posts: Post[] = [
       }
     ],
     relatedPosts: ['early-pension-1967', 'national-pension-amount-calculation', 'basic-pension-eligibility'],
+    nextStep: 'national-pension-amount-calculation',
+    nextQuestions: [
+      {
+        question: '1968년생 국민연금, 실제로 얼마나 받을 수 있나요?',
+        href: '/pension-asset/national-pension-amount-calculation',
+        contentType: 'next-step',
+        description: '2026년 A값 기준 가입기간별 예상 수령액 · 조기/연기수령 손익 계산'
+      },
+      {
+        question: '기초연금도 함께 받을 수 있나요?',
+        href: '/pension-asset/basic-pension-eligibility',
+        contentType: 'related-article',
+        description: '국민연금 52만원 초과 시 기초연금 감액 구조 · 소득인정액 계산기'
+      },
+      {
+        question: '1967년생과 수령 시기가 어떻게 다른가요?',
+        href: '/pension-asset/early-pension-1967',
+        contentType: 'related-article',
+        description: '1967년생 조기수령 2026년 시작 · 1968년생과 1년 차이 비교'
+      },
+      {
+        question: '조기수령 결정 전 은퇴 준비 체크리스트가 있나요?',
+        href: '/pension-asset/retirement-5years-checklist',
+        contentType: 'related-article',
+        description: 'IRP·연금저축·기초연금 시뮬레이션 7가지 은퇴 전 필수 확인'
+      }
+    ],
     sources: [
       { name: '국민연금공단 — 노령연금 지급개시연령 (공식)', url: 'https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do' },
       { name: '보건복지부 2026년 국민연금 수가 고시', url: 'https://www.mohw.go.kr' }

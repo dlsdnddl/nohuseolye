@@ -236,6 +236,56 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
             </section>
           )}
 
+          {/* ─── Phase B: 다음으로 궁금한 내용 ─── */}
+          {post.nextQuestions && post.nextQuestions.length > 0 && (
+            <section class="mb-8" aria-label="다음으로 궁금한 내용">
+              <h2 class="text-xl font-extrabold text-gray-900 mb-4 flex items-center gap-2">
+                <i class="fas fa-route text-primary-600"></i>
+                다음으로 궁금한 내용
+              </h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {post.nextQuestions.map((nq, i) => (
+                  <a
+                    key={i}
+                    href={nq.href}
+                    data-link-position="next-questions"
+                    data-content-type={nq.contentType}
+                    class={`group flex flex-col gap-2 p-4 rounded-xl border transition-all hover:shadow-md ${
+                      nq.contentType === 'next-step'
+                        ? 'border-primary-200 bg-primary-50 hover:bg-primary-100 hover:border-primary-400'
+                        : 'border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300'
+                    }`}
+                  >
+                    <div class="flex items-start gap-3">
+                      <span class={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center mt-0.5 ${
+                        nq.contentType === 'next-step'
+                          ? 'bg-primary-600 text-white'
+                          : 'bg-gray-100 text-gray-500'
+                      }`}>
+                        <i class={`fas ${nq.contentType === 'next-step' ? 'fa-arrow-right' : 'fa-file-alt'} text-xs`}></i>
+                      </span>
+                      <div class="flex-1 min-w-0">
+                        <p class={`text-sm font-semibold leading-snug group-hover:underline ${
+                          nq.contentType === 'next-step' ? 'text-primary-800' : 'text-gray-800'
+                        }`}>
+                          {nq.question}
+                        </p>
+                        {nq.description && (
+                          <p class="text-xs text-gray-500 mt-1 leading-relaxed line-clamp-2">{nq.description}</p>
+                        )}
+                      </div>
+                    </div>
+                    {nq.contentType === 'next-step' && (
+                      <span class="self-start text-xs font-bold px-2 py-0.5 rounded-full bg-primary-600 text-white">
+                        다음 단계
+                      </span>
+                    )}
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+
         </main>
 
         {/* ─── 사이드바 ─── */}

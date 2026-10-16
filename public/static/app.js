@@ -1536,14 +1536,19 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ── 내부 링크 클릭 GA4 추적
+  // Phase B: data-link-position, data-content-type 속성이 있으면 추가 파라미터 포함
+  // 기존 링크(속성 없음): link_position='general', content_type='navigation'
   document.querySelectorAll('a[href^="/"]').forEach(function(link) {
     link.addEventListener('click', function() {
       if (typeof gtag === 'function') {
-        gtag('event', 'internal_link_click', {
+        var params = {
           link_url: link.getAttribute('href'),
           link_text: (link.textContent || '').trim().slice(0, 80),
-          source_page: window.location.pathname
-        });
+          source_page: window.location.pathname,
+          link_position: link.getAttribute('data-link-position') || 'general',
+          content_type: link.getAttribute('data-content-type') || 'navigation'
+        };
+        gtag('event', 'internal_link_click', params);
       }
     });
   });

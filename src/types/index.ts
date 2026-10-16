@@ -16,8 +16,19 @@ export interface Post {
   featured: boolean
   situation?: string // "은퇴 5년 전" | "부모님 병원비 걱정될 때" 등
   faq?: FAQ[]
-  relatedPosts?: string[] // slug 배열
+  relatedPosts?: string[] // slug 배열 (사이드바·본문 중간 CTA용)
   sources?: Source[] // 공식 출처
+  // ── Phase B: 검색 여정형 내부링크 ────────────────────────────────
+  nextQuestions?: NextQuestion[] // 이 글을 읽은 뒤 다음으로 궁금해할 질문 목록
+  nextStep?: string              // 가장 핵심적인 다음 글 slug (nextQuestions[0]와 중복 가능)
+}
+
+// Phase B: 다음 질문 카드 한 항목
+export interface NextQuestion {
+  question: string                                        // "국민연금 얼마나 받을 수 있나요?"
+  href: string                                           // "/pension-asset/national-pension-amount-calculation"
+  contentType: 'next-step' | 'related-article'          // 콘텐츠 유형 (GA4 파라미터용)
+  description?: string                                   // 카드 부제목 (선택)
 }
 
 export interface FAQ {
