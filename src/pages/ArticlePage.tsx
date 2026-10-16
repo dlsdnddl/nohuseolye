@@ -248,7 +248,7 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
                 <i class="fas fa-list text-primary-600"></i> 목차
               </h3>
               <nav class="space-y-2 text-sm" id="toc">
-                <a href="#" class="block text-gray-500 hover:text-primary-600 transition-colors">글을 불러오는 중...</a>
+                {/* JS(buildTOC)가 페이지 로드 후 목차를 자동 생성합니다 */}
               </nav>
             </div>
 

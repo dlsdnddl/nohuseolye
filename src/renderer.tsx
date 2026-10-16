@@ -62,6 +62,16 @@ export const renderer = jsxRenderer(({ children, title, description, ogImage, js
         <meta name="google-site-verification" content="a57r9VKSo4eR77ebK5nrIlr0-mCJYnpZSn-Oovxrte4" />
         {/* 네이버 서치어드바이저 소유권 확인 */}
         <meta name="naver-site-verification" content="fb50d5f71e40bc597ff17079cb19b01310c2b1c3" />
+        {/* Google Analytics 4 — G-DYBVSJDG4H */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-DYBVSJDG4H"></script>
+        <script dangerouslySetInnerHTML={{__html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-DYBVSJDG4H', {
+            page_path: window.location.pathname
+          });
+        `}} />
         {/* Google AdSense */}
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5237218812452624" crossorigin="anonymous"></script>
         <script dangerouslySetInnerHTML={{__html: `

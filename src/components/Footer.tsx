@@ -27,17 +27,18 @@ export const Footer = () => {
           <p class="text-primary-300 text-sm font-semibold mb-2">📬 무료 뉴스레터</p>
           <h3 class="text-white text-2xl font-bold mb-2">매주 월요일, 노후 혜택 변경사항 알림</h3>
           <p class="text-primary-200 text-sm mb-6">기초연금 금액 변경, 지원금 신청 마감일 등 놓치면 손해인 정보를 먼저 알려드립니다.</p>
-          <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" id="newsletter-form">
             <input
               type="email"
+              id="newsletter-email"
               placeholder="이메일 주소 입력"
               class="flex-1 px-4 py-3 rounded-lg bg-white text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
             />
-            <button class="px-6 py-3 bg-warm-500 hover:bg-warm-600 text-white font-semibold rounded-lg text-sm transition-colors whitespace-nowrap">
+            <button id="newsletter-btn" class="px-6 py-3 bg-warm-500 hover:bg-warm-600 text-white font-semibold rounded-lg text-sm transition-colors whitespace-nowrap">
               구독하기
             </button>
           </div>
-          <p class="text-primary-400 text-xs mt-3">언제든지 구독 취소 가능 · 스팸 없음</p>
+          <p id="newsletter-msg" class="text-primary-400 text-xs mt-3">언제든지 구독 취소 가능 · 스팸 없음</p>
         </div>
       </div>
 

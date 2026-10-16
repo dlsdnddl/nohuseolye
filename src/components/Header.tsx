@@ -1,9 +1,9 @@
 export const Header = () => {
   const navItems = [
     { label: '연금·자산', href: '/pension-asset', active: true },
+    { label: '부모님 돌봄', href: '/care', active: true },
     { label: '집·노후소득', href: '/housing-income', active: false },
     { label: '지원금', href: '/support', active: false },
-    { label: '부모님 돌봄', href: '/care', active: false },
   ]
 
   return (

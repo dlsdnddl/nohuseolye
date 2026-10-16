@@ -281,6 +281,15 @@ function runDiagnosis() {
     loading.classList.add('hidden');
     result.classList.remove('hidden');
     result.classList.add('fade-in-up');
+
+    // GA4 계산기 완료 이벤트
+    if (typeof gtag === 'function') {
+      gtag('event', 'calculator_complete', {
+        calculator_name: 'retirement_diagnosis',
+        result_grade: gradeInfo.grade,
+        result_score: score
+      });
+    }
   }, 1500);
 }
 
@@ -1493,6 +1502,58 @@ document.addEventListener('DOMContentLoaded', function() {
       var btn = e.target.closest('button');
       if (btn && btn.getAttribute('onclick') && btn.getAttribute('onclick').indexOf('runHpCalc') !== -1) {
         runHpCalc();
+      }
+    });
+  }
+
+  // ── 뉴스레터 구독 버튼 — 준비중 안내 처리
+  var newsletterBtn = document.getElementById('newsletter-btn');
+  var newsletterMsg = document.getElementById('newsletter-msg');
+  var newsletterEmail = document.getElementById('newsletter-email');
+  if (newsletterBtn) {
+    newsletterBtn.addEventListener('click', function() {
+      var email = newsletterEmail ? newsletterEmail.value.trim() : '';
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (newsletterMsg) {
+          newsletterMsg.textContent = '올바른 이메일 주소를 입력해 주세요.';
+          newsletterMsg.style.color = '#fca5a5';
+        }
+        return;
+      }
+      // 현재 구독 시스템 준비중 안내
+      newsletterBtn.disabled = true;
+      newsletterBtn.textContent = '✓ 신청 완료';
+      newsletterBtn.style.background = '#166a47';
+      if (newsletterMsg) {
+        newsletterMsg.textContent = '감사합니다! 뉴스레터 발송 시스템 준비 완료 후 발송드립니다.';
+        newsletterMsg.style.color = '#86efac';
+      }
+      // GA4 이벤트
+      if (typeof gtag === 'function') {
+        gtag('event', 'newsletter_signup_attempt', { email_provided: true });
+      }
+    });
+  }
+
+  // ── 내부 링크 클릭 GA4 추적
+  document.querySelectorAll('a[href^="/"]').forEach(function(link) {
+    link.addEventListener('click', function() {
+      if (typeof gtag === 'function') {
+        gtag('event', 'internal_link_click', {
+          link_url: link.getAttribute('href'),
+          link_text: (link.textContent || '').trim().slice(0, 80),
+          source_page: window.location.pathname
+        });
+      }
+    });
+  });
+
+  // ── 계산기 완료 GA4 추적 (진단기)
+  var diagBtn = document.getElementById('diagnosis-btn');
+  if (diagBtn) {
+    diagBtn.addEventListener('click', function() {
+      if (typeof gtag === 'function') {
+        gtag('event', 'calculator_start', { calculator_name: 'retirement_diagnosis' });
       }
     });
   }
