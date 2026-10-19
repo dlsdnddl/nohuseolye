@@ -7,6 +7,7 @@ interface AdSlotProps {
   id: string
   slotId?: string   // 애드센스 data-ad-slot 값 (예: "1234567890")
   className?: string
+  desktopOnly?: boolean // true: 뷰포트 ≥1024px 에서만 광고 요청 (모바일에서 숨겨진 슬롯의 push 오류 방지)
 }
 
 const AD_CONFIG: Record<string, { minHeight: string; format: string; layoutKey?: string }> = {
@@ -16,7 +17,7 @@ const AD_CONFIG: Record<string, { minHeight: string; format: string; layoutKey?:
   'in-article': { minHeight: '280px', format: 'fluid', layoutKey: '-fb+5w+4e-db+86' },
 }
 
-export const AdSlot = ({ type, id, slotId, className = '' }: AdSlotProps) => {
+export const AdSlot = ({ type, id, slotId, className = '', desktopOnly = false }: AdSlotProps) => {
   // slotId 없으면 광고 영역 자체를 렌더링하지 않음
   if (!slotId) return null
 
@@ -37,7 +38,9 @@ export const AdSlot = ({ type, id, slotId, className = '' }: AdSlotProps) => {
         {...(cfg.layoutKey ? { 'data-ad-layout-key': cfg.layoutKey } : {})}
         data-full-width-responsive="true"
       ></ins>
-      <script dangerouslySetInnerHTML={{__html: `(adsbygoogle = window.adsbygoogle || []).push({});`}} />
+      <script dangerouslySetInnerHTML={{__html: desktopOnly
+        ? `if (window.matchMedia('(min-width:1024px)').matches) { (adsbygoogle = window.adsbygoogle || []).push({}); }`
+        : `(adsbygoogle = window.adsbygoogle || []).push({});`}} />
     </div>
   )
 }

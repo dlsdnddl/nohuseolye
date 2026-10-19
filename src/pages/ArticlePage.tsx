@@ -303,7 +303,7 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
             </div>
 
             {/* 사이드바 광고 — slotId: 애드센스 '노후설계-사이드바' 광고 단위 ID */}
-            <AdSlot type="rectangle" id="sidebar-ad" slotId="8049115674" />
+            <AdSlot type="rectangle" id="sidebar-ad" slotId="8049115674" desktopOnly />
 
             {/* 관련 글 */}
             {relatedPosts.length > 0 && (

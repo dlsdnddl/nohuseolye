@@ -55,17 +55,13 @@ export const Header = () => {
             <button id="mobile-search-btn" class="md:hidden p-2 rounded-full text-gray-500 hover:bg-gray-100">
               <i class="fas fa-search"></i>
             </button>
-            {/* 관리자 */}
-            <a href="/admin" class="hidden md:flex items-center gap-1 text-xs text-gray-400 hover:text-primary-700 transition-colors">
-              <i class="fas fa-cog"></i>
-            </a>
           </div>
         </div>
 
         {/* GNB 메뉴 */}
-        <nav class="flex items-center gap-1 pb-0 border-t border-gray-50">
+        <nav class="flex flex-nowrap items-center gap-0 sm:gap-1 pb-0 border-t border-gray-50 overflow-x-auto whitespace-nowrap" style="scrollbar-width:none;-webkit-overflow-scrolling:touch">
           {/* 홈 */}
-          <a href="/" class="relative px-4 py-3 text-sm font-semibold text-gray-500 hover:text-primary-700 transition-colors">
+          <a href="/" class="relative shrink-0 px-3 sm:px-4 py-3 text-sm font-semibold text-gray-500 hover:text-primary-700 transition-colors">
             홈
           </a>
           {navItems.map(item => (
@@ -73,33 +69,33 @@ export const Header = () => {
               <a
                 key={item.href}
                 href={item.href}
-                class="relative px-4 py-3 text-sm font-semibold text-primary-700 border-b-2 border-primary-600"
+                class="relative shrink-0 px-3 sm:px-4 py-3 text-sm font-semibold text-primary-700 border-b-2 border-primary-600"
               >
                 {item.label}
               </a>
             ) : (
               <span
                 key={item.href}
-                class="relative px-4 py-3 text-sm text-gray-300 cursor-not-allowed select-none"
+                class="relative shrink-0 px-3 sm:px-4 py-3 text-sm text-gray-300 cursor-not-allowed select-none"
                 title="준비 중입니다"
               >
                 {item.label}
-                <span class="ml-1 text-xs bg-gray-100 text-gray-400 rounded px-1 py-0.5">준비중</span>
+                <span class="ml-1 text-xs bg-gray-100 text-gray-400 rounded px-1 py-0.5 hidden sm:inline">준비중</span>
               </span>
             )
           ))}
           {/* 우측 보조 링크 */}
-          <div class="ml-auto flex items-center gap-1">
+          <div class="ml-auto shrink-0 flex items-center gap-1">
             <a
               href="/pension-asset"
-              class="px-4 py-3 text-sm text-gray-500 hover:text-primary-700 transition-colors flex items-center gap-1"
+              class="hidden sm:flex px-4 py-3 text-sm text-gray-500 hover:text-primary-700 transition-colors items-center gap-1"
             >
               <i class="fas fa-list text-xs"></i>
               전체 글
             </a>
             <a
               href="/#diagnosis-form"
-              class="ml-1 px-4 py-2 text-sm font-semibold text-white bg-primary-700 hover:bg-primary-600 rounded-full transition-colors flex items-center gap-1.5"
+              class="ml-1 px-3 sm:px-4 py-2 text-sm font-semibold text-white bg-primary-700 hover:bg-primary-600 rounded-full transition-colors flex items-center gap-1.5 whitespace-nowrap"
             >
               <i class="fas fa-chart-pie text-xs"></i>
               무료 진단

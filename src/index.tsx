@@ -7,7 +7,6 @@ import { QuickLinks } from './components/QuickLinks'
 import { ContentCuration } from './components/ContentCuration'
 import { AdSlot } from './components/AdSlot'
 import { ArticlePage } from './pages/ArticlePage'
-import { AdminPage } from './pages/AdminPage'
 import { posts, getPostBySlug } from './data/posts'
 
 const app = new Hono()
@@ -24,6 +23,27 @@ app.use('*', (c, next) => {
   }
   return next()
 })
+
+// ─── 404 페이지 (실제 HTTP 404 + noindex) ──────────────────────────────────────
+const renderNotFound = (c: any) => {
+  c.status(404)
+  c.header('X-Robots-Tag', 'noindex, nofollow')
+  return c.render(
+    <>
+      <Header />
+      <main class="max-w-6xl mx-auto px-4 py-20 text-center">
+        <i class="fas fa-search text-5xl text-gray-200 mb-6"></i>
+        <h1 class="text-2xl font-bold text-gray-700 mb-2">페이지를 찾을 수 없습니다</h1>
+        <p class="text-gray-400 mb-8">요청하신 글이 존재하지 않거나 이동되었습니다.</p>
+        <a href="/" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-700 text-white font-semibold rounded-xl hover:bg-primary-600">
+          <i class="fas fa-home"></i> 홈으로 돌아가기
+        </a>
+      </main>
+      <Footer />
+    </>,
+    { title: '페이지 없음', noindex: true }
+  )
+}
 
 // ─── 구 티스토리 URL 410 Gone 처리 ────────────────────────────────────────────
 // 티스토리 시절 글 URL 패턴: /숫자 (예: /1, /2, /3, /100 등)
@@ -130,23 +150,7 @@ app.get('/pension-asset/:slug', (c) => {
   const slug = c.req.param('slug')
   const post = getPostBySlug(slug)
 
-  if (!post) {
-    return c.render(
-      <>
-        <Header />
-        <main class="max-w-6xl mx-auto px-4 py-20 text-center">
-          <i class="fas fa-search text-5xl text-gray-200 mb-6"></i>
-          <h1 class="text-2xl font-bold text-gray-700 mb-2">페이지를 찾을 수 없습니다</h1>
-          <p class="text-gray-400 mb-8">요청하신 글이 존재하지 않거나 이동되었습니다.</p>
-          <a href="/" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-700 text-white font-semibold rounded-xl hover:bg-primary-600">
-            <i class="fas fa-home"></i> 홈으로 돌아가기
-          </a>
-        </main>
-        <Footer />
-      </>,
-      { title: '페이지 없음' }
-    )
-  }
+  if (!post) return renderNotFound(c)
 
   // JSON-LD 구조화 데이터
   const jsonLd = [
@@ -199,16 +203,15 @@ app.get('/pension-asset/:slug', (c) => {
 })
 
 // ─── 관리자 ────────────────────────────────────────────────────────────────────
-app.get('/admin', (c) => {
-  return c.render(<AdminPage />, { title: '관리자 대시보드' })
-})
-
-app.get('/admin/posts', (c) => {
-  return c.render(<AdminPage />, { title: '포스트 관리' })
-})
+// 인증 시스템/실데이터가 없는 정적 목업 화면이었으므로 운영에서는 비공개(404) 처리.
+// (Cloudflare Pages는 Hosted 접근규칙을 적용할 수 없어, 공개 라우트 자체를 제거)
+app.all('/admin', (c) => renderNotFound(c))
+app.all('/admin/*', (c) => renderNotFound(c))
 
 // ─── 준비 중 카테고리 (noindex) ────────────────────────────────────────────────
-const comingSoonPage = (label: string) => (c: any) => c.render(
+const comingSoonPage = (label: string) => (c: any) => {
+  c.header('X-Robots-Tag', 'noindex, follow')
+  return c.render(
   <>
     <Header />
     <main class="max-w-3xl mx-auto px-4 py-24 text-center">
@@ -221,8 +224,9 @@ const comingSoonPage = (label: string) => (c: any) => c.render(
     </main>
     <Footer />
   </>,
-  { title: `${label} — 준비 중` }
-)
+  { title: `${label} — 준비 중`, noindex: true }
+  )
+}
 
 app.get('/housing-income', comingSoonPage('집·노후소득'))
 app.get('/support', comingSoonPage('지원금'))
@@ -282,23 +286,7 @@ app.get('/care/:slug', (c) => {
   const slug = c.req.param('slug')
   const post = getPostBySlug(slug)
 
-  if (!post) {
-    return c.render(
-      <>
-        <Header />
-        <main class="max-w-6xl mx-auto px-4 py-20 text-center">
-          <i class="fas fa-search text-5xl text-gray-200 mb-6"></i>
-          <h1 class="text-2xl font-bold text-gray-700 mb-2">페이지를 찾을 수 없습니다</h1>
-          <p class="text-gray-400 mb-8">요청하신 글이 존재하지 않거나 이동되었습니다.</p>
-          <a href="/" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-700 text-white font-semibold rounded-xl hover:bg-primary-600">
-            <i class="fas fa-home"></i> 홈으로 돌아가기
-          </a>
-        </main>
-        <Footer />
-      </>,
-      { title: '페이지 없음' }
-    )
-  }
+  if (!post) return renderNotFound(c)
 
   const jsonLd = [
     {
@@ -536,11 +524,14 @@ app.get('/ads.txt', (c) => {
 app.get('/robots.txt', (c) => {
   const txt = `User-agent: *
 Allow: /
+Disallow: /admin
 
 Sitemap: https://www.luckyu.co.kr/sitemap.xml
 `
 
   return c.text(txt, 200, { 'Content-Type': 'text/plain; charset=utf-8' })
 })
+
+app.notFound((c) => renderNotFound(c))
 
 export default app

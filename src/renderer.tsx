@@ -1,6 +1,6 @@
 import { jsxRenderer } from 'hono/jsx-renderer'
 
-export const renderer = jsxRenderer(({ children, title, description, ogImage, jsonLd, canonicalUrl }) => {
+export const renderer = jsxRenderer(({ children, title, description, ogImage, jsonLd, canonicalUrl, noindex }) => {
   const SITE_URL = 'https://www.luckyu.co.kr'
   const siteTitle = title ? `${title} | 노후설계 가이드` : '노후설계 가이드 — 4070 은퇴·연금·복지 실전 해설'
   const metaDesc = description || '국민연금·주택연금·기초연금·장기요양 등 4070 세대를 위한 노후 현금흐름 설계 정보를 보건복지부·금감원 공식 자료 기반으로 제공합니다.'
@@ -25,8 +25,10 @@ export const renderer = jsxRenderer(({ children, title, description, ogImage, js
         <meta name="theme-color" content="#1a5c3e" />
         <title>{siteTitle}</title>
         <meta name="description" content={metaDesc} />
+        {/* 색인 제외 페이지(준비 중/404/관리자) */}
+        {noindex && <meta name="robots" content="noindex, nofollow" />}
         {/* Canonical */}
-        <link rel="canonical" href={canonical} />
+        {!noindex && <link rel="canonical" href={canonical} />}
         {/* Open Graph */}
         <meta property="og:title" content={siteTitle} />
         <meta property="og:description" content={metaDesc} />
