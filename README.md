@@ -138,6 +138,27 @@ npx wrangler pages deploy dist --project-name nohuseolye
 
 ---
 
+## 🚢 운영 배포 · 롤백 (2026-10-19 갱신)
+
+- **운영 도메인**: https://www.luckyu.co.kr (luckyu.co.kr → www 301)
+- **배포 방식**: Cloudflare Pages `nohuseolye` — **직접 업로드(Git 연동 없음)**, BYOK(`wrangler pages deploy`)
+- **배포 명령**: `npm run build && npx wrangler pages deploy dist --project-name nohuseolye --branch main`
+- **현재 운영 배포**: `6e420247-9c78-439a-86ca-a399ec09f5f8` (commit `e76cacb`, Phase B + 오류 수정)
+- **직전 정상 배포(롤백 대상)**: `3e9b3c5a-dc7c-4914-a80f-cce0a6f7a33a` (commit `9888666`)
+- **롤백 방법**
+  1. Cloudflare 대시보드 → Workers & Pages → nohuseolye → Deployments → 3e9b3c5a 선택 → *Rollback to this deployment* (즉시 반영)
+  2. 또는 `git checkout 9888666 && npm run build && npx wrangler pages deploy dist --project-name nohuseolye --branch main`
+- **참고**: gsk Hosted 배포(`*.vip.gensparksite.com`)는 미리보기용이며 운영 도메인과 무관함. Hosted 접근규칙은 Pages에 적용되지 않으므로 `/admin`은 라우트 자체를 비공개(404) 처리함.
+
+### 2026-10-19 수정 요약
+- 장기요양 재가급여 한도액 표를 보건복지부 보도자료(2025.11.4.) 붙임 2 기준으로 정정 (3~5등급·인지지원 수치 교정, 요양원 본인부담금 30일 기준 정정)
+- 국민연금 3개 글의 손익분기점 정정 (5년 조기수령 시 정상수령 대비 +11년 8개월: 65세 기준 76세 8개월, 64세 기준 75세 8개월) 및 "물가·세금·건강보험료·시간가치 미반영" 명시
+- `/admin`, `/admin/*` → 404 + noindex (robots.txt Disallow 추가), 헤더의 관리자 링크 제거
+- 존재하지 않는 글 URL(`/pension-asset/*`, `/care/*`) 및 전역 미매칭 → 실제 HTTP 404 + noindex
+- `/housing-income`, `/support`(준비 중) → `noindex` (meta + X-Robots-Tag), canonical 미출력
+- 모바일 헤더(390px) nav 205px → 47px (가로 스크롤, 기존 디자인 유지)
+- 모바일 JS 오류 `adsbygoogle.push() error: No slot size for availableWidth=0` 제거 (데스크톱 전용 사이드바 광고 슬롯을 모바일에서 요청하지 않도록 변경, 광고 단위·슬롯 ID 불변)
+
 ## 🌍 도메인 연결 (진행 중)
 
 - **연결 예정 도메인**: `luckyu.co.kr`
