@@ -4,9 +4,16 @@ import { posts } from '../data/posts'
 
 interface ArticlePageProps {
   post: Post
+  preview?: boolean // 미리보기 빌드에서만 true (상태 배너 표시)
 }
 
-export const ArticlePage = ({ post }: ArticlePageProps) => {
+const STATUS_BANNER: Record<string, { label: string; cls: string; msg: string }> = {
+  draft: { label: 'DRAFT · 작성 중', cls: 'bg-gray-800 text-white', msg: 'AI 작성 단계의 초안입니다. 공식자료 검증이 끝나지 않았을 수 있으며 운영 사이트에는 공개되지 않습니다.' },
+  review: { label: 'REVIEW · 운영자 검토 중', cls: 'bg-amber-500 text-white', msg: '운영자 검토 단계입니다. 승인 전에는 운영 사이트에 공개되지 않습니다.' },
+  published: { label: 'PUBLISHED', cls: 'bg-green-600 text-white', msg: '정식 발행 상태의 글입니다.' },
+}
+
+export const ArticlePage = ({ post, preview = false }: ArticlePageProps) => {
   const relatedPosts = post.relatedPosts
     ? post.relatedPosts.map(slug => posts.find(p => p.slug === slug)).filter(Boolean) as Post[]
     : []
@@ -26,6 +33,15 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
 
         {/* ─── 메인 콘텐츠 ─── */}
         <main class="lg:col-span-2">
+
+          {/* 미리보기 전용 상태 배너 (운영 빌드에서는 렌더링되지 않음) */}
+          {preview && post.origin === 'md' && post.status && (
+            <div class={`mb-5 rounded-xl px-4 py-3 text-sm ${STATUS_BANNER[post.status].cls}`} role="status">
+              <strong>{STATUS_BANNER[post.status].label}</strong>
+              <span class="ml-2 opacity-90">{STATUS_BANNER[post.status].msg}</span>
+              <a href={`/_review/${post.slug}`} class="ml-3 underline font-semibold">검증표 보기</a>
+            </div>
+          )}
 
           {/* 브레드크럼 */}
           <nav class="flex items-center gap-2 text-sm text-gray-400 mb-6" aria-label="breadcrumb">
@@ -70,7 +86,30 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
               <span><i class="fas fa-sync-alt mr-1"></i>최종 업데이트: {post.updatedAt}</span>
               <span><i class="fas fa-clock mr-1"></i>약 {post.readTime}분</span>
             </div>
+
+            {/* 기준연도·공식자료 검증일 (신규 글 — 값이 있을 때만 표시) */}
+            {(post.basisYear || post.verifiedAt) && (
+              <p class="mt-3 inline-flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold text-primary-800 bg-primary-50 border border-primary-100 rounded-lg px-3 py-2">
+                <span><i class="fas fa-shield-alt mr-1"></i>공식자료 검증</span>
+                {post.basisYear && <span>{post.basisYear}년 기준</span>}
+                {post.verifiedAt && <span>검증일 {post.verifiedAt}</span>}
+              </p>
+            )}
           </header>
+
+          {/* 대표 이미지 (신규 글 — image 지정 시) */}
+          {post.image && (
+            <figure class="mb-8">
+              <img
+                src={post.image.src}
+                alt={post.image.alt}
+                width="1200"
+                height="630"
+                class="w-full h-auto rounded-2xl border border-gray-100"
+                fetchpriority="high"
+              />
+            </figure>
+          )}
 
           {/* 이 글이 필요한 분 + 3줄 요약 */}
           <div class="bg-primary-50 border border-primary-100 rounded-2xl p-6 mb-8">
@@ -123,6 +162,8 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
                   <a
                     key={related.id}
                     href={`/${related.category}/${related.slug}`}
+                    data-link-position="related-posts"
+                    data-content-type="related-article"
                     class="flex items-center gap-3 p-3 bg-white rounded-lg hover:bg-primary-50 transition-colors group"
                   >
                     <i class="fas fa-arrow-right text-primary-500 text-sm group-hover:translate-x-1 transition-transform"></i>
@@ -152,8 +193,15 @@ export const ArticlePage = ({ post }: ArticlePageProps) => {
                       class="flex items-center gap-2 text-sm text-primary-600 hover:underline"
                     >
                       <i class="fas fa-external-link-alt text-xs text-gray-400"></i>
-                      {source.name}
+                      {source.title ? `${source.name} — ${source.title}` : source.name}
                     </a>
+                    {(source.effectiveDate || source.accessedAt) && (
+                      <p class="text-xs text-gray-400 ml-5">
+                        {source.effectiveDate ? `시행·기준 ${source.effectiveDate}` : ''}
+                        {source.effectiveDate && source.accessedAt ? ' · ' : ''}
+                        {source.accessedAt ? `확인일 ${source.accessedAt}` : ''}
+                      </p>
+                    )}
                   </li>
                 ))}
               </ul>

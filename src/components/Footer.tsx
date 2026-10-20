@@ -1,3 +1,21 @@
+import { categories } from '../data/categories'
+import { posts, isPreview } from '../data/posts'
+
+// 카테고리별 푸터 링크: footerLinks 지정 시 고정 목록, 아니면 공개 글 최신 4편
+const footerColumns = () =>
+  categories
+    .filter(c => c.state === 'open' || isPreview)
+    .map(c => {
+      const items = c.footerLinks
+        ? c.footerLinks.map(l => ({ href: `/${c.slug}/${l.slug}`, label: l.label }))
+        : posts
+            .filter(p => p.category === c.slug)
+            .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+            .slice(0, 4)
+            .map(p => ({ href: `/${p.category}/${p.slug}`, label: p.shortTitle || p.title }))
+      return { label: c.label, items }
+    })
+
 export const Footer = () => {
   return (
     <footer class="bg-gray-900 text-gray-400 mt-20">
@@ -66,25 +84,17 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* 연금·자산 */}
-          <div>
-            <h4 class="text-white font-semibold text-sm mb-4">연금·자산</h4>
-            <ul class="space-y-2 text-sm">
-              <li><a href="/pension-asset/national-pension-amount-calculation" class="hover:text-white transition-colors">국민연금 수령액 계산</a></li>
-              <li><a href="/pension-asset/housing-pension-calculation" class="hover:text-white transition-colors">주택연금 계산기</a></li>
-              <li><a href="/pension-asset/basic-pension-eligibility" class="hover:text-white transition-colors">기초연금 자격조건</a></li>
-              <li><a href="/pension-asset/retirement-5years-checklist" class="hover:text-white transition-colors">은퇴 5년 전 체크리스트</a></li>
-            </ul>
-          </div>
-
-          {/* 부모님 돌봄 */}
-          <div>
-            <h4 class="text-white font-semibold text-sm mb-4">부모님 돌봄</h4>
-            <ul class="space-y-2 text-sm">
-              <li><a href="/care/long-term-care-grade-application" class="hover:text-white transition-colors">장기요양등급 신청</a></li>
-              <li><a href="/care/medical-expense-support-parents" class="hover:text-white transition-colors">부모님 병원비 지원</a></li>
-            </ul>
-          </div>
+          {/* 카테고리별 링크 (categories.ts 기반 — 오픈된 카테고리만) */}
+          {footerColumns().map(col => (
+            <div key={col.label}>
+              <h4 class="text-white font-semibold text-sm mb-4">{col.label}</h4>
+              <ul class="space-y-2 text-sm">
+                {col.items.map(it => (
+                  <li key={it.href}><a href={it.href} class="hover:text-white transition-colors">{it.label}</a></li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
           {/* 사이트 정보 */}
           <div>

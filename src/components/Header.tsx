@@ -1,10 +1,14 @@
+import { categories } from '../data/categories'
+import { isPreview } from '../data/posts'
+
 export const Header = () => {
-  const navItems = [
-    { label: '연금·자산', href: '/pension-asset', active: true },
-    { label: '부모님 돌봄', href: '/care', active: true },
-    { label: '집·노후소득', href: '/housing-income', active: false },
-    { label: '지원금', href: '/support', active: false },
-  ]
+  // 메뉴는 categories.ts에서 생성: state가 'open'이면 활성 링크, 'coming-soon'이면 "준비중" 배지
+  // (미리보기 빌드에서는 검토를 위해 모든 카테고리를 활성화)
+  const navItems = categories.map(c => ({
+    label: c.label,
+    href: `/${c.slug}`,
+    active: c.state === 'open' || isPreview,
+  }))
 
   return (
     <header class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">

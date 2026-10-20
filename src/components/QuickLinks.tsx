@@ -37,7 +37,7 @@ export const QuickLinks = () => {
       btnColor: 'bg-purple-600 hover:bg-purple-700',
       label: '장기요양등급 신청',
       desc: '부모님 돌봄 서비스 등급 안내',
-      href: '/pension-asset/long-term-care-grade-application',
+      href: '/care/long-term-care-grade-application',
       badge: '대리검색',
       badgeColor: 'bg-purple-100 text-purple-700',
     },

@@ -7,9 +7,45 @@ import { QuickLinks } from './components/QuickLinks'
 import { ContentCuration } from './components/ContentCuration'
 import { AdSlot } from './components/AdSlot'
 import { ArticlePage } from './pages/ArticlePage'
-import { posts, getPostBySlug } from './data/posts'
+import { CategoryPage } from './pages/CategoryPage'
+import { ReviewIndex, ReviewDetail } from './pages/ReviewPage'
+import { posts, indexablePosts, getPostBySlug, isPreview, latestUpdate } from './data/posts'
+import { categories, getCategory } from './data/categories'
+import { verificationSheets } from './generated/content'
+import { SITE_URL, SITE_NAME, articleJsonLd, postPath, postCanonical, xmlEscape, toRfc822 } from './lib/seo'
 
-const app = new Hono()
+type Bindings = { PREVIEW_PASSWORD?: string }
+const app = new Hono<{ Bindings: Bindings }>()
+
+// ─── 미리보기 빌드 전용: 전 페이지 noindex 헤더 + 간단한 비밀번호 보호(Basic Auth) ───────────
+// 운영 빌드(BUILD_MODE=production)에서는 이 블록이 실행되지 않습니다.
+if (isPreview) {
+  app.use('*', async (c, next) => {
+    const expected = c.env?.PREVIEW_PASSWORD
+    const header = c.req.header('authorization') || ''
+    let ok = false
+    if (expected && header.startsWith('Basic ')) {
+      try {
+        const given = atob(header.slice(6)).split(':').slice(1).join(':')
+        // 길이가 달라도 전체 비교(타이밍 편차 최소화)
+        let diff = given.length ^ expected.length
+        for (let i = 0; i < Math.max(given.length, expected.length); i++) diff |= (given.charCodeAt(i) || 0) ^ (expected.charCodeAt(i) || 0)
+        ok = diff === 0
+      } catch { ok = false }
+    }
+    if (!ok) {
+      // 비밀번호가 설정되지 않은 경우에도 접근 거부(fail-closed)
+      return new Response('Unauthorized — LuckyU preview', {
+        status: 401,
+        headers: { 'WWW-Authenticate': 'Basic realm="LuckyU Preview", charset="UTF-8"', 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' },
+      })
+    }
+    await next()
+    c.res.headers.set('X-Robots-Tag', 'noindex, nofollow')
+    c.res.headers.set('Cache-Control', 'no-store')
+  })
+}
+
 app.use(renderer)
 
 // ─── www 리다이렉트 (SEO: 중복 도메인 방지) ────────────────────────────────────
@@ -93,114 +129,15 @@ app.get('/', (c) => {
   )
 })
 
-// ─── 카테고리 목록 ─────────────────────────────────────────────────────────────
-app.get('/pension-asset', (c) => {
-  const categoryPosts = posts.filter(p => p.category === 'pension-asset')
-
-  return c.render(
-    <>
-      <Header />
-      <main class="max-w-6xl mx-auto px-4 py-12">
-        {/* 카테고리 헤더 */}
-        <div class="mb-10">
-          <nav class="flex items-center gap-2 text-sm text-gray-400 mb-4">
-            <a href="/" class="hover:text-primary-600">홈</a>
-            <i class="fas fa-chevron-right text-xs"></i>
-            <span class="text-gray-700 font-medium">연금·자산</span>
-          </nav>
-          <h1 class="text-3xl font-extrabold text-gray-900 mb-2">연금·자산</h1>
-          <p class="text-gray-500">국민연금, 주택연금, 기초연금 등 노후 소득 관련 핵심 정보</p>
-        </div>
-
-        {/* 포스트 그리드 */}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categoryPosts.map(post => {
-            const badge = post.type === 'pillar' ? { label: '기둥글', color: 'bg-blue-100 text-blue-700' }
-              : post.type === 'comparison' ? { label: '비교분석', color: 'bg-amber-100 text-amber-700' }
-              : { label: '체크리스트', color: 'bg-green-100 text-green-700' }
-            return (
-              <a key={post.id} href={`/pension-asset/${post.slug}`}
-                class="group bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1">
-                <div class="h-2 bg-gradient-to-r from-primary-600 to-primary-400"></div>
-                <div class="p-6">
-                  <div class="flex gap-2 mb-3">
-                    <span class={`text-xs font-bold px-2.5 py-1 rounded-full ${badge.color}`}>{badge.label}</span>
-                    {post.situation && <span class="text-xs text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full">{post.situation}</span>}
-                  </div>
-                  <h2 class="font-bold text-gray-900 leading-snug mb-2 group-hover:text-primary-700 transition-colors">{post.title}</h2>
-                  <p class="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-4">{post.description}</p>
-                  <div class="flex items-center justify-between text-xs text-gray-400">
-                    <span><i class="fas fa-clock mr-1"></i>{post.readTime}분</span>
-                    <span class="text-primary-600 font-semibold">읽기 →</span>
-                  </div>
-                </div>
-              </a>
-            )
-          })}
-        </div>
-      </main>
-      <Footer />
-    </>,
-    { title: '연금·자산 정보', description: '국민연금, 주택연금, 기초연금 등 노후 소득 관련 핵심 정보를 공식 자료 기반으로 제공합니다.', canonicalUrl: 'https://www.luckyu.co.kr/pension-asset' }
-  )
-})
-
-// ─── 아티클 상세 ───────────────────────────────────────────────────────────────
-app.get('/pension-asset/:slug', (c) => {
-  const slug = c.req.param('slug')
-  const post = getPostBySlug(slug)
-
-  if (!post) return renderNotFound(c)
-
-  // JSON-LD 구조화 데이터
-  const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: post.title,
-      description: post.description,
-      datePublished: post.publishedAt,
-      dateModified: post.updatedAt, // 동적 렌더링 — 하드코딩 금지
-      author: {
-        '@type': 'Organization',
-        name: '노후설계 가이드'
-      },
-      publisher: {
-        '@type': 'Organization',
-        name: '노후설계 가이드',
-        logo: { '@type': 'ImageObject', url: 'https://www.luckyu.co.kr/static/favicon.svg' }
-      },
-      image: `https://www.luckyu.co.kr${post.thumbnail}`
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: '홈', item: 'https://www.luckyu.co.kr' },
-        { '@type': 'ListItem', position: 2, name: post.categoryLabel, item: `https://www.luckyu.co.kr/${post.category}` },
-        { '@type': 'ListItem', position: 3, name: post.title, item: `https://www.luckyu.co.kr/${post.category}/${post.slug}` }
-      ]
-    },
-    ...(post.faq ? [{
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: post.faq.map(item => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: { '@type': 'Answer', text: item.answer }
-      }))
-    }] : [])
-  ]
-
-  return c.render(
-    <>
-      <Header />
-      <ArticlePage post={post} />
-      <Footer />
-    </>,
-    { title: post.title, description: post.description, jsonLd, canonicalUrl: `https://www.luckyu.co.kr/${post.category}/${post.slug}` }
-  )
-})
+// ─── 미리보기 전용 검토 화면 (/_review) — 운영 빌드에는 등록되지 않음 ──────────────────
+if (isPreview) {
+  app.get('/_review', (c) => c.render(<><Header /><ReviewIndex posts={posts} sheets={verificationSheets} /><Footer /></>, { title: '운영자 검토 목록', noindex: true }))
+  app.get('/_review/:slug', (c) => {
+    const post = getPostBySlug(c.req.param('slug'))
+    if (!post) return renderNotFound(c)
+    return c.render(<><Header /><ReviewDetail post={post} sheet={verificationSheets[post.slug]} /><Footer /></>, { title: `검토: ${post.title}`, noindex: true })
+  })
+}
 
 // ─── 관리자 ────────────────────────────────────────────────────────────────────
 // 인증 시스템/실데이터가 없는 정적 목업 화면이었으므로 운영에서는 비공개(404) 처리.
@@ -228,109 +165,58 @@ const comingSoonPage = (label: string) => (c: any) => {
   )
 }
 
-app.get('/housing-income', comingSoonPage('집·노후소득'))
-app.get('/support', comingSoonPage('지원금'))
+// ─── 카테고리 허브 (categories.ts 한 곳에서 관리) ──────────────────────────────────
+//  open        → 공개 글 목록(+대표 글) 표시, canonical, sitemap 포함
+//  coming-soon → noindex 안내 페이지 (미리보기 빌드에서는 검토용으로 목록 표시)
+for (const cat of categories) {
+  app.get(`/${cat.slug}`, (c) => {
+    if (!isPreview && cat.state !== 'open') return comingSoonPage(cat.label)(c)
+    const catPosts = posts.filter(p => p.category === cat.slug)
+    const pinned = (cat.pinned ?? []).map(slug => getPostBySlug(slug)).filter(Boolean) as typeof posts
+    const otherHubs = categories
+      .filter(o => o.slug !== cat.slug && (isPreview || o.state === 'open'))
+      .map(o => ({ slug: o.slug, label: o.label, intro: o.intro }))
+    return c.render(
+      <>
+        <Header />
+        <CategoryPage category={cat} posts={catPosts} pinned={pinned} otherHubs={otherHubs} preview={isPreview} />
+        <Footer />
+      </>,
+      { title: cat.seoTitle, description: cat.seoDescription, canonicalUrl: `${SITE_URL}/${cat.slug}` }
+    )
+  })
+}
 
-// ─── 부모님 돌봄 카테고리 목록 ────────────────────────────────────────────────
-app.get('/care', (c) => {
-  const categoryPosts = posts.filter(p => p.category === 'care')
-
-  return c.render(
-    <>
-      <Header />
-      <main class="max-w-6xl mx-auto px-4 py-12">
-        <div class="mb-10">
-          <nav class="flex items-center gap-2 text-sm text-gray-400 mb-4">
-            <a href="/" class="hover:text-primary-600">홈</a>
-            <i class="fas fa-chevron-right text-xs"></i>
-            <span class="text-gray-700 font-medium">부모님 돌봄</span>
-          </nav>
-          <h1 class="text-3xl font-extrabold text-gray-900 mb-2">부모님 돌봄</h1>
-          <p class="text-gray-500">장기요양등급, 병원비 지원 등 부모님 돌봄 관련 핵심 정보</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categoryPosts.map(post => {
-            const badge = post.type === 'pillar' ? { label: '기둥글', color: 'bg-blue-100 text-blue-700' }
-              : post.type === 'comparison' ? { label: '비교분석', color: 'bg-amber-100 text-amber-700' }
-              : { label: '체크리스트', color: 'bg-green-100 text-green-700' }
-            return (
-              <a key={post.id} href={`/care/${post.slug}`}
-                class="group bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1">
-                <div class="h-2 bg-gradient-to-r from-primary-600 to-primary-400"></div>
-                <div class="p-6">
-                  <div class="flex gap-2 mb-3">
-                    <span class={`text-xs font-bold px-2.5 py-1 rounded-full ${badge.color}`}>{badge.label}</span>
-                    {post.situation && <span class="text-xs text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full">{post.situation}</span>}
-                  </div>
-                  <h2 class="font-bold text-gray-900 leading-snug mb-2 group-hover:text-primary-700 transition-colors">{post.title}</h2>
-                  <p class="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-4">{post.description}</p>
-                  <div class="flex items-center justify-between text-xs text-gray-400">
-                    <span><i class="fas fa-clock mr-1"></i>{post.readTime}분</span>
-                    <span class="text-primary-600 font-semibold">읽기 →</span>
-                  </div>
-                </div>
-              </a>
-            )
-          })}
-        </div>
-      </main>
-      <Footer />
-    </>,
-    { title: '부모님 돌봄 정보', description: '장기요양등급, 병원비 지원 등 부모님 돌봄 관련 핵심 정보를 공식 자료 기반으로 제공합니다.', canonicalUrl: 'https://www.luckyu.co.kr/care' }
-  )
-})
-
-// ─── 부모님 돌봄 아티클 상세 ──────────────────────────────────────────────────
-app.get('/care/:slug', (c) => {
+// ─── 아티클 상세 (모든 카테고리 공통: /:category/:slug) ───────────────────────────────
+// - 글은 자신이 속한 카테고리 URL에서만 200 (다른 카테고리 경로는 301 → 정규 URL: 중복 콘텐츠 방지)
+// - 비공개(draft/review)·미오픈 카테고리 글은 운영 번들에 없으므로 404
+app.get('/:category/:slug', (c) => {
+  const category = c.req.param('category')
   const slug = c.req.param('slug')
+  if (!getCategory(category)) return renderNotFound(c)
+
   const post = getPostBySlug(slug)
-
   if (!post) return renderNotFound(c)
+  if (post.category !== category) return c.redirect(postPath(post), 301)
 
-  const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: post.title,
-      description: post.description,
-      datePublished: post.publishedAt,
-      dateModified: post.updatedAt,
-      author: { '@type': 'Organization', name: '노후설계 가이드' },
-      publisher: {
-        '@type': 'Organization',
-        name: '노후설계 가이드',
-        logo: { '@type': 'ImageObject', url: 'https://www.luckyu.co.kr/static/favicon.svg' }
-      },
-      image: `https://www.luckyu.co.kr${post.thumbnail}`
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: '홈', item: 'https://www.luckyu.co.kr' },
-        { '@type': 'ListItem', position: 2, name: post.categoryLabel, item: `https://www.luckyu.co.kr/${post.category}` },
-        { '@type': 'ListItem', position: 3, name: post.title, item: `https://www.luckyu.co.kr/${post.category}/${post.slug}` }
-      ]
-    },
-    ...(post.faq ? [{
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: post.faq.map(item => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: { '@type': 'Answer', text: item.answer }
-      }))
-    }] : [])
-  ]
+  const noindex = post.noindex === true
+  if (noindex) c.header('X-Robots-Tag', 'noindex, follow')
 
   return c.render(
     <>
       <Header />
-      <ArticlePage post={post} />
+      <ArticlePage post={post} preview={isPreview} />
       <Footer />
     </>,
-    { title: post.title, description: post.description, jsonLd, canonicalUrl: `https://www.luckyu.co.kr/${post.category}/${post.slug}` }
+    {
+      title: post.seoTitle || post.title,
+      description: post.metaDescription || post.description,
+      jsonLd: articleJsonLd(post),
+      canonicalUrl: postCanonical(post),
+      ogImage: post.image?.src,
+      ogType: 'article',
+      noindex,
+    }
   )
 })
 
@@ -478,37 +364,67 @@ app.get('/contact', (c) => {
   )
 })
 
-// ─── sitemap.xml ─────────────────────────────────────────────────────────────
+// ─── sitemap.xml (자동 생성) ────────────────────────────────────────────────────
+// 포함: 홈 + open 카테고리 허브 + 정식 발행(published)·noindex 아님 글 — 데이터에서 파생되므로 수동 편집 불필요
+// 제외: draft/review, 미오픈 카테고리, noindex, 존재하지 않는 URL
+// lastmod: 요청 시각이 아닌 콘텐츠의 updatedAt(의미 있는 수정일)만 사용
 app.get('/sitemap.xml', (c) => {
-  const BASE = 'https://www.luckyu.co.kr'
-  const now = new Date().toISOString().split('T')[0]
+  if (isPreview) return c.text('Not Found', 404)
 
-  const staticPages = [
-    { url: '/',              changefreq: 'weekly',  priority: '1.0' },
-    { url: '/pension-asset', changefreq: 'weekly',  priority: '0.8' },
-    { url: '/care',          changefreq: 'weekly',  priority: '0.8' },
-  ]
-
-  const postPages = posts.map(post => ({
-    url: `/${post.category}/${post.slug}`,
-    changefreq: 'monthly',
-    priority: post.featured ? '0.9' : '0.7',
-    lastmod: post.updatedAt || now,
-  }))
-
-  const allPages = [...staticPages, ...postPages]
+  type Entry = { url: string; lastmod?: string; changefreq: string; priority: string }
+  const entries: Entry[] = [{ url: '/', lastmod: latestUpdate(indexablePosts), changefreq: 'weekly', priority: '1.0' }]
+  for (const cat of categories.filter(x => x.state === 'open')) {
+    entries.push({ url: `/${cat.slug}`, lastmod: latestUpdate(indexablePosts.filter(p => p.category === cat.slug)), changefreq: 'weekly', priority: '0.8' })
+  }
+  for (const post of indexablePosts) {
+    entries.push({ url: postPath(post), lastmod: post.updatedAt, changefreq: 'monthly', priority: post.featured ? '0.9' : '0.7' })
+  }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${allPages.map(p => `  <url>
-    <loc>${BASE}${p.url}</loc>
-    <lastmod>${p.lastmod || now}</lastmod>
+${entries.map(p => `  <url>
+    <loc>${SITE_URL}${p.url === '/' ? '/' : p.url}</loc>${p.lastmod ? `
+    <lastmod>${p.lastmod}</lastmod>` : ''}
     <changefreq>${p.changefreq}</changefreq>
     <priority>${p.priority}</priority>
   </url>`).join('\n')}
 </urlset>`
 
-  return c.text(xml, 200, { 'Content-Type': 'application/xml; charset=utf-8' })
+  return c.text(xml, 200, { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=900' })
+})
+
+// ─── rss.xml (네이버 서치어드바이저 RSS 제출용 · RSS 2.0) ─────────────────────────────
+// 정식 발행·noindex 아님 글만 최신 발행순으로 포함. 글이 추가/수정되면 배포 시 자동 갱신.
+app.get('/rss.xml', (c) => {
+  if (isPreview) return c.text('Not Found', 404)
+
+  const items = [...indexablePosts]
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.updatedAt.localeCompare(a.updatedAt))
+    .slice(0, 50)
+  const lastBuild = latestUpdate(indexablePosts)
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>${xmlEscape(SITE_NAME)}</title>
+    <link>${SITE_URL}/</link>
+    <description>${xmlEscape('4070 세대를 위한 연금·복지·노후 현금흐름 설계 정보 — 공식 자료 기반 칼럼')}</description>
+    <language>ko-KR</language>${lastBuild ? `
+    <lastBuildDate>${toRfc822(lastBuild)}</lastBuildDate>` : ''}
+    <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
+${items.map(p => `    <item>
+      <title>${xmlEscape(p.title)}</title>
+      <link>${postCanonical(p)}</link>
+      <guid isPermaLink="true">${postCanonical(p)}</guid>
+      <pubDate>${toRfc822(p.publishedAt)}</pubDate>
+      <dc:creator>${xmlEscape(SITE_NAME)}</dc:creator>
+      <category>${xmlEscape(p.categoryLabel)}</category>
+      <description>${xmlEscape(p.metaDescription || p.description)}</description>
+    </item>`).join('\n')}
+  </channel>
+</rss>`
+
+  return c.text(xml, 200, { 'Content-Type': 'application/rss+xml; charset=utf-8', 'Cache-Control': 'public, max-age=900' })
 })
 
 // ─── ads.txt ──────────────────────────────────────────────────────────────────
@@ -522,7 +438,10 @@ app.get('/ads.txt', (c) => {
 
 // ─── robots.txt ───────────────────────────────────────────────────────────────
 app.get('/robots.txt', (c) => {
-  const txt = `User-agent: *
+  // 운영: 전체 허용(/admin만 차단) + sitemap 안내. 미리보기: 전체 차단
+  const txt = isPreview
+    ? `User-agent: *\nDisallow: /\n`
+    : `User-agent: *
 Allow: /
 Disallow: /admin
 

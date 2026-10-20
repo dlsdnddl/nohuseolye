@@ -1,6 +1,11 @@
 import { jsxRenderer } from 'hono/jsx-renderer'
+import { BUILD_MODE } from './generated/content'
 
-export const renderer = jsxRenderer(({ children, title, description, ogImage, jsonLd, canonicalUrl, noindex }) => {
+// 미리보기 빌드: 전체 noindex + GA4/AdSense 미탑재 (운영 성과 지표 오염 방지)
+const PREVIEW = BUILD_MODE === 'preview'
+
+export const renderer = jsxRenderer(({ children, title, description, ogImage, jsonLd, canonicalUrl, noindex: noindexProp, ogType }) => {
+  const noindex = PREVIEW || noindexProp
   const SITE_URL = 'https://www.luckyu.co.kr'
   const siteTitle = title ? `${title} | 노후설계 가이드` : '노후설계 가이드 — 4070 은퇴·연금·복지 실전 해설'
   const metaDesc = description || '국민연금·주택연금·기초연금·장기요양 등 4070 세대를 위한 노후 현금흐름 설계 정보를 보건복지부·금감원 공식 자료 기반으로 제공합니다.'
@@ -34,7 +39,7 @@ export const renderer = jsxRenderer(({ children, title, description, ogImage, js
         <meta property="og:description" content={metaDesc} />
         <meta property="og:image" content={ogImg} />
         <meta property="og:url" content={canonical} />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={ogType || 'website'} />
         <meta property="og:locale" content="ko_KR" />
         <meta property="og:site_name" content="노후설계 가이드" />
         {/* Twitter Card */}
@@ -64,18 +69,20 @@ export const renderer = jsxRenderer(({ children, title, description, ogImage, js
         <meta name="google-site-verification" content="a57r9VKSo4eR77ebK5nrIlr0-mCJYnpZSn-Oovxrte4" />
         {/* 네이버 서치어드바이저 소유권 확인 */}
         <meta name="naver-site-verification" content="fb50d5f71e40bc597ff17079cb19b01310c2b1c3" />
-        {/* Google Analytics 4 — G-DYBVSJDG4H */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-DYBVSJDG4H"></script>
-        <script dangerouslySetInnerHTML={{__html: `
+        {/* Google Analytics 4 — G-DYBVSJDG4H (미리보기 빌드에서는 미탑재) */}
+        {!PREVIEW && <script async src="https://www.googletagmanager.com/gtag/js?id=G-DYBVSJDG4H"></script>}
+        {!PREVIEW && <script dangerouslySetInnerHTML={{__html: `
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'G-DYBVSJDG4H', {
             page_path: window.location.pathname
           });
-        `}} />
-        {/* Google AdSense */}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5237218812452624" crossorigin="anonymous"></script>
+        `}} />}
+        {/* Google AdSense (미리보기 빌드에서는 미탑재) */}
+        {!PREVIEW && <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5237218812452624" crossorigin="anonymous"></script>}
+        {/* RSS 자동 발견 (네이버·구글 등) */}
+        {!PREVIEW && <link rel="alternate" type="application/rss+xml" title="노후설계 가이드 새 글" href="https://www.luckyu.co.kr/rss.xml" />}
         <script dangerouslySetInnerHTML={{__html: `
           tailwind.config = {
             theme: {

@@ -31,3 +31,7 @@ lerna-debug.log*
 
 # misc
 .DS_Store
+
+# generated content bundle / preview build
+src/generated/
+dist-preview/

@@ -583,7 +583,7 @@ function resetDiagnosis() {
 // ─── 상황별 필터링 ─────────────────────────────────────────────────────────────
 
 // 포스트 데이터 (서버 렌더링 된 카드와 연동)
-const ALL_POSTS_DATA = [
+const FALLBACK_POSTS_DATA = [
   { id: '1', slug: 'national-pension-amount-calculation', situation: '은퇴 5년 전', type: 'pillar',     title: '국민연금 수령액 2026 완벽 계산법 — A값 319만원 기준', category: 'pension-asset', readTime: 8 },
   { id: '2', slug: 'housing-pension-calculation',         situation: '은퇴 5년 전', type: 'comparison', title: '주택연금 계산기 2026 — 3월부터 3.13% 인상, 내 집으로 얼마?', category: 'pension-asset', readTime: 9 },
   { id: '3', slug: 'basic-pension-eligibility',           situation: '은퇴 후 생활비 걱정될 때', type: 'checklist', title: '기초연금 자격조건 2026 — 월 최대 34만 9,700원', category: 'pension-asset', readTime: 7 },
@@ -591,6 +591,19 @@ const ALL_POSTS_DATA = [
   { id: '5', slug: 'retirement-5years-checklist',         situation: '은퇴 5년 전', type: 'checklist', title: '은퇴 5년 전 반드시 해야 할 7가지 체크리스트 (2026 최신)', category: 'pension-asset', readTime: 7 },
   { id: '6', slug: 'medical-expense-support-parents',     situation: '부모님 병원비 걱정될 때',   type: 'comparison', title: '부모님 병원비 지원제도 2026 — 몰라서 못 받는 5가지', category: 'care', readTime: 9 },
 ];
+
+// 서버가 홈 페이지에 주입한 공개 글 목록(#posts-data)을 우선 사용 — 신규 글 발행 시 자동 반영
+// (주입 데이터가 없거나 파싱 실패 시 위 FALLBACK 사용)
+const ALL_POSTS_DATA = (function () {
+  try {
+    const el = document.getElementById('posts-data');
+    if (el) {
+      const data = JSON.parse(el.textContent || '[]');
+      if (Array.isArray(data) && data.length > 0) return data;
+    }
+  } catch (e) { /* fallback */ }
+  return FALLBACK_POSTS_DATA;
+})();
 
 const TYPE_BADGE = {
   pillar:     { label: '기둥글',     color: 'bg-blue-100 text-blue-700' },

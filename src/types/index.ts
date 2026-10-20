@@ -21,6 +21,49 @@ export interface Post {
   // ── Phase B: 검색 여정형 내부링크 ────────────────────────────────
   nextQuestions?: NextQuestion[] // 이 글을 읽은 뒤 다음으로 궁금해할 질문 목록
   nextStep?: string              // 가장 핵심적인 다음 글 slug (nextQuestions[0]와 중복 가능)
+  // ── 콘텐츠 발행 시스템 (모두 optional: 기존 글은 값이 없어도 동작) ──────────
+  status?: PostStatus            // 미지정 = 'published' (기존 TS 글 호환)
+  origin?: 'legacy' | 'md'       // legacy: src/data/legacy-posts.ts, md: content/posts/*.md
+  seoTitle?: string              // <title>에 쓸 SEO 제목 (없으면 title)
+  metaDescription?: string       // meta description (없으면 description)
+  basisYear?: number             // 정책 적용(기준) 연도
+  verifiedAt?: string            // 공식자료 검증일 (YYYY-MM-DD)
+  approvedAt?: string            // 운영자 발행 승인일 (md 글의 published 전환 조건)
+  noindex?: boolean              // true면 meta robots noindex + sitemap/RSS 제외
+  image?: PostImage              // 대표 이미지 + alt
+  review?: PostReviewNotes       // 검토용 메모 (미리보기 빌드에서만 포함)
+  shortTitle?: string            // 푸터·좁은 영역용 짧은 제목
+}
+
+export type PostStatus = 'draft' | 'review' | 'published'
+
+export interface PostImage {
+  src: string  // /static/images/... (public/ 하위 실제 파일)
+  alt: string
+}
+
+export interface PostReviewNotes {
+  differentiation?: string // 기존 글과의 차별점
+  reviewNotes?: string     // 운영자 검토 메모
+}
+
+// 공식자료 검증표 한 행 (content/verification/<slug>.yaml)
+export interface VerificationRow {
+  item: string          // 검증 항목
+  value: string         // 실제 적용 수치 또는 조건
+  agency: string        // 공식 기관
+  document: string      // 공식 문서명
+  url: string           // 원문 URL
+  effectiveDate: string // 자료 시행일
+  checkedAt: string     // 확인일
+  result: 'verified' | 'partial' | 'unverified' | 'conflict'
+  note?: string
+}
+
+export interface VerificationSheet {
+  slug: string
+  checkedAt: string
+  rows: VerificationRow[]
 }
 
 // Phase B: 다음 질문 카드 한 항목
@@ -37,8 +80,11 @@ export interface FAQ {
 }
 
 export interface Source {
-  name: string
+  name: string          // 기관/자료 표시명
   url: string
+  title?: string        // 공식 문서명
+  effectiveDate?: string // 자료 시행일
+  accessedAt?: string   // 확인일
 }
 
 // 진단기 타입

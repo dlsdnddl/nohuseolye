@@ -19,8 +19,14 @@ export const ContentCuration = ({ posts }: ContentCurationProps) => {
     .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
     .slice(0, 6)
 
+  // 클라이언트 상황별 필터(app.js)가 사용할 공개 글 목록 — 서버 데이터에서 자동 생성 (하드코딩 제거)
+  const clientPosts = JSON.stringify(
+    posts.map(p => ({ id: p.id, slug: p.slug, situation: p.situation ?? '', type: p.type, title: p.title, category: p.category, readTime: p.readTime }))
+  ).replace(/</g, '\u003c')
+
   return (
     <div class="max-w-6xl mx-auto px-4 space-y-16">
+      <script id="posts-data" type="application/json" dangerouslySetInnerHTML={{ __html: clientPosts }} />
 
       {/* ─── 상황별 큐레이션 ─── */}
       <section>
