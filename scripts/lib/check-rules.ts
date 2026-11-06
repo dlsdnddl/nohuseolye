@@ -126,7 +126,7 @@ export function runChecks(opts: CheckOptions): CheckResult {
       if (!(Array.isArray(fm.relatedPosts) && fm.relatedPosts.length) && !(Array.isArray(fm.nextQuestions) && fm.nextQuestions.length)) {
         add(lv, f, 'internal-links', 'relatedPosts/nextQuestions가 모두 없습니다.', '관련 글과 다음 질문 카드를 연결하세요.')
       }
-      if (!fm.image?.src) add(lv, f, 'image', '대표 이미지(image.src)가 없습니다.')
+      if (!fm.image?.src) add('warn', f, 'image', '대표 이미지(image.src)가 없습니다. 이해를 돕는 이미지가 있을 때만 추가하세요(선택).')
       if (!raw.body.includes('## 이 글이 필요한 분') || !raw.body.includes('## 3줄 요약')) {
         add(lv, f, 'body-sections', '본문에 "## 이 글이 필요한 분" 또는 "## 3줄 요약" 섹션이 없습니다.', '_TEMPLATE.md 구조를 따르세요.')
       }

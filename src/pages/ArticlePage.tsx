@@ -44,16 +44,16 @@ export const ArticlePage = ({ post, preview = false }: ArticlePageProps) => {
           )}
 
           {/* 브레드크럼 */}
-          <nav class="flex items-center gap-2 text-sm text-gray-400 mb-6" aria-label="breadcrumb">
+          <nav class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-400 mb-6" aria-label="breadcrumb">
             {breadcrumbs.map((crumb, i) => (
-              <span key={crumb.url} class="flex items-center gap-2">
+              <span key={crumb.url} class="flex items-center gap-2 min-w-0">
                 {i < breadcrumbs.length - 1 ? (
                   <>
-                    <a href={crumb.url} class="hover:text-primary-600 transition-colors">{crumb.name}</a>
+                    <a href={crumb.url} class="hover:text-primary-600 transition-colors whitespace-nowrap shrink-0">{crumb.name}</a>
                     <i class="fas fa-chevron-right text-xs"></i>
                   </>
                 ) : (
-                  <span class="text-gray-600 font-medium line-clamp-1">{crumb.name}</span>
+                  <span class="text-gray-600 font-medium line-clamp-2 min-w-0">{crumb.name}</span>
                 )}
               </span>
             ))}

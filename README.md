@@ -23,7 +23,7 @@
 | 항목 | 내용 |
 |------|------|
 | 프레임워크 | Hono (Cloudflare Workers) |
-| 빌드 도구 | Vite + TypeScript |
+| 빌드 도구 | Vite 6 + TypeScript 7 (타입 검사: `npm run typecheck`) |
 | 스타일 | Tailwind CSS (CDN) |
 | 아이콘 | FontAwesome 6.4 (CDN) |
 | 배포 | Cloudflare Pages |
@@ -37,7 +37,9 @@
 /home/user/webapp/
 ├── src/
 │   ├── index.tsx              # 메인 라우터
-│   ├── data/posts.ts          # 아티클 데이터 (6개 포스트)
+│   ├── data/posts.ts          # 기존 8개 + Markdown 글 통합 facade
+│   ├── data/legacy-posts.ts   # 기존 8개 글
+│   ├── generated/content.ts   # 빌드 시 생성 (git 제외)
 │   ├── pages/
 │   │   ├── ArticlePage.tsx    # 아티클 렌더링 + 소득인정액 계산기 위젯
 │   │   └── AdminPage.tsx
@@ -53,7 +55,11 @@
 │   └── renderer.tsx
 ├── public/static/
 │   └── app.js                 # 프론트엔드 JS (진단기, 계산기, TOC, 공유 등)
-├── dist/                      # 빌드 결과물 (배포용)
+├── content/                   # Markdown 글(posts)·검증표(verification)·이미지
+├── scripts/                   # build-content, content-check, new-post 등
+├── docs/                      # 검토 보고서·기획표
+├── dist/                      # 운영 빌드 결과물 (배포용)
+├── dist-preview/              # 미리보기 빌드 결과물
 ├── wrangler.jsonc             # Cloudflare 설정
 ├── package.json
 ├── vite.config.ts
@@ -158,6 +164,52 @@ npx wrangler pages deploy dist --project-name nohuseolye
 - `/housing-income`, `/support`(준비 중) → `noindex` (meta + X-Robots-Tag), canonical 미출력
 - 모바일 헤더(390px) nav 205px → 47px (가로 스크롤, 기존 디자인 유지)
 - 모바일 JS 오류 `adsbygoogle.push() error: No slot size for availableWidth=0` 제거 (데스크톱 전용 사이드바 광고 슬롯을 모바일에서 요청하지 않도록 변경, 광고 단위·슬롯 ID 불변)
+
+## ✍️ 콘텐츠 발행 워크플로 · 미리보기 환경 (2026-11 추가)
+
+### 콘텐츠 구조
+- 신규 글: `content/posts/<카테고리>/<slug>.md` (Markdown + frontmatter, 양식은 `content/posts/_TEMPLATE.md`)
+- 사실 검증표: `content/verification/<slug>.yaml` (항목별 `verified | partial | unverified | conflict`)
+- 기존 8개 글: `src/data/legacy-posts.ts` (변경 없음). `src/data/posts.ts`가 둘을 합쳐 제공
+- 빌드 시 `scripts/build-content.ts`가 `src/generated/content.ts`를 생성 (git 제외)
+- 상태: `draft` → `review` → `published` (published는 `approvedAt` 필수). **운영 빌드에는 published + 열린 카테고리만 포함**
+- `housing-income`, `support` 카테고리는 `coming-soon`(noindex). 글이 3개 이상 published되고 승인된 뒤에만 `src/data/categories.ts`에서 `open`으로 변경
+
+### 자주 쓰는 명령
+```bash
+npm run content:new            # 새 글 초안 생성
+npm run content:check          # 형식·링크·검증표 검사 (오류 0이어야 발행 가능)
+npm run content:check:review   # review 단계도 오류로 취급하는 엄격 검사
+npm run typecheck              # TypeScript 타입 검사 (빌드와 별개)
+npm run build                  # 운영 빌드 → dist (published만)
+npm run build:preview          # 미리보기 빌드 → dist-preview (초안 포함)
+npm run deploy:preview         # 미리보기 프로젝트(nohuseolye-preview)에 배포
+```
+> **빌드 성공과 타입 검사 성공은 별개입니다.** 배포 전에 `typecheck`, `content:check`, `build`를 모두 통과시킵니다.
+
+### 미리보기 환경 (`nohuseolye-preview`)
+- URL: https://nohuseolye-preview.pages.dev (운영 `nohuseolye` 프로젝트와 완전히 분리된 별도 Pages 프로젝트)
+- 접근 보호: HTTP Basic 인증. 비밀번호는 Pages 시크릿 `PREVIEW_PASSWORD`로만 저장하며 **코드·README·채팅에 기록하지 않음** (시크릿이 없으면 접근 자체를 막는 fail-closed)
+- 사이트 전체 noindex(meta + `X-Robots-Tag`), `robots.txt` Disallow, sitemap/rss 404
+- GA4·AdSense 스크립트 제거, 초안·검토 메모 포함, 검증표는 `/_review/<slug>`, 검토 목록은 `/_review`
+- 비밀번호 재설정: Cloudflare 대시보드 → Workers & Pages → nohuseolye-preview → Settings → Variables and Secrets → `PREVIEW_PASSWORD` 수정 후 `npm run deploy:preview` 재실행
+- 로컬 확인: `CONTENT_MODE=preview` 빌드 결과를 `wrangler pages dev dist-preview --binding PREVIEW_PASSWORD=<임시값>`으로 실행
+
+### 운영 반영 전 원칙
+1. 미리보기에서 PC/모바일·수치·출처 검토 → 검토자가 승인
+2. frontmatter `status: published` + `approvedAt` 기입, 필요한 경우 카테고리 `open` 전환
+3. `typecheck`, `content:check`, `build` 통과 → 운영 배포(위 명령) → 라이브 URL·sitemap·RSS 확인
+4. 문제 시 위 롤백 절차 사용
+
+### 관련 문서
+- `docs/housing-pension-calculation-review.md` — 기존 주택연금 계산 글 2026 개정사항 대조 결과(수정 전 검토 보고서)
+- `docs/content-plan-40.md` — 신규 칼럼 40개 기획표 (검색량·CPC는 측정하지 않아 정성 표현만 사용)
+
+### 현재 상태 (2026-11-06)
+- 신규 칼럼 6편(H1~H3, S1~S3): `status: review`, 미리보기에만 존재, **운영 미공개**
+- 운영 배포: `6e420247` (commit `e76cacb`) 그대로. 신규 글·카테고리 활성화 없음
+
+---
 
 ## 🌍 도메인 연결 (진행 중)
 

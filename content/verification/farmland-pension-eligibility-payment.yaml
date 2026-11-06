@@ -1,0 +1,75 @@
+slug: farmland-pension-eligibility-payment
+checkedAt: 2026-11-06
+rows:
+  - item: "신청 대상 연령·영농경력"
+    value: "신청연도 말일 기준 농업인 만 60세 이상, 영농경력 5년 이상"
+    agency: "법제처 생활법령정보 / 한국농어촌공사 농지은행"
+    document: "농지연금 - 신청 대상 및 담보농지 요건"
+    url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2056&ccfNo=4&cciNo=2&cnpClsNo=2"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "기간정액형 가입 연령"
+    value: "5년형 78세 이상, 10년형 73세 이상, 15년형 68세 이상, 20년형 63세 이상"
+    agency: "법제처 생활법령정보"
+    document: "농지연금 - 신청 대상 및 담보농지 요건"
+    url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2056&ccfNo=4&cciNo=2&cnpClsNo=2"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "담보농지 기본 요건(15%/30%, 압류 등, 전·답·과수원, 2020.1.1 이후 취득 2년 보유·주소지)"
+    value: "제한물권 채권최고액 농지가격 15% 미만(일시상환 가능 시 30% 이하), 압류·가압류·가처분 아님, 전·답·과수원 실제 영농, 2020.1.1 이후 취득은 2년 이상 보유 + 주소지(해당 시·군·구 및 연접 또는 직선거리 30km 이내)"
+    agency: "법제처 생활법령정보"
+    document: "농지연금 - 신청 대상 및 담보농지 요건"
+    url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2056&ccfNo=4&cciNo=2&cnpClsNo=2"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "제한 농지 유형과 부부 공동소유 예외"
+    value: "불법건축물·비농업 시설, 2인 이상 공동소유(부부 공동은 1명 신청으로 전체 담보), 개발지역 확정, 2018.1.1 이후 경·공매 취득, 소유권 외 권리 설정, 농기계 진출입 곤란(농업진흥지역 전·답·과수원 제외)"
+    agency: "법제처 생활법령정보"
+    document: "농지연금 - 신청 대상 및 담보농지 요건"
+    url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2056&ccfNo=4&cciNo=2&cnpClsNo=2"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "지급방식 6종과 수시인출형 가입 제한"
+    value: "종신정액형, 전후후박형(초기 10년 더 많이), 수시인출형(현재 가입 제한 중), 기간정액형, 경영이양형(소유권 이전 전제), 은퇴직불형(5~10년 임대 후 이전 전제)"
+    agency: "한국농어촌공사 농지은행 / 농촌진흥청"
+    document: "농지연금 안내"
+    url: "https://www.rda.go.kr/young/content/content50.do"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "상담 채널(1577-7770, fbo.or.kr)"
+    value: "농지은행 포털 www.fbo.or.kr, 상담전화 1577-7770"
+    agency: "한국농어촌공사 농지은행"
+    document: "농지은행 포털"
+    url: "https://www.fbo.or.kr"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "과거 65세 기준과의 혼재 여부"
+    value: "일부 검색 자료의 '65세 이상'은 구제도. 본문은 현행 60세만 서술하고 변경 시점은 기재하지 않음(변경 시점은 공식 문서 직접 확인 전)"
+    agency: "법제처 생활법령정보"
+    document: "농지연금 - 신청 대상"
+    url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2056&ccfNo=4&cciNo=2&cnpClsNo=2"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: partial
+  - item: "월지급금 예시 금액"
+    value: "공식 계산기로 확인하지 못해 본문에 수치 미기재. 농지은행 모의계산 안내로 대체"
+    agency: "한국농어촌공사 농지은행"
+    document: "-"
+    url: "https://www.fbo.or.kr"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: unverified
+  - item: "가입 후 경작·임대 가능 여부, 신청 구비서류 상세, 상속·정산"
+    value: "공식 문서로 세부 확인하지 못해 본문에서는 일반 안내와 '농지은행 확인' 안내만 기재"
+    agency: "한국농어촌공사 농지은행"
+    document: "-"
+    url: "https://www.fbo.or.kr"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: unverified

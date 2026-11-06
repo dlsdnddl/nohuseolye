@@ -1,0 +1,91 @@
+slug: housing-pension-spouse-succession
+checkedAt: 2026-11-06
+rows:
+  - item: "가입자 사망 시 월지급금 중단, 승계 가능 배우자 범위"
+    value: "가입자 사망 시 지급 중단. 최초 가입 시부터 계속 혼인관계인 배우자만 승계 가능"
+    agency: "한국주택금융공사"
+    document: "주택연금 가입고객 사망 후 절차 안내"
+    url: "https://www.hf.go.kr/ko/sub03/sub03_02_05_07.do"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "승계 기한"
+    value: "사망일로부터 6개월 이내 승계(채무인수) 완료. 6개월 경과 시 사망확인일로부터 1개월 이내(생활법령정보)"
+    agency: "한국주택금융공사 / 법제처 생활법령정보"
+    document: "가입고객 사망 후 절차 / 주택연금 가입자 사망 시(2026.10.15 기준)"
+    url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=3&cciNo=2&cnpClsNo=2"
+    effectiveDate: "2026-10-15"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "승계 시 배우자 월지급금"
+    value: "기존 월지급금과 동일(감액 없음)"
+    agency: "한국주택금융공사"
+    document: "주택연금 가입고객 사망 후 절차 안내"
+    url: "https://www.hf.go.kr/ko/sub03/sub03_02_05_07.do"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "저당권방식 승계 절차"
+    value: "배우자 앞 소유권 전부 이전(상속인 동의) + 채무인수 신청 + 근저당권설정변경계약 → 공사심사 → 은행방문 → 연금실행"
+    agency: "한국주택금융공사"
+    document: "주택연금 가입고객 사망 후 절차 안내"
+    url: "https://www.hf.go.kr/ko/sub03/sub03_02_05_07.do"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "신탁방식 승계 절차, 보증금 있는 일부 임대 가능 여부"
+    value: "소유권 이전·담보권 변경 불요, 승계(채무인수) 신청만. 보증금 있는 일부 임대는 신탁방식만 가능, 저당권방식은 불가"
+    agency: "한국주택금융공사"
+    document: "주택연금 상품 소개 / 사망 후 절차 안내"
+    url: "https://www.hf.go.kr/ko/sub03/sub03_01_01_01.do"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "승계 시 세금 안내(상속세·취득세·재산세·종부세)"
+    value: "배우자가 신고·납부. 종부세는 대상자 한정. 취득세율은 지자체 결정. 공사는 법률·세무 상담 불가"
+    agency: "한국주택금융공사"
+    document: "주택연금 가입고객 사망 후 절차 안내"
+    url: "https://www.hf.go.kr/ko/sub03/sub03_02_05_07.do"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "부부 모두 사망 시 정산 원칙(잔액 vs 집값)"
+    value: "집값이 남으면 상속인(신탁은 귀속권리자), 부족하면 공사 부담·상속인 청구 없음. 저당권방식은 법원경매, 신탁방식은 공매"
+    agency: "한국주택금융공사 / 법제처 생활법령정보"
+    document: "가입고객 사망 후 절차 / 주택연금 가입자 사망 시"
+    url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=3&cciNo=2&cnpClsNo=2"
+    effectiveDate: "2026-10-15"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "상속인 선택지(임의매각·직접상환), 담보주택 가격과 대출잔액 중 적은 금액 상환, 승인 시 최대 3년"
+    value: "임의매각은 공사 동의·협의 후 일정 기간 내 처분, 적은 금액 상환, 물적담보 충분 승인 시 최대 3년. 직접 상환 시 주택은 상속인에게. 신탁방식 비귀속 상속인 상환 시에도 소유권은 귀속권리자에게"
+    agency: "한국주택금융공사"
+    document: "주택연금 가입고객 사망 후 절차 안내"
+    url: "https://www.hf.go.kr/ko/sub03/sub03_02_05_07.do"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "세대이음 주택연금(2026.6.1~) 개요"
+    value: "55세 이상 자녀가 동일 주택으로 가입, 인출한도(대출한도의 50% 초과 90% 이하) 내 목돈으로 부모 채무 상환, 부모는 근저당권방식 한정, 채무가 잔존가치보다 큰 경우 등 가입 불가"
+    agency: "금융위원회 / 한국주택금융공사"
+    document: "2026년 주택연금 제도 개선 / 보도자료(2026-05-11)"
+    url: "https://www.fsc.go.kr/edu/news/86247"
+    effectiveDate: "2026-06-01"
+    checkedAt: 2026-11-06
+    result: verified
+  - item: "본문 정산 예시 금액(5억/3억/3.8억)"
+    value: "설명용 가정치이며 공식 수치 아님. 본문에 '가정'으로 명시"
+    agency: "-"
+    document: "-"
+    url: "https://www.hf.go.kr/ko/sub03/sub03_02_05_07.do"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: partial
+  - item: "재혼·사실혼·가입 이후 혼인 배우자의 승계 가능 여부"
+    value: "공식 문서에서 '최초 가입 시부터 계속 혼인관계' 배우자만 확인. 그 외 사례는 판단하지 않고 공사 상담 안내로 처리"
+    agency: "한국주택금융공사"
+    document: "주택연금 가입고객 사망 후 절차 안내"
+    url: "https://www.hf.go.kr/ko/sub03/sub03_02_05_07.do"
+    effectiveDate: "2026-11-06"
+    checkedAt: 2026-11-06
+    result: partial
