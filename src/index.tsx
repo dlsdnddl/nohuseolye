@@ -50,14 +50,14 @@ app.use(renderer)
 
 // ─── www 리다이렉트 (SEO: 중복 도메인 방지) ────────────────────────────────────
 // luckyu.co.kr → www.luckyu.co.kr 301 영구 리다이렉트
-app.use('*', (c, next) => {
+app.use('*', async (c, next) => {
   const host = c.req.header('host') || ''
   if (host === 'luckyu.co.kr') {
     const url = new URL(c.req.url)
     url.host = 'www.luckyu.co.kr'
     return c.redirect(url.toString(), 301)
   }
-  return next()
+  await next()
 })
 
 // ─── 404 페이지 (실제 HTTP 404 + noindex) ──────────────────────────────────────

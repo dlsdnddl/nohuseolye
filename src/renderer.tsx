@@ -1,6 +1,24 @@
 import { jsxRenderer } from 'hono/jsx-renderer'
 import { BUILD_MODE } from './generated/content'
 
+// c.render(content, props) 의 props 타입 선언 (타입 검사용 — 런타임 영향 없음)
+declare module 'hono' {
+  interface ContextRenderer {
+    (
+      content: string | Promise<string>,
+      props?: {
+        title?: string | null
+        description?: string | null
+        ogImage?: string | null
+        jsonLd?: unknown
+        canonicalUrl?: string | null
+        noindex?: boolean
+        ogType?: string | null
+      }
+    ): Response | Promise<Response>
+  }
+}
+
 // 미리보기 빌드: 전체 noindex + GA4/AdSense 미탑재 (운영 성과 지표 오염 방지)
 const PREVIEW = BUILD_MODE === 'preview'
 

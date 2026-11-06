@@ -14,16 +14,20 @@
     "content:new": "tsx scripts/new-post.ts",
     "content:build": "tsx scripts/build-content.ts",
     "build:preview": "CONTENT_MODE=preview tsx scripts/build-content.ts && OUT_DIR=dist-preview vite build && OUT_DIR=dist-preview tsx scripts/copy-post-images.ts && OUT_DIR=dist-preview tsx scripts/verify-dist.ts",
-    "deploy:preview": "npm run build:preview && wrangler pages deploy dist-preview --project-name nohuseolye-preview --branch main"
+    "deploy:preview": "npm run build:preview && wrangler pages deploy dist-preview --project-name nohuseolye-preview --branch main",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.scripts.json"
   },
   "dependencies": {
     "hono": "^4.12.12"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260702.1",
     "@hono/vite-build": "^1.2.0",
     "@hono/vite-cloudflare-pages": "^0.4.3",
     "@hono/vite-dev-server": "^0.18.2",
+    "@types/node": "^26.6.6",
     "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
     "vite": "^6.3.5",
     "wrangler": "^4.4.0",
     "yaml": "^2.9.1"

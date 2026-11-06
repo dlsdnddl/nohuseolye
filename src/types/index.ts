@@ -123,7 +123,7 @@ export interface Category {
 }
 
 // 관리자 페이지용
-export interface AdminPost extends Post {
+export interface AdminPost extends Omit<Post, 'status'> {
   createdAt: string
   status: 'draft' | 'published' | 'archived'
 }
