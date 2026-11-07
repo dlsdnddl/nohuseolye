@@ -150,10 +150,11 @@ npx wrangler pages deploy dist --project-name nohuseolye
 - **배포 방식**: Cloudflare Pages `nohuseolye` — **직접 업로드(Git 연동 없음)**, BYOK(`wrangler pages deploy`)
 - **배포 명령**: `npm run build && npx wrangler pages deploy dist --project-name nohuseolye --branch main`
 - **현재 운영 배포**: `6e420247-9c78-439a-86ca-a399ec09f5f8` (commit `e76cacb`, Phase B + 오류 수정)
-- **직전 정상 배포(롤백 대상)**: `3e9b3c5a-dc7c-4914-a80f-cce0a6f7a33a` (commit `9888666`)
+- **롤백 대상(운영 배포 전 정상 배포)**: `6e420247-9c78-439a-86ca-a399ec09f5f8` (commit `e76cacb`, Phase B 포함)
+- **사용 금지**: `3e9b3c5a-dc7c-4914-a80f-cce0a6f7a33a` (commit `9888666`) — Phase B(내부링크 카드·GA4 internal_link_click)가 없는 구버전이라 롤백 대상이 아님
 - **롤백 방법**
-  1. Cloudflare 대시보드 → Workers & Pages → nohuseolye → Deployments → 3e9b3c5a 선택 → *Rollback to this deployment* (즉시 반영)
-  2. 또는 `git checkout 9888666 && npm run build && npx wrangler pages deploy dist --project-name nohuseolye --branch main`
+  1. Cloudflare 대시보드 → Workers & Pages → nohuseolye → Deployments → `6e420247` 선택 → *Rollback to this deployment* (즉시 반영)
+  2. 또는 `git checkout e76cacb && npm run build && npx wrangler pages deploy dist --project-name nohuseolye --branch main`
 - **참고**: gsk Hosted 배포(`*.vip.gensparksite.com`)는 미리보기용이며 운영 도메인과 무관함. Hosted 접근규칙은 Pages에 적용되지 않으므로 `/admin`은 라우트 자체를 비공개(404) 처리함.
 
 ### 2026-10-19 수정 요약
