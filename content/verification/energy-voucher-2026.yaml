@@ -1,5 +1,5 @@
 slug: energy-voucher-2026
-checkedAt: 2026-11-06
+checkedAt: 2026-11-07
 rows:
   - item: "소득 기준(수급자 유형)"
     value: "생계급여·의료급여·주거급여·교육급여 수급자"
@@ -7,7 +7,7 @@ rows:
     document: "에너지바우처 지원 안내"
     url: "https://www.energyv.or.kr/info/support_info.do"
     effectiveDate: "2026-06-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "세대원 특성 기준(노인·영유아·장애인·임산부·중증희귀난치·한부모·소년소녀·다자녀)"
     value: "주민등록 등본 기준. 노인 1961.12.31 이전 출생, 영유아 2019.1.1 이후 출생 7세 이하 취학 전, 임산부 임신 중·분만 후 6개월 미만, 다자녀 19세 미만 자녀 2명 이상"
@@ -15,7 +15,7 @@ rows:
     document: "에너지바우처 지원 안내"
     url: "https://www.energyv.or.kr/info/support_info.do"
     effectiveDate: "2026-06-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "제외 대상·중복수급 불가"
     value: "세대원 모두 보장시설 급여 수급자 제외. 동절기 중복 불가: 긴급복지 동절기 연료비(2026.10~2027.3), 연탄쿠폰, 연탄전환 에너지바우처"
@@ -23,7 +23,7 @@ rows:
     document: "에너지바우처 지원 안내"
     url: "https://www.energyv.or.kr/info/support_info.do"
     effectiveDate: "2026-06-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "2026년 지원 금액(세대원 수별 총액)"
     value: "1인 295,200원 / 2인 407,500원 / 3인 532,700원 / 4인 이상 701,300원. 하절기만 사용(괄호) 40,700 / 58,800 / 75,800 / 102,000원. 월별이 아닌 총액"
@@ -31,7 +31,7 @@ rows:
     document: "에너지바우처 지원 안내"
     url: "https://www.energyv.or.kr/info/support_info.do"
     effectiveDate: "2026-06-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "신청기간·중단일"
     value: "2026.6.15~2026.12.31, 중단 6.27~6.30, 10.1~10.2, 12월말 2~3일"
@@ -39,7 +39,7 @@ rows:
     document: "에너지바우처 지원 안내"
     url: "https://www.energyv.or.kr/info/support_info.do"
     effectiveDate: "2026-06-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "사용기간(하절기·동절기, 실물/가상카드)"
     value: "2026.7.1~2027.5.31. 하절기 7.1~9.30, 동절기 가상카드 10.1~2027.5.31, 실물카드 10.3~2027.5.31"
@@ -47,7 +47,7 @@ rows:
     document: "에너지바우처 지원 안내"
     url: "https://www.energyv.or.kr/info/support_info.do"
     effectiveDate: "2026-06-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "세대원 수 변경 기간, 하절기 요금 미차감 신청, 수급자 소득산정 미반영"
     value: "감소 6.15~6.26만 가능, 증가 ~2027.5.31. 하절기 미사용·동절기 몰아쓰기는 요금 미차감 신청 필요. 소득산정 미반영"
@@ -55,7 +55,7 @@ rows:
     document: "에너지바우처 지원 안내"
     url: "https://www.energyv.or.kr/info/support_info.do"
     effectiveDate: "2026-06-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "신청 장소·방식, 잔액 조회"
     value: "읍·면·동 행정복지센터(대리·직권 신청 가능). 실물카드(국민행복카드) 또는 가상카드(요금차감). 복지로 > 복지지갑에서 조회"
@@ -63,29 +63,21 @@ rows:
     document: "에너지바우처 지원 안내"
     url: "https://www.energyv.or.kr/info/support_info.do"
     effectiveDate: "2026-06-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
-  - item: "전년도 정보 변동 없을 시 자동 신청"
-    value: "검색 스니펫 수준 확인. 본문은 '자동 신청되는 경우가 있다고 안내됨, 정확한 대상 여부는 공단에서 확인'으로 한정 표현"
+  - item: "전년도 정보 변동 없을 시 자동 신청, 변동 시 재신청"
+    value: "전년도 지원을 받았고 정보 변동이 없으며 자격 충족 시 자동 신청. 이사·세대원 변동 시 신규 신청, 지원 중 변동 시 행정복지센터에 알리고 재신청"
     agency: "한국에너지공단 에너지바우처"
     document: "에너지바우처 신청 안내"
     url: "https://www.energyv.or.kr/info/apl_info.do"
     effectiveDate: "2026-06-15"
-    checkedAt: 2026-11-06
-    result: partial
-  - item: "2027년 에너지바우처 대상·금액·신청기간"
-    value: "공식 발표 확인되지 않음(2026-11-06 기준). 본문은 2026 기준만 확정 서술, 2027은 '발표 후 확인'으로 처리"
+    checkedAt: 2026-11-07
+    result: verified
+  - item: "2027년 에너지바우처 발표 여부(미래 일정, C 분류)"
+    value: "2026-11-07 기준 한국에너지공단 공식 안내에 2027년 대상·금액·신청기간 발표 없음을 확인. 본문은 '공식 발표 전'으로 표시하고 2027 수치는 쓰지 않음. 발표 후 갱신 필요"
     agency: "한국에너지공단 에너지바우처"
-    document: "-"
+    document: "에너지바우처 지원 안내(공지 확인)"
     url: "https://www.energyv.or.kr/info/support_info.do"
-    effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-06
-    result: unverified
-  - item: "연탄전환 에너지바우처 금액, 소득 기준 상세(중위소득 비율)"
-    value: "별도 사업/별도 기준이라 본문에 기재하지 않음"
-    agency: "-"
-    document: "-"
-    url: "https://www.energyv.or.kr/info/support_info.do"
-    effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-06
-    result: unverified
+    effectiveDate: "2026-11-07"
+    checkedAt: 2026-11-07
+    result: verified

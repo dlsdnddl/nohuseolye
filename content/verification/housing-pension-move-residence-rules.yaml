@@ -1,13 +1,13 @@
 slug: housing-pension-move-residence-rules
-checkedAt: 2026-11-06
+checkedAt: 2026-11-07
 rows:
   - item: "가입 시 실거주 요건"
     value: "가입자 또는 배우자가 담보주택에 실제 거주(주민등록 전입)"
     agency: "한국주택금융공사"
     document: "주택연금 상품 소개"
     url: "https://www.hf.go.kr/ko/sub03/sub03_01_01_01.do"
-    effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-06
+    effectiveDate: "2026-11-07"
+    checkedAt: 2026-11-07
     result: verified
   - item: "2026.6.1 가입 시 실거주 예외(부부합산 1주택자) 3개 사유"
     value: "①질병 치료 병원·요양시설 입원(소) ②자녀 등 봉양 다른 주택 장기체류 ③노인주거복지시설 이주. 6.1 이후 신규 신청건부터. 예외 시 담보주택 전체 임대 허용"
@@ -15,7 +15,7 @@ rows:
     document: "2026년 주택연금 제도 개선(2026-02-05) / 보도자료(2026-05-11)"
     url: "https://www.fsc.go.kr/edu/news/86247"
     effectiveDate: "2026-06-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "가입 후 지급정지 기준(주민등록 이전, 1년 이상 계속 미거주)"
     value: "가입자·배우자 모두 담보주택에서 주민등록 이전하거나 모두 1년 이상 계속 거주하지 않으면 지급정지(공사가 미거주 확인한 날부터 1년)"
@@ -23,7 +23,7 @@ rows:
     document: "주택연금 - 지급정지"
     url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=4&cciNo=1&cnpClsNo=1"
     effectiveDate: "2026-10-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "미거주 인정 사유 5종과 사전 통지"
     value: "병원·요양 입원, 자녀 봉양 장기체류, 노인주거복지시설 이주, 관공서 명령 격리·수용·수감, 공사 인정 개인적 특별사정. 사전 서면 통지 또는 공사 확인"
@@ -31,7 +31,7 @@ rows:
     document: "주택연금 - 수령자의 의무"
     url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=3&cciNo=3&cnpClsNo=2"
     effectiveDate: "2026-10-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "담보주택 변경 허용 유형"
     value: "일반↔일반, 노인복지주택↔노인복지주택, 주거목적 오피스텔↔오피스텔(규정 제37조제1항제8호), 재건축 참여 신축 입주, 재난 멸실 후 신축. 유형 간 변경 불가"
@@ -39,7 +39,7 @@ rows:
     document: "주택연금 - 담보주택 변경"
     url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=3&cciNo=2&cnpClsNo=3"
     effectiveDate: "2026-10-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "신규 주택 요건(소유·거주·권리관계·가격)"
     value: "신청인 단독/배우자 공동 소유, 거주, 소유권 침해·제한물권·보증금 임대차 없음(대출실행일까지 해소 가능), 재건축 진행 아님, 등기 완료, 신규 공시가격 12억 이하 또는 기존 이하(재건축·재난 예외)"
@@ -47,7 +47,7 @@ rows:
     document: "주택연금 - 담보주택 변경"
     url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=3&cciNo=2&cnpClsNo=3"
     effectiveDate: "2026-10-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "이사 시 월지급금 증감 원칙, 예비승인 1개월, 가격평가 순서"
     value: "기존가=신규가 동일, 신규 더 크면 증가(초기보증료 추가), 기존 더 크면 차액으로 잔액 상환(잔액≥차액 동일, 잔액<차액 감소). 예비승인 신청일부터 1개월 이내, 평가순서 부동산원→KB→공시가격→감정평가"
@@ -55,37 +55,37 @@ rows:
     document: "주택연금 - 담보주택 변경"
     url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=3&cciNo=2&cnpClsNo=3"
     effectiveDate: "2026-10-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "임대 가능 여부(저당권 vs 신탁)"
     value: "원칙 금지, 공사 동의 후 가능, 보증금 없는 월세 일부임대는 동의 불필요. 저당권방식은 보증금 없는 임대만, 신탁방식은 보증금 있는 임대도 가능"
     agency: "한국주택금융공사"
     document: "주택연금 상품 소개"
     url: "https://www.hf.go.kr/ko/sub03/sub03_01_01_01.do"
-    effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-06
+    effectiveDate: "2026-11-07"
+    checkedAt: 2026-11-07
     result: verified
-  - item: "재건축·재개발·리모델링 시 조건부 계속 수령"
-    value: "참여 시 증빙 제출 등 조건부 계속 수령. 세부 요건은 본문에 쓰지 않고 공사 사전 알림만 안내"
+  - item: "재건축·재개발·리모델링 조합 참여 시 지급정지 예외와 적용 제외"
+    value: "조합원 참여·리모델링·증개축 동의 상태에서 소유권 상실 사유 발생 시 지급정지 사유 미발생으로 보고, 주민등록 이전·1년 이상 미거주 시 일정 기간 미발생으로 봄. 적용 제외: 공사의 증빙·서약서 이행 요청 불응, 조합 참여 중단, 청산금 수령(권리가액>분양가 차액)"
     agency: "법제처 생활법령정보"
     document: "주택연금 - 지급정지"
     url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=4&cciNo=1&cnpClsNo=1"
     effectiveDate: "2026-10-15"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
+    result: verified
+  - item: "재건축 기간 이주비 대출 제한 가능성"
+    value: "공사의 1순위 근저당권 유지가 필요하다는 담보 원칙에 따른 설명. 본문은 '받지 못할 수 있다, 사전에 공사에 확인'으로 한정 표현"
+    agency: "한국주택금융공사 / 법제처 생활법령정보"
+    document: "주택연금 - 지급정지 / 담보주택 변경"
+    url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=4&cciNo=1&cnpClsNo=1"
+    effectiveDate: "2026-10-15"
+    checkedAt: 2026-11-07
     result: partial
-  - item: "본문 이사 시 월지급금 감소 예시(5억→3억, 잔액 1억)"
-    value: "설명용 가정치이며 공식 수치 아님. 본문에 '가정 예시'로 명시"
-    agency: "-"
-    document: "-"
-    url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=3&cciNo=2&cnpClsNo=3"
-    effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-06
-    result: partial
-  - item: "지급정지 후 재개 조건"
-    value: "공식 확인 범위를 벗어나 본문에 기술하지 않음. 공사 상담 안내로 처리"
-    agency: "한국주택금융공사"
-    document: "-"
-    url: "https://www.hf.go.kr/ko/sub03/sub03_01_01_01.do"
-    effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-06
-    result: unverified
+  - item: "지급정지 후 재개·미지급 연금 지급"
+    value: "사유가 모두 해소되면 지체 없이 지급재개 통지, 정지 기간 미지급 연금은 재개 통지서 수령일 다음 영업일까지 일시 지급. 가입자 요청 정지는 일시지급 또는 미지급 선택"
+    agency: "법제처 생활법령정보"
+    document: "주택연금 - 지급정지(지급정지의 해소 및 지급재개)"
+    url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=4&cciNo=1&cnpClsNo=1"
+    effectiveDate: "2026-10-15"
+    checkedAt: 2026-11-07
+    result: verified

@@ -6,9 +6,9 @@ status: review
 type: comparison
 seoTitle: "65세 이상 임플란트·틀니 건강보험 적용 조건·본인부담률 총정리"
 metaDescription: "만 65세 이상 임플란트는 평생 2개까지, 틀니는 7년에 1번 건강보험이 적용됩니다. 대상 조건, 본인부담 30%, 급여 안 되는 경우(지르코니아·골이식), 사전등록과 진료 순서, 치과 갈 때 확인할 점을 공단 기준으로 정리했습니다."
-publishedAt: 2026-11-06
-updatedAt: 2026-11-06
-verifiedAt: 2026-11-06
+publishedAt: 2026-11-07
+updatedAt: 2026-11-07
+verifiedAt: 2026-11-07
 basisYear: 2026
 readTime: 11
 featured: false
@@ -19,22 +19,22 @@ sources:
     title: "임플란트 건강보험 적용 안내"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0221.html"
     effectiveDate: "2016-07-01"
-    accessedAt: "2026-11-06"
+    accessedAt: "2026-11-07"
   - name: "국민건강보험공단"
     title: "틀니 건강보험 적용 안내"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0217.html"
     effectiveDate: "2015-07-01"
-    accessedAt: "2026-11-06"
+    accessedAt: "2026-11-07"
   - name: "국민건강보험공단"
     title: "임플란트 Q&A (PDF)"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0221_2.pdf"
     effectiveDate: "2018-01-01"
-    accessedAt: "2026-11-06"
+    accessedAt: "2026-11-07"
   - name: "국민건강보험공단"
     title: "틀니 Q&A (PDF)"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0217_2.pdf"
     effectiveDate: "2018-01-01"
-    accessedAt: "2026-11-06"
+    accessedAt: "2026-11-07"
 relatedPosts:
   - medical-expense-support-parents
   - long-term-care-grade-application
@@ -63,8 +63,8 @@ faq:
 differentiation: "LuckyU 기존 글 중 medical-expense-support-parents는 병원비 지원 5가지 개요이고 임플란트·틀니는 상세히 다루지 않음. 이 글은 임플란트와 틀니를 나란히 비교하고, 급여/비급여 경계(재료·부가수술), 진료 단계, 사전등록, 치과에서 확인할 질문을 정리."
 reviewNotes: |
   - 임플란트(건강보험 30%, 의료급여 1종 10%·2종 20%)와 틀니(건강보험 30%, 차상위 5%·15%, 의료급여 1종 5%·2종 15%)의 본인부담률이 다름. 표를 분리하여 혼용하지 않음.
-  - 실제 진료비 금액은 치과별 상이하고 공단 Q&A의 금액은 2018년 자료라 본문에 금액을 쓰지 않음.
-  - 공단 Q&A PDF 작성 연도는 확인하지 못해 검증표에는 '상시 게시 안내' 로 기재. 시행일(2014.7.1 등)만 기재.
+  - 공단 Q&A의 금액 예시는 2018년 자료라 본문에서 삭제(실제 진료비 금액은 쓰지 않음).
+  - 공단 안내 페이지는 상시 게시 중이나 2026년 고시 개정 여부는 공식 문서로 개별 확인하지 못해 '시술 전 최신 기준 확인' 안내를 병기(검증표 partial 1건).
   - 대표 이미지는 사용하지 않음.
 ---
 
@@ -181,7 +181,7 @@ reviewNotes: |
 
 ## 5. 비용 감각 잡기
 
-진료비는 치과마다 다르고 공단 Q&A의 금액 예시는 과거 자료(2018년 치과의원 기준 1개 총진료비 약 114만~128만원 안팎)라 현재 비용으로 단정하지 않습니다. **이 글에서는 실제 금액을 제시하지 않습니다.** 대신 구조를 보세요.
+진료비는 치과마다 다르고 시기에 따라 바뀌기 때문에 **이 글에서는 실제 금액을 제시하지 않습니다.** 대신 비용이 어떻게 나뉘는지 구조를 보세요.
 
 - **급여 구간**: 총진료비 × 본인부담률(건강보험 30%)
 - **비급여 구간**: 골이식·상악동거상술·맞춤형 지대주·비급여 재료 등은 전액 본인부담

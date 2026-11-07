@@ -6,9 +6,9 @@ status: review
 type: checklist
 seoTitle: "주택연금 가입자 사망 시 배우자 승계·정산 절차 총정리 2026"
 metaDescription: "주택연금 가입자가 사망하면 배우자는 연금을 계속 받을 수 있을까요? 승계 조건, 6개월 기한, 저당권·신탁방식별 절차, 부부 모두 사망 시 정산과 상속인 부담까지 공식 기준으로 정리했습니다."
-publishedAt: 2026-11-06
-updatedAt: 2026-11-06
-verifiedAt: 2026-11-06
+publishedAt: 2026-11-07
+updatedAt: 2026-11-07
+verifiedAt: 2026-11-07
 basisYear: 2026
 readTime: 9
 featured: false
@@ -18,23 +18,23 @@ sources:
   - name: "한국주택금융공사"
     title: "주택연금 - 가입고객 사망 후 절차 안내"
     url: "https://www.hf.go.kr/ko/sub03/sub03_02_05_07.do"
-    effectiveDate: "2026-11-06"
-    accessedAt: "2026-11-06"
+    effectiveDate: "2026-11-07"
+    accessedAt: "2026-11-07"
   - name: "한국주택금융공사"
     title: "주택연금 상품 소개"
     url: "https://www.hf.go.kr/ko/sub03/sub03_01_01_01.do"
     effectiveDate: "2026-06-01"
-    accessedAt: "2026-11-06"
+    accessedAt: "2026-11-07"
   - name: "법제처 생활법령정보"
     title: "주택연금 - 가입자 사망 시 (2026.10.15 기준)"
     url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=3&cciNo=2&cnpClsNo=2"
     effectiveDate: "2026-10-15"
-    accessedAt: "2026-11-06"
+    accessedAt: "2026-11-07"
   - name: "금융위원회"
     title: "2026년 주택연금 제도 개선 보도자료"
     url: "https://www.fsc.go.kr/edu/news/86247"
     effectiveDate: "2026-02-05"
-    accessedAt: "2026-11-06"
+    accessedAt: "2026-11-07"
 relatedPosts:
   - housing-pension-calculation
   - basic-pension-eligibility

@@ -1,99 +1,83 @@
 slug: senior-jobs-eligibility-types
-checkedAt: 2026-11-06
+checkedAt: 2026-11-07
 rows:
   - item: "참여 대상 연령"
-    value: "65세 이상(일부 유형 60세 이상)"
-    agency: "한국노인인력개발원 / 보건복지부"
-    document: "노인역량활용사업 안내 / 2026년 노인일자리 참여자 모집(2025.12.4)"
+    value: "65세 이상(일부 유형 60세 이상 참여 가능)"
+    agency: "한국노인인력개발원"
+    document: "노인역량활용사업 안내"
     url: "https://www.kordi.or.kr/content.do?cmsId=400"
     effectiveDate: "2026-01-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "공익활동형 대상·활동비·시간·기간"
-    value: "기초연금 수급 65세 이상, 월 29만원, 월 30시간, 11개월"
-    agency: "보건복지부"
-    document: "2026년 노인일자리 참여자 모집(2025.12.4 게시)"
-    url: "https://blog.naver.com/mohw2016/224097710163"
+    value: "65세 이상 기초연금 수급자·직역연금 수급자(배우자 포함, 보건복지부 기준 충족 시). 활동비 월 29만원 이내, 월 30시간 이상(하루 3시간 이내), 평균 11개월"
+    agency: "한국노인인력개발원 / 법제처 생활법령정보"
+    document: "노인공익활동사업 안내 / 공공형(공익활동) 및 사회서비스형 일자리 지원"
+    url: "https://www.kordi.or.kr/m/content.do?cmsId=107"
     effectiveDate: "2026-01-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
-  - item: "사회서비스형 대상·활동비·시간·기간"
-    value: "65세 이상(일부 60세), 월 76.1만원, 월 60시간, 10개월"
-    agency: "보건복지부"
-    document: "2026년 노인일자리 참여자 모집(2025.12.4 게시)"
-    url: "https://blog.naver.com/mohw2016/224097710163"
+  - item: "역량활용형(구 사회서비스형) 대상·활동비·시간·기간"
+    value: "65세 이상(일부 유형 60세 이상), 월 최대 761,040원(주휴수당 포함, 연차수당 별도), 월 60시간 이내(주 15시간), 10개월. 보건복지부 보도자료상 평균 월 76.1만원(10개월)"
+    agency: "법제처 생활법령정보 / 보건복지부"
+    document: "공공형(공익활동) 및 사회서비스형 일자리 지원 / 노인일자리 역대 최대 115만 2천 개 제공"
+    url: "https://easylaw.go.kr/CSP/CnpClsMainBtr.laf?popMenu=ov&csmSeq=1696&ccfNo=3&cciNo=3&cnpClsNo=1"
     effectiveDate: "2026-01-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
-  - item: "선도모델·민간형 연령 및 시장형 사업단 사업비"
-    value: "선도모델 60세 이상, 민간형 60세 이상, 시장형 사업단 연 267만원 내외 사업비 지원. 선도모델 활동비·시간·기간은 확인하지 못해 '유형별 상이'로 표기"
+  - item: "공동체사업단(구 시장형사업단) 지원 방식과 유형 명칭 변경"
+    value: "급여가 아닌 참여 노인 1인당 연 267만원 내외 지원. 2025년부터 명칭 변경(공익형→공익활동형, 사회서비스형→역량활용형, 시장형→공동체사업단). 본문은 공동체사업단 활동시간·기간을 '사업단별 상이'로 표기"
     agency: "보건복지부"
-    document: "2026년 노인일자리 참여자 모집(2025.12.4 게시)"
-    url: "https://blog.naver.com/mohw2016/224097710163"
-    effectiveDate: "2026-01-01"
-    checkedAt: 2026-11-06
-    result: partial
+    document: "노인일자리, 역대 최대 115만 2천 개 제공(보도자료)"
+    url: "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&tag=&act=view&list_no=1488935&cg_code="
+    effectiveDate: "2026-02-01"
+    checkedAt: 2026-11-07
+    result: verified
   - item: "신청 제한·선발 제외 대상"
-    value: "신청 제외: 과거 부정수급 제한자, 외국인. 선발 제외: 생계급여 수급자(의료·교육·주거급여 수급자는 신청 가능), 건강보험 직장가입자(노인역량활용사업은 해당 사업 직장가입자 예외), 장기요양 1~5등급·인지지원등급(인지지원등급은 전문의 진단서 시 가능), 정부·지자체 일자리사업 2개 이상 참여자"
-    agency: "보건복지부 / 한국노인인력개발원"
-    document: "2026년 노인일자리 참여자 모집 / 노인역량활용사업 안내"
+    value: "신청 제외: 과거 부정수급 제한자, 외국인. 선발 제외: 생계급여 수급자(의료·교육·주거급여 수급자는 신청 가능), 건강보험 직장가입자(노인역량활용사업은 해당 사업의 직장가입자 예외), 장기요양 1~5등급·인지지원등급(인지지원등급은 전문의 진단서 시 가능), 정부·지자체 일자리사업 2개 이상 참여자"
+    agency: "한국노인인력개발원"
+    document: "노인역량활용사업 안내 / 노인공익활동사업 안내"
     url: "https://www.kordi.or.kr/content.do?cmsId=400"
     effectiveDate: "2026-01-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "실업급여 수급 후 90일 이내 참여 시 취업지원 프로그램"
-    value: "실업급여 수급 후 90일 이내 참여 시 취업지원 프로그램 필요"
+    value: "실업급여 수급일로부터 90일 이내 참여하려면 취업지원 프로그램을 거쳐야 선발 가능"
     agency: "한국노인인력개발원"
     document: "노인역량활용사업 안내"
     url: "https://www.kordi.or.kr/content.do?cmsId=400"
-    effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-06
+    effectiveDate: "2026-01-01"
+    checkedAt: 2026-11-07
     result: verified
   - item: "선발 방식, 교육 시간"
-    value: "수행기관 개별상담 후 선발기준표 고득점자 순. 소양교육 5시간, 안전 6시간, 직무 6시간 이상"
+    value: "수행기관 개별상담 후 선발기준표 고득점자 순. 역량활용 소양교육 5시간·안전 6시간·직무 6시간 이상 (공익활동은 활동교육 12시간·안전 6시간 이상이므로 본문은 역량활용 기준임을 명시)"
     agency: "한국노인인력개발원"
-    document: "노인역량활용사업 안내"
+    document: "노인역량활용사업 안내 / 노인공익활동사업 안내"
     url: "https://www.kordi.or.kr/content.do?cmsId=400"
-    effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-06
+    effectiveDate: "2026-01-01"
+    checkedAt: 2026-11-07
     result: verified
   - item: "신청 방법"
-    value: "가까운 수행기관 또는 행정복지센터에서 참여신청서 제출(통합신청), 온라인 노인일자리 여기(seniorro.or.kr)"
+    value: "가까운 수행기관 또는 행정복지센터에서 참여신청서 제출(통합신청), 온라인은 노인일자리 여기(seniorro.or.kr)"
     agency: "한국노인인력개발원 / 보건복지부"
-    document: "노인역량활용사업 안내 / 2026년 노인일자리 참여자 모집"
+    document: "노인역량활용사업 안내 / 보도자료"
     url: "https://www.seniorro.or.kr"
-    effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-06
+    effectiveDate: "2026-02-01"
+    checkedAt: 2026-11-07
     result: verified
   - item: "2026년 사업 참여자 집중모집 기간"
-    value: "2025.11.28~2025.12.26"
+    value: "2025.11.28~2025.12.26(29일간). 취업·창업형 24.6만 개는 연중 선발"
     agency: "보건복지부"
-    document: "2026년 노인일자리 참여자 모집(2025.12.4 게시)"
-    url: "https://blog.naver.com/mohw2016/224097710163"
-    effectiveDate: "2025-11-28"
-    checkedAt: 2026-11-06
+    document: "노인일자리, 역대 최대 115만 2천 개 제공(보도자료)"
+    url: "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&tag=&act=view&list_no=1488935&cg_code="
+    effectiveDate: "2026-02-01"
+    checkedAt: 2026-11-07
     result: verified
-  - item: "2027년 사업 참여자 모집 일정"
-    value: "공식 공고 확인되지 않음(KORDI 2026-11-05 공지는 기관 대상 안내, seniwork 11-02 공지는 수행기관 교육·사업 희망기관 모집). 본문은 확정 서술 없이 '공고 확인 필요'로 처리"
-    agency: "한국노인인력개발원"
-    document: "공지사항"
-    url: "https://www.kordi.or.kr/content.do?cmsId=400"
-    effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-06
-    result: unverified
-  - item: "총 사업량·유형별 사업량·예산"
-    value: "보건복지부 안내가 총 사업량을 '115만 2천개/1,152천개'와 제목 '11만 2천 개'로 혼재 표기. 본문에서 사업량 수치 미사용"
+  - item: "2026년 총 사업량(상충 해소)"
+    value: "보도자료 원문: 2026년 총 115만 2천 개(전년 109.8만 개). 공식 블로그 제목의 '11만 2천 개'는 오기로 판단. 본문은 115만 2천 개만 사용"
     agency: "보건복지부"
-    document: "2026년 노인일자리 참여자 모집(2025.12.4 게시)"
-    url: "https://blog.naver.com/mohw2016/224097710163"
-    effectiveDate: "2026-01-01"
-    checkedAt: 2026-11-06
-    result: conflict
-  - item: "활동비가 기초연금·수급 자격에 미치는 영향, 사고 보험 보장 범위"
-    value: "공식 문서로 확인하지 못해 본문에서 단정하지 않고 수행기관·행정복지센터 확인으로 안내"
-    agency: "-"
-    document: "-"
-    url: "https://www.kordi.or.kr/content.do?cmsId=400"
-    effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-06
-    result: unverified
+    document: "노인일자리, 역대 최대 115만 2천 개 제공(보도자료)"
+    url: "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&tag=&act=view&list_no=1488935&cg_code="
+    effectiveDate: "2026-02-01"
+    checkedAt: 2026-11-07
+    result: verified

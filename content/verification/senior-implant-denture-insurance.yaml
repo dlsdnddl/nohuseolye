@@ -1,5 +1,5 @@
 slug: senior-implant-denture-insurance
-checkedAt: 2026-11-06
+checkedAt: 2026-11-07
 rows:
   - item: "임플란트 대상 연령·부위·횟수"
     value: "만 65세 이상 건강보험 가입자·피부양자, 부분 무치악(완전 무치악 제외), 평생 2개(의학적 불가피 중단 시 개수 미포함), 상·하악 구분 없이 모든 치식. 시행 2014.7.1(75세→70세→2016.7.1 이후 65세)"
@@ -7,7 +7,7 @@ rows:
     document: "임플란트 건강보험 적용 안내 / 임플란트 Q&A"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0221.html"
     effectiveDate: "2016-07-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "임플란트 급여 재료와 전체 비급여 사례"
     value: "급여: 분리형 식립재료 + PFM crown. 시술 전체 비급여: 완전 무치악, 관골 식립, 일체형 식립재료, PFM 이외 보철재료(지르코니아·금·메탈 등). 부가수술(골이식·상악동거상술)·맞춤형 지대주는 비급여"
@@ -15,7 +15,7 @@ rows:
     document: "임플란트 건강보험 적용 안내 / 임플란트 Q&A"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0221.html"
     effectiveDate: "2016-07-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "임플란트 본인부담률"
     value: "건강보험 30%(본인부담상한제 제외), 차상위 희귀난치성질환자 10%, 만성질환자 등 20%, 의료급여 1종 10%·2종 20%"
@@ -23,7 +23,7 @@ rows:
     document: "임플란트 건강보험 적용 안내"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0221.html"
     effectiveDate: "2016-07-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "임플란트 진료 단계·재시술·유지관리·기관 이동"
     value: "3단계(진단·치료계획, 고정체 식립, 보철수복). 골유착 실패 시 2단계 재시술 1회(수가 50%). 보철 장착 후 3개월 이내 진찰료만, 3개월 초과 유지관리 비급여. 1단계 시작 후 다른 요양기관 이동 불가(중단 시 진행 단계까지 비용). 부분틀니와 중복급여 허용"
@@ -31,7 +31,7 @@ rows:
     document: "임플란트 Q&A"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0221_2.pdf"
     effectiveDate: "2016-07-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "사전등록(치과가 요양기관정보마당으로 등록, 의료급여는 관할 시·군·구)"
     value: "치과 병·의원이 사전등록 신청(환자 대행). 의료급여 수급권자는 관할 시·군·구에서만 가능"
@@ -39,7 +39,7 @@ rows:
     document: "임플란트·틀니 Q&A"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0221_2.pdf"
     effectiveDate: "2016-07-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "틀니 대상·종류·시행일·주기"
     value: "만 65세 이상. 완전틀니 레진상 2012.7.1·금속상 2015.7.1, 부분틀니 2013.7.1(클라스프 유지형 금속상). 1악당 7년에 1회, 구강상태 심각 변화 시 의학적 소견 있으면 추가 1회. 어태치먼트·텔레스코픽·임플란트 피개의치 등 특수 틀니 제외"
@@ -47,7 +47,7 @@ rows:
     document: "틀니 건강보험 적용 안내 / 틀니 Q&A"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0217.html"
     effectiveDate: "2015-07-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "틀니 본인부담률"
     value: "건강보험 30%(본인부담상한제 적용), 차상위 희귀난치 5%·만성 15%, 의료급여 1종 5%·2종 15%. 임시틀니 급여(본인부담 30%)"
@@ -55,7 +55,7 @@ rows:
     document: "틀니 건강보험 적용 안내"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0217.html"
     effectiveDate: "2015-07-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "틀니 진료 단계·재제작·유지관리·무상보상"
     value: "완전 1~5단계, 부분 1~6단계. 환자 귀책 분실·파손 재제작 비급여, 일부 파절 수리 급여. 유지관리 급여(첨상 연 1회 등 항목별 연간 횟수 제한), 본인부담 30%(차상위 5%/15%, 의료급여 1종 5%/2종 15%). 무상 사후점검 장착 후 3개월 이내 최대 6회(진찰료만)"
@@ -63,7 +63,7 @@ rows:
     document: "틀니 Q&A"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0217_2.pdf"
     effectiveDate: "2015-07-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "임플란트/틀니 본인부담률 혼용 여부"
     value: "임플란트 의료급여 1종 10%·2종 20%, 틀니 5%·15%로 서로 다름. 본문에서 표를 분리하고 경고 문구를 둠"
@@ -71,21 +71,13 @@ rows:
     document: "임플란트 / 틀니 안내"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0221.html"
     effectiveDate: "2016-07-01"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: verified
   - item: "2026년 현재 적용 여부(고시 개정·수가 변경)"
-    value: "NHIS 안내 페이지는 상시 게시 중이나, Q&A PDF의 작성 연도는 확인하지 못함(금액 예시가 2018년 자료). 2026년 개정 여부는 공식 문서로 개별 확인하지 못해 본문에 '시술 전 공단·치과에서 최신 기준 확인' 안내 병기"
+    value: "NHIS 안내 페이지(임플란트·틀니)는 현재 게시 중이며 본문의 연령·횟수·본인부담률은 해당 페이지와 일치. 다만 Q&A PDF 작성 연도와 2026년 고시 개정 여부는 개별 확인하지 못해 본문에 '시술 전 공단·치과에서 최신 기준 확인' 안내를 병기. 2018년 진료비 금액은 본문에서 삭제"
     agency: "국민건강보험공단"
     document: "임플란트·틀니 안내 페이지"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0221.html"
     effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-06
+    checkedAt: 2026-11-07
     result: partial
-  - item: "실제 진료비 금액, 본인부담상한제 한도액"
-    value: "공단 Q&A의 금액 예시는 2018년 치과의원 기준(총진료비 약 114~128만원)이라 현재 비용으로 단정할 수 없어 본문에서 금액 제시하지 않고 구조만 설명. 본인부담상한제 한도는 다루지 않음"
-    agency: "국민건강보험공단"
-    document: "임플란트 Q&A"
-    url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0221_2.pdf"
-    effectiveDate: "2018-01-01"
-    checkedAt: 2026-11-06
-    result: unverified
