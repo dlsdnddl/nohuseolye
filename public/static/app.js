@@ -904,51 +904,134 @@ function showToast(message, duration = 2500) {
 
 // ─── 주택연금 월지급금 계산기 ─────────────────────────────────────────────────
 /**
- * 한국주택금융공사 공식 요율표 (2026.03.01 기준, 단위: 천원/월)
- * 출처: https://www.hf.go.kr/ko/sub03/sub03_01_01_02.do
- *
- * 구조: HP_TABLE[houseType][methodKey][age] = 1억원당 월지급금(천원)
- * age 키: 55,60,65,70,75,80  (보간은 선형)
- * 주택가격 상한: 일반·오피스텔 12억, 노인복지 12억 (상한 초과분 cap)
- *
- * 공식 표는 1억~12억 절댓값이므로, 1억당 단가(rate)로 변환해 내장
- * rate = 표의 1억원 열 값  (1억 당 천원/월)
- * 비례 계산: 월지급금 = rate × (주택가격억) — 단, 상한 cap 적용
+ * 한국주택금융공사(HF) 공식 월지급금 일람표 (종신지급방식·정액형, 부부 중 연소자 나이 기준, 단위: 천원/월)
+ *  - 일반주택·주거목적 오피스텔: HF '월지급금 일람표(엑셀)' 2026.6.1 신청접수분 시트, 55~90세 1세 단위 × 주택가격 1~12억(1억 단위).
+ *    (일반주택·오피스텔의 일반형 금액은 HF 웹 '월지급금 예시'(2026.03.01 기준)와 전 구간 일치 확인)
+ *  - 노인복지주택: HF 웹 '월지급금 예시'(2026.03.01 기준) 5세 단위(55·60·...·80세) 표. 사이 나이는 선형 보간한 근사값.
+ *  - 출처: https://www.hf.go.kr/ko/sub03/sub03_01_01_02.do
+ *  - 초기증액형·정기증가형은 정액형과의 비율이 연령·주택가격별로 달라 공식 값을 확인하지 못해 계산기에서 제외했습니다(공식 예상연금조회 안내).
+ * 각 배열의 i번째 값 = 주택가격 (i+1)억원일 때 월지급금(천원).
  */
-
-// ── 종신지급 정액형 (일반주택) ────────────────────────────────────────────────
-// 표 원본 1억원 열 값(천원), 상한 cap(천원) [55,60,65,70,75,80]
-const HP_GENERAL_FIXED = {
-  rate: { 55:156, 60:210, 65:252, 70:307, 75:381, 80:483 },
-  // 상한: 표상 12억 값 (이 이상으로 cap)
-  cap:  { 55:1872, 60:2528, 65:3035, 70:3414, 75:3666, 80:4060 }
+const HP_TABLE_GENERAL = {
+  55:[156,312,468,624,780,936,1092,1248,1404,1560,1716,1872],
+  56:[166,333,500,666,833,1000,1166,1333,1500,1666,1833,2000],
+  57:[176,352,529,705,882,1058,1234,1411,1587,1764,1940,2116],
+  58:[186,373,560,747,933,1120,1307,1494,1681,1867,2054,2241],
+  59:[199,398,598,797,997,1196,1396,1595,1795,1994,2194,2393],
+  60:[210,421,632,842,1053,1264,1475,1685,1896,2107,2318,2528],
+  61:[218,436,655,873,1092,1310,1529,1747,1966,2184,2403,2621],
+  62:[226,452,679,905,1131,1358,1584,1810,2037,2263,2489,2716],
+  63:[235,470,705,940,1175,1410,1645,1880,2115,2350,2585,2820],
+  64:[243,487,731,975,1219,1463,1707,1950,2194,2438,2682,2926],
+  65:[252,505,758,1011,1264,1517,1770,2023,2276,2529,2782,3035],
+  66:[262,525,788,1051,1314,1577,1840,2103,2366,2629,2892,3155],
+  67:[273,546,819,1092,1365,1639,1912,2185,2458,2731,3004,3278],
+  68:[284,568,852,1137,1421,1705,1990,2274,2558,2843,3127,3338],
+  69:[295,591,887,1183,1479,1775,2071,2367,2662,2958,3254,3375],
+  70:[307,615,923,1231,1539,1847,2155,2462,2770,3078,3386,3414],
+  71:[320,641,962,1283,1604,1925,2246,2567,2888,3209,3456,3456],
+  72:[334,669,1003,1338,1672,2007,2341,2676,3010,3345,3503,3503],
+  73:[349,698,1048,1397,1746,2096,2445,2795,3144,3493,3553,3553],
+  74:[364,729,1094,1459,1824,2189,2554,2919,3284,3607,3607,3607],
+  75:[381,762,1143,1525,1906,2287,2669,3050,3431,3666,3666,3666],
+  76:[398,797,1195,1594,1993,2391,2790,3188,3587,3731,3731,3731],
+  77:[417,835,1252,1670,2087,2505,2923,3340,3758,3802,3802,3802],
+  78:[437,875,1313,1751,2188,2626,3064,3502,3879,3879,3879,3879],
+  79:[459,918,1378,1837,2296,2756,3215,3674,3965,3965,3965,3965],
+  80:[483,966,1449,1932,2416,2899,3382,3865,4060,4060,4060,4060],
+  81:[508,1016,1524,2033,2541,3049,3558,4066,4166,4166,4166,4166],
+  82:[535,1071,1606,2142,2677,3213,3748,4284,4284,4284,4284,4284],
+  83:[566,1132,1698,2264,2830,3396,3962,4416,4416,4416,4416,4416],
+  84:[598,1197,1796,2395,2994,3593,4191,4565,4565,4565,4565,4565],
+  85:[635,1270,1905,2540,3176,3811,4446,4734,4734,4734,4734,4734],
+  86:[675,1351,2027,2703,3379,4055,4731,4927,4927,4927,4927,4927],
+  87:[721,1442,2163,2884,3605,4326,5047,5150,5150,5150,5150,5150],
+  88:[769,1539,2309,3079,3849,4618,5388,5408,5408,5408,5408,5408],
+  89:[822,1644,2467,3289,4112,4934,5711,5711,5711,5711,5711,5711],
+  90:[882,1764,2647,3529,4412,5294,6072,6072,6072,6072,6072,6072]
 };
 
-// ── 종신지급 정액형 (노인복지주택) ───────────────────────────────────────────
-const HP_SENIOR_FIXED = {
-  rate: { 55:122, 60:170, 65:211, 70:263, 75:334, 80:434 },
-  cap:  { 55:1473, 60:2048, 65:2532, 70:3158, 75:3658, 80:4054 }
+const HP_TABLE_OFFICETEL = {
+  55:[112,225,338,451,564,677,790,903,1016,1128,1241,1354],
+  56:[121,243,365,487,608,730,852,974,1095,1217,1339,1461],
+  57:[129,259,389,518,648,778,907,1037,1167,1296,1426,1556],
+  58:[138,276,414,552,691,829,967,1105,1244,1382,1520,1658],
+  59:[148,297,445,594,742,891,1039,1188,1336,1485,1633,1782],
+  60:[158,316,475,633,792,950,1109,1267,1426,1584,1742,1901],
+  61:[165,330,495,661,826,991,1157,1322,1487,1653,1818,1983],
+  62:[172,344,517,689,861,1034,1206,1378,1551,1723,1895,2068],
+  63:[180,361,541,722,903,1083,1264,1444,1625,1806,1986,2167],
+  64:[188,377,565,754,942,1131,1319,1508,1696,1885,2073,2262],
+  65:[197,394,591,788,985,1183,1380,1577,1774,1971,2169,2366],
+  66:[206,413,619,826,1033,1239,1446,1653,1859,2066,2273,2479],
+  67:[216,432,649,865,1081,1298,1514,1731,1947,2163,2380,2596],
+  68:[226,452,679,905,1132,1358,1585,1811,2037,2264,2490,2717],
+  69:[237,474,712,949,1186,1424,1661,1899,2136,2373,2611,2848],
+  70:[248,497,746,994,1243,1492,1741,1989,2238,2487,2735,2984],
+  71:[261,522,783,1044,1305,1566,1827,2088,2349,2610,2871,3132],
+  72:[274,549,823,1098,1372,1647,1921,2196,2470,2745,3019,3294],
+  73:[288,577,865,1154,1442,1731,2019,2308,2596,2885,3173,3462],
+  74:[303,606,909,1212,1516,1819,2122,2425,2728,3032,3335,3595],
+  75:[319,638,957,1276,1596,1915,2234,2553,2872,3192,3511,3655],
+  76:[336,672,1008,1344,1680,2016,2352,2688,3024,3360,3696,3720],
+  77:[354,709,1063,1418,1772,2127,2481,2836,3190,3545,3791,3791],
+  78:[374,748,1122,1496,1870,2244,2618,2992,3367,3741,3870,3870],
+  79:[395,791,1186,1582,1978,2373,2769,3165,3560,3956,3956,3956],
+  80:[418,836,1254,1672,2090,2508,2926,3344,3762,4052,4052,4052],
+  81:[443,887,1330,1774,2217,2661,3104,3548,3991,4158,4158,4158],
+  82:[470,940,1411,1881,2352,2822,3292,3763,4233,4276,4276,4276],
+  83:[499,999,1499,1998,2498,2998,3497,3997,4408,4408,4408,4408],
+  84:[532,1065,1597,2130,2662,3195,3727,4260,4558,4558,4558,4558],
+  85:[568,1137,1706,2275,2844,3413,3982,4551,4727,4727,4727,4727],
+  86:[609,1218,1828,2437,3047,3656,4265,4875,4921,4921,4921,4921],
+  87:[654,1308,1962,2616,3270,3924,4578,5143,5143,5143,5143,5143],
+  88:[701,1402,2104,2805,3507,4208,4909,5402,5402,5402,5402,5402],
+  89:[754,1508,2262,3016,3770,4524,5278,5705,5705,5705,5705,5705],
+  90:[813,1627,2441,3255,4069,4883,5697,6066,6066,6066,6066,6066]
 };
 
-// ── 종신지급 정액형 (주거목적 오피스텔) ──────────────────────────────────────
-const HP_OFFICETEL_FIXED = {
-  rate: { 55:112, 60:158, 65:197, 70:248, 75:319, 80:418 },
-  cap:  { 55:1354, 60:1901, 65:2366, 70:2984, 75:3655, 80:4052 }
+const HP_TABLE_SENIOR_5Y = {
+  55:[122,245,368,491,613,736,859,982,1104,1227,1350,1473],
+  60:[170,341,512,682,853,1024,1195,1365,1536,1707,1877,2048],
+  65:[211,422,633,844,1055,1266,1477,1688,1899,2110,2321,2532],
+  70:[263,526,789,1052,1316,1579,1842,2105,2368,2632,2895,3158],
+  75:[334,669,1004,1338,1673,2008,2343,2677,3012,3347,3658,3658],
+  80:[434,869,1303,1738,2172,2607,3041,3476,3910,4054,4054,4054],
 };
+
+/** 연령 보간: 1세 단위 표는 그대로, 5세 단위 표는 선형 보간. exact=true이면 공식 표 값 그대로 */
+function _hpRowForAge(type, age) {
+  if (type !== 'senior') {
+    const t = type === 'officetel' ? HP_TABLE_OFFICETEL : HP_TABLE_GENERAL;
+    const a = Math.min(90, Math.max(55, Math.round(age)));
+    return { row: t[a], exact: true };
+  }
+  const steps = [55, 60, 65, 70, 75, 80];
+  const a = Math.min(80, Math.max(55, age));
+  if (steps.indexOf(a) !== -1) return { row: HP_TABLE_SENIOR_5Y[a], exact: true };
+  let lo = 55;
+  for (let i = 0; i < steps.length - 1; i++) if (a >= steps[i] && a < steps[i + 1]) lo = steps[i];
+  const hi = lo + 5, t = (a - lo) / 5;
+  const row = HP_TABLE_SENIOR_5Y[lo].map(function (v, i) { return v + (HP_TABLE_SENIOR_5Y[hi][i] - v) * t; });
+  return { row: row, exact: false };
+}
 
 /**
- * 초기증액형 배율 (정액형 대비)
- * 초기 기간: 정액형보다 더 받다가 → 이후 정액형의 약 70%
- * 공사 안내 기준 초기 배율 역산 (초기 월지급금 ÷ 정액형 ≈ 아래 값)
- * 실제로는 나이·주택가격마다 미세하게 다르나, 공식 안내 대표치 사용
+ * 월지급금 계산 (종신지급·정액형)
+ * @param {number} priceManwon  주택 시세 (만원, 1억~12억)
+ * @param {number} age          부부 중 연소자 나이 (55~90)
+ * @param {string} houseType    'general'|'senior'|'officetel'
+ * @returns {{ monthly: number, exact: boolean }}  monthly: 만원
  */
-const HP_BOOST_RATE = {
-  '41': 1.19,  // 초기증액형 3년
-  '42': 1.15,  // 초기증액형 5년
-  '43': 1.12,  // 초기증액형 7년
-  '44': 1.09,  // 초기증액형 10년
-  '31': 0.85,  // 정기증가형 (초기 정액형보다 낮게 시작 → 매 3년 4.5% 증가)
-};
+function calcHousingPension(priceManwon, age, houseType) {
+  const r = _hpRowForAge(houseType, age);
+  const priceEok = Math.min(12, Math.max(1, priceManwon / 10000));
+  const lo = Math.floor(priceEok);
+  const hi = Math.min(12, lo + 1);
+  const t = priceEok - lo;
+  const thousand = r.row[lo - 1] + (r.row[hi - 1] - r.row[lo - 1]) * t;
+  return { monthly: Math.round(thousand) / 10, exact: r.exact && t === 0 };
+}
 
 /** 만원 → 한글 표기 변환 */
 function wonToKorean(manwon) {
@@ -984,164 +1067,49 @@ function hpOnAgeInput() {
   // 실시간 피드백은 별도 표시 없음 (버튼 누를 때 검사)
 }
 
-/** 나이를 표 기준 키(5세 단위)로 내삽 */
-function _hpGetAgeKeys(age) {
-  const steps = [55, 60, 65, 70, 75, 80];
-  const clamped = Math.min(84, Math.max(55, age));
-
-  // 정확히 일치하는 키
-  if (steps.includes(clamped)) return { lo: clamped, hi: clamped, t: 0 };
-
-  // 사이 보간
-  for (let i = 0; i < steps.length - 1; i++) {
-    if (clamped >= steps[i] && clamped < steps[i + 1]) {
-      const t = (clamped - steps[i]) / (steps[i + 1] - steps[i]);
-      return { lo: steps[i], hi: steps[i + 1], t };
-    }
-  }
-  return { lo: 80, hi: 80, t: 0 };
-}
-
-/** 보간된 1억당 단가(천원) 반환 */
-function _hpRate(table, lo, hi, t) {
-  const rLo = table.rate[lo];
-  const rHi = table.rate[hi];
-  return rLo + (rHi - rLo) * t;
-}
-
-/** 보간된 cap(천원) 반환 */
-function _hpCap(table, lo, hi, t) {
-  const cLo = table.cap[lo];
-  const cHi = table.cap[hi];
-  return cLo + (cHi - cLo) * t;
-}
-
-/**
- * 핵심 계산
- * @param {number} priceManwon  주택 시세 (만원)
- * @param {number} age          부부 연소자 나이
- * @param {string} houseType    'general'|'senior'|'officetel'
- * @param {string} method       '01'|'41'|'42'|'43'|'44'|'31'
- * @returns {{ monthly: number, methodLabel: string, note: string }}  monthly: 만원
- */
-function calcHousingPension(priceManwon, age, houseType, method) {
-  const tableMap = {
-    general:   HP_GENERAL_FIXED,
-    senior:    HP_SENIOR_FIXED,
-    officetel: HP_OFFICETEL_FIXED,
-  };
-  const table = tableMap[houseType] || HP_GENERAL_FIXED;
-
-  const { lo, hi, t } = _hpGetAgeKeys(age);
-  const rate1eok = _hpRate(table, lo, hi, t);  // 천원/월 per 1억
-  const capThousand = _hpCap(table, lo, hi, t); // 천원/월 cap
-
-  // 주택가격(억 단위)
-  const priceEok = priceManwon / 10000;
-
-  // 정액형 월지급금 (천원)
-  let monthlyThousand = rate1eok * priceEok;
-  // 상한 적용
-  monthlyThousand = Math.min(monthlyThousand, capThousand);
-
-  // 지급방식 배율 적용
-  let boost = 1.0;
-  let methodLabel = '종신지급 — 정액형';
-  let note = '평생 동일 금액을 수령합니다.';
-
-  if (method === '41') {
-    boost = HP_BOOST_RATE['41'];
-    methodLabel = '종신지급 — 초기증액형 (3년)';
-    note = '처음 3년간 정액형보다 많이 받고, 이후 초기 월지급금의 약 70% 수준으로 줄어듭니다.';
-  } else if (method === '42') {
-    boost = HP_BOOST_RATE['42'];
-    methodLabel = '종신지급 — 초기증액형 (5년)';
-    note = '처음 5년간 정액형보다 많이 받고, 이후 초기 월지급금의 약 70% 수준으로 줄어듭니다.';
-  } else if (method === '43') {
-    boost = HP_BOOST_RATE['43'];
-    methodLabel = '종신지급 — 초기증액형 (7년)';
-    note = '처음 7년간 정액형보다 많이 받고, 이후 초기 월지급금의 약 70% 수준으로 줄어듭니다.';
-  } else if (method === '44') {
-    boost = HP_BOOST_RATE['44'];
-    methodLabel = '종신지급 — 초기증액형 (10년)';
-    note = '처음 10년간 정액형보다 많이 받고, 이후 초기 월지급금의 약 70% 수준으로 줄어듭니다.';
-  } else if (method === '31') {
-    boost = HP_BOOST_RATE['31'];
-    methodLabel = '종신지급 — 정기증가형';
-    note = '최초 월지급금은 정액형보다 적지만, 매 3년마다 4.5%씩 자동 인상됩니다.';
-  }
-
-  monthlyThousand = monthlyThousand * boost;
-
-  // 만원 단위로 반환 (소수 1자리)
-  // monthlyThousand 단위: 천원  →  ÷10 = 만원 (소수 1자리)
-  const monthly = Math.round(monthlyThousand) / 10; // 천원 → 만원
-  return { monthly, methodLabel, note, boost };
-}
-
-/** 계산 실행 */
+/** 계산 실행 (종신지급·정액형, HF 공식 일람표 기준) */
 function runHpCalc() {
   var priceManwon = parseInt(document.getElementById('hp-price').value || '0');
   var age         = parseInt(document.getElementById('hp-age').value || '0');
   var houseType   = document.getElementById('hp-house-type').value || 'general';
-  var method      = document.getElementById('hp-method').value || '01';
 
-  // 유효성 검사
-  if (!priceManwon || priceManwon < 5000) {
-    showToast('주택 시세를 5,000만원 이상으로 입력해 주세요.');
+  if (!priceManwon || priceManwon < 10000) {
+    showToast('주택 시세를 1억원(10,000만원) 이상으로 입력해 주세요. 공식 월지급금 일람표는 1억~12억원 범위입니다.');
     return;
   }
   if (priceManwon > 120000) {
-    showToast('주택연금 산정 상한은 시세 12억원입니다. 12억원으로 계산합니다.');
+    showToast('공식 일람표는 12억원까지입니다. 12억원 초과는 주택금융공사 예상연금조회로 확인해 주세요.');
+    return;
   }
-  if (!age || age < 55 || age > 84) {
-    showToast('나이를 55~84세 사이로 입력해 주세요.');
+  if (!age || age < 55 || age > 90) {
+    showToast('나이를 55~90세 사이로 입력해 주세요.');
+    return;
+  }
+  if (houseType === 'senior' && age > 80) {
+    showToast('노인복지주택은 공식 표가 55~80세까지만 제공됩니다. 81세 이상은 주택금융공사 예상연금조회로 확인해 주세요.');
     return;
   }
 
-  var effectivePrice = Math.min(priceManwon, 120000);
-  var result = calcHousingPension(effectivePrice, age, houseType, method);
+  var result = calcHousingPension(priceManwon, age, houseType);
   var monthly = result.monthly;
-  var methodLabel = result.methodLabel;
-  var note = result.note;
-  var boost = result.boost;
-
-  // 정액형 비교값
-  var fixedRef = calcHousingPension(effectivePrice, age, houseType, '01');
-
   var houseTypeLabels = { general: '일반주택', senior: '노인복지주택', officetel: '주거목적 오피스텔' };
   var houseTypeLabel = houseTypeLabels[houseType] || '일반주택';
-
-  var priceKor = wonToKorean(effectivePrice);
+  var priceKor = wonToKorean(priceManwon);
   var monthlyWon = Math.round(monthly * 10000);
   var yearlyAmt = (monthly * 12).toFixed(0);
   var total20yr = (monthly * 12 * 20).toFixed(0);
 
-  // 정액형 비교 행
-  var compareRow = '';
-  if (method !== '01') {
-    compareRow = '<div class="flex justify-between items-center py-2.5 px-4 bg-blue-50 rounded-xl border border-blue-100">' +
-      '<span class="text-xs text-gray-500 flex items-center gap-1.5"><i class="fas fa-exchange-alt text-blue-400"></i>정액형 대비</span>' +
-      '<span class="font-bold text-blue-700 text-sm">정액형 ' + fixedRef.monthly.toFixed(1) + '만원 → 선택방식 ' + monthly.toFixed(1) + '만원</span>' +
-      '</div>';
-  }
+  var exactNote = result.exact
+    ? '공식 일람표에 있는 값 그대로입니다.'
+    : '입력하신 값이 공식표의 칸(1억원 단위, 노인복지주택은 5세 단위) 사이라서, 공식표 값을 직선으로 이어 계산한 <strong>근사값</strong>입니다.';
 
-  // 방식 부연 설명
-  var noteExtra = '';
-  if (method === '31') {
-    noteExtra = '<p class="text-xs text-blue-500 mt-1.5">예: 현재 ' + monthly.toFixed(1) + '만원 → 3년 후 ' +
-      (monthly * 1.045).toFixed(1) + '만원 → 6년 후 ' + (monthly * 1.045 * 1.045).toFixed(1) + '만원...</p>';
-  } else if (method !== '01') {
-    noteExtra = '<p class="text-xs text-blue-500 mt-1.5">초기 기간 종료 후 예상 수령액: 약 ' +
-      (monthly * 0.70 / boost).toFixed(1) + '만원 (정액형의 70% 수준)</p>';
-  }
-
-  // 우대형 안내
   var preferentialNote = '';
-  if (effectivePrice <= 25000) {
+  if (priceManwon < 25000) {
     preferentialNote = '<div class="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-4">' +
-      '<p class="text-xs font-bold text-amber-700 mb-1"><i class="fas fa-star mr-1 text-amber-500"></i>우대형 주택연금 해당 여부 확인하세요!</p>' +
-      '<p class="text-xs text-amber-600 leading-relaxed">주택 시세 <strong>2억 5천만원 미만</strong> + 부부 중 1인 기초연금 수급자라면 일반형보다 월 수령액을 <strong>약 20% 이상 더</strong> 받는 우대지급방식을 신청할 수 있습니다. 공사에 직접 문의하세요.</p>' +
+      '<p class="text-xs font-bold text-amber-700 mb-1"><i class="fas fa-star mr-1 text-amber-500"></i>우대형 주택연금 해당 여부를 확인해 보세요</p>' +
+      '<p class="text-xs text-amber-600 leading-relaxed">부부 중 1명 이상이 기초연금 수급권자이고, 부부 합산 <strong>시가 2억 5천만원 미만 1주택</strong>이면 우대형을 신청할 수 있습니다. ' +
+      '일반형보다 시가 1억 8천만원 이상~2억 5천만원 미만은 최대 약 20%, 1억 8천만원 미만은 최대 약 25% 더 받습니다(한국주택금융공사 안내). ' +
+      '위 금액은 일반형 기준이므로 우대형 금액은 공식 예상연금조회로 확인하세요.</p>' +
       '</div>';
   }
 
@@ -1150,11 +1118,11 @@ function runHpCalc() {
 
   resultEl.innerHTML =
     '<div class="text-center mb-6">' +
-      '<p class="text-xs text-gray-500 mb-1">' + houseTypeLabel + ' · ' + age + '세 · ' + methodLabel + '</p>' +
+      '<p class="text-xs text-gray-500 mb-1">' + houseTypeLabel + ' · ' + age + '세 · 종신지급 정액형(일반형)</p>' +
       '<div class="inline-flex flex-col items-center bg-blue-600 text-white rounded-2xl px-8 py-5 shadow-lg">' +
         '<span class="text-xs font-semibold text-blue-200 mb-1">예상 월지급금</span>' +
         '<span class="text-4xl font-extrabold tracking-tight">' + monthly.toFixed(1) + '<span class="text-xl ml-1">만원</span></span>' +
-        '<span class="text-sm text-blue-100 mt-1">월 ' + monthlyWon.toLocaleString() + '원</span>' +
+        '<span class="text-sm text-blue-100 mt-1">월 약 ' + monthlyWon.toLocaleString() + '원</span>' +
       '</div>' +
     '</div>' +
     '<div class="space-y-2.5 mb-5">' +
@@ -1166,12 +1134,11 @@ function runHpCalc() {
         '<span class="text-xs text-gray-500 flex items-center gap-1.5"><i class="fas fa-user text-blue-400"></i>기준 나이 (연소자)</span>' +
         '<span class="font-bold text-gray-800 text-sm">' + age + '세</span>' +
       '</div>' +
-      compareRow +
     '</div>' +
     '<div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-4">' +
-      '<p class="text-xs font-bold text-blue-700 mb-1"><i class="fas fa-lightbulb mr-1"></i>' + methodLabel + '</p>' +
-      '<p class="text-xs text-blue-600 leading-relaxed">' + note + '</p>' +
-      noteExtra +
+      '<p class="text-xs font-bold text-blue-700 mb-1"><i class="fas fa-lightbulb mr-1"></i>종신지급 — 정액형</p>' +
+      '<p class="text-xs text-blue-600 leading-relaxed">평생 같은 금액을 받는 기본 방식입니다. ' + exactNote + '</p>' +
+      '<p class="text-xs text-blue-500 mt-1.5">초기증액형·정기증가형, 인출한도가 있는 방식은 금액이 달라지므로 <a href="https://www.hf.go.kr/ko/sub03/sub03_02_02.do" target="_blank" rel="noopener" class="underline font-semibold">공식 예상연금조회</a>에서 확인하세요.</p>' +
     '</div>' +
     '<div class="grid grid-cols-2 gap-2 mb-5">' +
       '<div class="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">' +
@@ -1179,7 +1146,7 @@ function runHpCalc() {
         '<p class="font-extrabold text-gray-800">' + yearlyAmt + '만원</p>' +
       '</div>' +
       '<div class="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">' +
-        '<p class="text-xs text-gray-500 mb-1">20년 총수령액 (참고)</p>' +
+        '<p class="text-xs text-gray-500 mb-1">20년 총수령액 (단순 곱, 참고)</p>' +
         '<p class="font-extrabold text-gray-800">' + total20yr + '만원</p>' +
       '</div>' +
     '</div>' +

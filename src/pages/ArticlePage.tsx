@@ -622,7 +622,7 @@ function buildHousingPensionCalcWidget(): string {
       <i class="fas fa-home text-white text-base"></i>
     </div>
     <div>
-      <p class="text-blue-200 text-xs font-semibold">한국주택금융공사 2026.03.01 기준</p>
+      <p class="text-blue-200 text-xs font-semibold">한국주택금융공사 공식 일람표 기준(종신지급·정액형)</p>
       <h3 class="text-white font-extrabold text-base leading-tight">주택연금 월지급금 계산기</h3>
     </div>
     <span class="ml-auto text-xs bg-white/20 text-white px-2.5 py-1 rounded-full font-semibold">참고용</span>
@@ -642,13 +642,13 @@ function buildHousingPensionCalcWidget(): string {
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">주택 시세 <span class="text-gray-400 font-normal">(시장가격 기준)</span></label>
           <div class="relative">
-            <input type="number" id="hp-price" min="1000" max="120000" step="500" placeholder="예: 30000"
+            <input type="number" id="hp-price" min="10000" max="120000" step="1000" placeholder="예: 30000 (3억원)"
               oninput="hpOnPriceInput()"
               class="w-full pl-3 pr-14 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-50 transition-all"/>
             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 whitespace-nowrap">만원</span>
           </div>
           <p class="text-xs text-blue-600 font-semibold mt-1.5 h-4" id="hp-price-korean"></p>
-          <p class="text-xs text-gray-400 mt-0.5">공시가 아닌 시세(시장가격) 기준 입력</p>
+          <p class="text-xs text-gray-400 mt-0.5">1억~12억원 · 공시가격이 아닌 시세(시장가격) 기준 입력</p>
         </div>
         <!-- 주택 유형 -->
         <div>
@@ -675,25 +675,18 @@ function buildHousingPensionCalcWidget(): string {
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">부부 중 연소자 나이 <span class="text-red-400">*</span></label>
           <div class="relative">
-            <input type="number" id="hp-age" min="55" max="84" placeholder="예: 70"
+            <input type="number" id="hp-age" min="55" max="90" placeholder="예: 70"
               oninput="hpOnAgeInput()"
               class="w-full pl-3 pr-12 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-50 transition-all"/>
             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">세</span>
           </div>
-          <p class="text-xs text-gray-400 mt-1">55세 이상 가입 가능 · 수령액은 연소자 기준</p>
+          <p class="text-xs text-gray-400 mt-1">55~90세 · 수령액은 부부 중 연소자(나이가 적은 사람) 기준</p>
         </div>
-        <!-- 지급방식 -->
+        <!-- 지급방식 안내 (선택 불가: 공식 정액형 표만 반영) -->
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">지급방식</label>
-          <select id="hp-method"
-            class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 bg-white appearance-none cursor-pointer">
-            <option value="01">종신지급 — 정액형 (기본 추천)</option>
-            <option value="41">종신지급 — 초기증액형 (3년)</option>
-            <option value="42">종신지급 — 초기증액형 (5년)</option>
-            <option value="43">종신지급 — 초기증액형 (7년)</option>
-            <option value="44">종신지급 — 초기증액형 (10년)</option>
-            <option value="31">종신지급 — 정기증가형</option>
-          </select>
+          <p class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-600">종신지급 · 정액형 (평생 같은 금액)</p>
+          <p class="text-xs text-gray-400 mt-1">초기증액형·정기증가형은 공식 예상연금조회에서 확인하세요</p>
         </div>
       </div>
     </div>
@@ -715,9 +708,9 @@ function buildHousingPensionCalcWidget(): string {
   <div class="bg-blue-50 border-t border-blue-100 px-6 py-4">
     <p class="text-xs text-blue-700 leading-relaxed">
       <i class="fas fa-info-circle mr-1"></i>
-      이 계산기는 <strong>한국주택금융공사 2026년 3월 1일 공시 요율표</strong> 기반 <strong>참고용 예상값</strong>입니다.
-      실제 월지급금은 감정평가·금리·가입 시점에 따라 달라집니다.
-      정확한 금액은 <a href="https://www.hf.go.kr/ko/sub03/sub03_02_02.do" target="_blank" class="underline font-semibold">주택금융공사 공식 계산기</a> 또는
+      이 계산기는 <strong>한국주택금융공사 공식 월지급금 일람표(종신지급·정액형, 일반형)</strong>를 그대로 옮긴 <strong>참고용 예상값</strong>입니다.
+      공식표에 없는 중간 값(예: 3.5억원)은 표를 직선으로 이어 계산한 근사값이며, 우대형·인출한도 설정 방식은 반영하지 않습니다.
+      실제 월지급금은 가입 시점의 시세·감정평가에 따라 달라지므로 정확한 금액은 <a href="https://www.hf.go.kr/ko/sub03/sub03_02_02.do" target="_blank" rel="noopener" class="underline font-semibold">주택금융공사 공식 예상연금조회</a> 또는
       고객센터 <strong>1688-8114</strong>로 확인하세요.
     </p>
   </div>
