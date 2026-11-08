@@ -1030,7 +1030,10 @@ function calcHousingPension(priceManwon, age, houseType) {
   const hi = Math.min(12, lo + 1);
   const t = priceEok - lo;
   const thousand = r.row[lo - 1] + (r.row[hi - 1] - r.row[lo - 1]) * t;
-  return { monthly: Math.round(thousand) / 10, exact: r.exact && t === 0 };
+  // 보간 구간 '안에서' 월지급금 상한(꺾임)이 시작되면 선형 보간 오차가 커질 수 있음(양끝이 모두 상한이면 평평하므로 제외)
+  const stepSlope = r.row[hi - 1] - r.row[lo - 1];
+  const nearCap = t > 0 && hi > lo && stepSlope > 0 && stepSlope < r.row[0] * 0.98;
+  return { monthly: Math.round(thousand) / 10, exact: r.exact && t === 0, nearCap: nearCap };
 }
 
 /** 만원 → 한글 표기 변환 */
@@ -1101,7 +1104,8 @@ function runHpCalc() {
 
   var exactNote = result.exact
     ? '공식 일람표에 있는 값 그대로입니다.'
-    : '입력하신 값이 공식표의 칸(1억원 단위, 노인복지주택은 5세 단위) 사이라서, 공식표 값을 직선으로 이어 계산한 <strong>근사값</strong>입니다.';
+    : '입력하신 값이 공식표의 칸(1억원 단위, 노인복지주택은 5세 단위) 사이라서, 공식표 값을 직선으로 이어 계산한 <strong>근사값</strong>입니다.' +
+      (result.nearCap ? ' 이 구간은 월지급금 상한에 걸려 있어 <strong>실제와 차이가 더 클 수 있습니다</strong>(공식 예상연금조회로 확인하세요).' : '');
 
   var preferentialNote = '';
   if (priceManwon < 25000) {
@@ -1119,8 +1123,9 @@ function runHpCalc() {
   resultEl.innerHTML =
     '<div class="text-center mb-6">' +
       '<p class="text-xs text-gray-500 mb-1">' + houseTypeLabel + ' · ' + age + '세 · 종신지급 정액형(일반형)</p>' +
+      '<p class="mb-2"><span id="hp-result-badge" data-exact="' + (result.exact ? '1' : '0') + '" class="inline-block text-xs font-bold px-2.5 py-1 rounded-full ' + (result.exact ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700') + '">' + (result.exact ? '공식 일람표 값 그대로' : '근사값 · 공식표 사이를 직선 보간') + '</span></p>' +
       '<div class="inline-flex flex-col items-center bg-blue-600 text-white rounded-2xl px-8 py-5 shadow-lg">' +
-        '<span class="text-xs font-semibold text-blue-200 mb-1">예상 월지급금</span>' +
+        '<span class="text-xs font-semibold text-blue-200 mb-1">' + (result.exact ? '월지급금' : '예상 월지급금 (근사값)') + '</span>' +
         '<span class="text-4xl font-extrabold tracking-tight">' + monthly.toFixed(1) + '<span class="text-xl ml-1">만원</span></span>' +
         '<span class="text-sm text-blue-100 mt-1">월 약 ' + monthlyWon.toLocaleString() + '원</span>' +
       '</div>' +
