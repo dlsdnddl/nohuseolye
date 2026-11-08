@@ -1,5 +1,5 @@
 slug: senior-implant-denture-insurance
-checkedAt: 2026-11-07
+checkedAt: 2026-11-08
 rows:
   - item: "임플란트 대상 연령·부위·횟수"
     value: "만 65세 이상 건강보험 가입자·피부양자, 부분 무치악(완전 무치악 제외), 평생 2개(의학적 불가피 중단 시 개수 미포함), 상·하악 구분 없이 모든 치식. 시행 2014.7.1(75세→70세→2016.7.1 이후 65세)"
@@ -9,13 +9,13 @@ rows:
     effectiveDate: "2016-07-01"
     checkedAt: 2026-11-07
     result: verified
-  - item: "임플란트 급여 재료와 전체 비급여 사례"
-    value: "급여: 분리형 식립재료 + PFM crown. 시술 전체 비급여: 완전 무치악, 관골 식립, 일체형 식립재료, PFM 이외 보철재료(지르코니아·금·메탈 등). 부가수술(골이식·상악동거상술)·맞춤형 지대주는 비급여"
-    agency: "국민건강보험공단"
-    document: "임플란트 건강보험 적용 안내 / 임플란트 Q&A"
-    url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0221.html"
-    effectiveDate: "2016-07-01"
-    checkedAt: 2026-11-07
+  - item: "임플란트 급여 재료와 급여 제외 사례(지르코니아 급여 반영)"
+    value: "급여: 분리형 식립재료 + 보철재료 PFM crown 또는 지르코니아 crown(복지부 고시 제2025-23호, 2025.2.1 시행). 급여 제외: 관골 식립, 일체형 식립재료 등 공단 안내 사례, 부가수술(골이식·상악동거상술)·맞춤형 지대주는 비급여. 공단 안내 페이지·Q&A PDF는 PFM만 급여로 적혀 있어 복지부 발표를 우선 적용"
+    agency: "보건복지부"
+    document: "치과 임플란트 보철재료 확대 및 치아 우식검사 급여 확대(2024 제25차 건정심 보도자료) / 고시 제2025-23호 치협 안내"
+    url: "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1484121&tag=&nPage=1"
+    effectiveDate: "2025-02-01"
+    checkedAt: 2026-11-08
     result: verified
   - item: "임플란트 본인부담률"
     value: "건강보험 30%(본인부담상한제 제외), 차상위 희귀난치성질환자 10%, 만성질환자 등 20%, 의료급여 1종 10%·2종 20%"
@@ -73,11 +73,19 @@ rows:
     effectiveDate: "2016-07-01"
     checkedAt: 2026-11-07
     result: verified
-  - item: "2026년 현재 적용 여부(고시 개정·수가 변경)"
-    value: "NHIS 안내 페이지(임플란트·틀니)는 현재 게시 중이며 본문의 연령·횟수·본인부담률은 해당 페이지와 일치. 다만 Q&A PDF 작성 연도와 2026년 고시 개정 여부는 개별 확인하지 못해 본문에 '시술 전 공단·치과에서 최신 기준 확인' 안내를 병기. 2018년 진료비 금액은 본문에서 삭제"
+  - item: "2027년 1월 완전 무치악 임플란트 지원 확대(의결, 시행 전)"
+    value: "2026.9.8 제15차 건정심 의결: 2027.1월부터 치아가 없는 만 65세 이상도 임플란트 2개 지원(약 7만 명, 1인당 약 228만 원 지원 예상). 기존 건강보험 완전틀니 수혜 완전 무치악 환자는 틀니 지원 후 7년 경과 후부터. 현재(2026.11)는 시행 전이므로 본문에서 '현재 제외 / 2027.1 확대 예정'으로 구분, 세부 고시 기준은 단정하지 않음"
+    agency: "보건복지부"
+    document: "건강보험 보장 수준 높아진다(2026.9.8 보도자료, 건강보험 보장 1단계 혁신방안)"
+    url: "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1491824&tag=&nPage=1"
+    effectiveDate: "2027-01-01"
+    checkedAt: 2026-11-08
+    result: verified
+  - item: "임플란트 본인부담상한제 제외 문구의 2027 이후 유지 여부"
+    value: "공단 Q&A는 임플란트 본인부담상한제 미적용이라고 안내. 2027 확대 후 변경 여부는 확인되지 않아 본문은 '공단 안내 기준'으로만 서술하고 단정하지 않음(본문 '다루지 않는 것'에 상한제 한도액 제외)"
     agency: "국민건강보험공단"
-    document: "임플란트·틀니 안내 페이지"
+    document: "임플란트 안내 / 틀니 Q&A"
     url: "https://www.nhis.or.kr/static/html/wbma/c/wbmac0221.html"
-    effectiveDate: "2026-11-06"
-    checkedAt: 2026-11-07
-    result: partial
+    effectiveDate: "2016-07-01"
+    checkedAt: 2026-11-08
+    result: verified

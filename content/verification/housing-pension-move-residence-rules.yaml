@@ -74,13 +74,13 @@ rows:
     checkedAt: 2026-11-07
     result: verified
   - item: "재건축 기간 이주비 대출 제한 가능성"
-    value: "공사의 1순위 근저당권 유지가 필요하다는 담보 원칙에 따른 설명. 본문은 '받지 못할 수 있다, 사전에 공사에 확인'으로 한정 표현"
-    agency: "한국주택금융공사 / 법제처 생활법령정보"
-    document: "주택연금 - 지급정지 / 담보주택 변경"
-    url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=730&ccfNo=4&cciNo=1&cnpClsNo=1"
-    effectiveDate: "2026-10-15"
-    checkedAt: 2026-11-07
-    result: partial
+    value: "공사 FAQ 원문: 재건축·재개발 시에도 담보주택에 공사의 1순위 근저당권이 반드시 유지되어야 하므로, 이주비대출 등에 금융기관의 1순위 근저당권 설정이 필요한 경우 이주비대출을 받지 못할 수 있음. 본문은 '받지 못할 수 있다, 개별 가능 여부는 공사에 확인'으로 한정"
+    agency: "한국주택금융공사"
+    document: "주택연금 자주하는 질문 - 주택연금 이용중 재건축이나 재개발이 되면 계속 연금을 받을 수 있나요?"
+    url: "https://www.hf.go.kr/ko/sub03/sub03_02_05_04.do?mode=list&&pagerLimit=10&pager.offset=30"
+    effectiveDate: "2015-09-25"
+    checkedAt: 2026-11-08
+    result: verified
   - item: "지급정지 후 재개·미지급 연금 지급"
     value: "사유가 모두 해소되면 지체 없이 지급재개 통지, 정지 기간 미지급 연금은 재개 통지서 수령일 다음 영업일까지 일시 지급. 가입자 요청 정지는 일시지급 또는 미지급 선택"
     agency: "법제처 생활법령정보"
