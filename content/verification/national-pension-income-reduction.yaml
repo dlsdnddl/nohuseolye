@@ -1,0 +1,67 @@
+slug: national-pension-income-reduction
+checkedAt: 2026-11-09
+rows:
+  - item: "2026년 A값 및 감액 기준선"
+    value: "A값 3,193,511원. 감액 대상은 월평균소득금액이 A값 + 200만원(2026년 519만원대, 519만 3,511원) 이상"
+    agency: "국민연금공단"
+    document: "노령연금 안내(소득 있는 업무에 종사하는 경우 감액)"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-09
+    result: verified
+  - item: "소득 구간별 감액 계산식(3개 구간)과 감액 한도"
+    value: "200만~300만 미만 15만원+(200만 초과분×15%), 300만~400만 미만 30만원+(300만 초과분×20%), 400만 이상 50만원+(400만 초과분×25%). 감액한도 노령연금의 1/2. 구간 경계는 A값 초과분 기준"
+    agency: "국민연금공단"
+    document: "노령연금 안내(소득 감액 구간표)"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-09
+    result: verified
+  - item: "근로소득만 있는 경우 환산 총급여(12개월)"
+    value: "7,586만 5,403원 이상(월 6,322,117원) / 8,849만 6,982원 이상(월 7,374,749원) / 1억 109만 4,013원 이상(월 8,424,502원)"
+    agency: "국민연금공단"
+    document: "노령연금 안내(근로소득만 있는 경우 총급여 기준)"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-09
+    result: verified
+  - item: "5년 한시 감액, 소득 활동 중단 시 감액 없음, 소득 신고 의무"
+    value: "2015.7.29 이후 수급권 취득자는 지급개시연령부터 5년간 감액. 소득 있는 업무 종사·종료 시 공단 신고 필요"
+    agency: "국민연금공단"
+    document: "노령연금 안내"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-09
+    result: verified
+  - item: "개정법 시행일(2026.6.17)과 2025년 소득분부터 소급 적용, 자동 환급"
+    value: "2026.6.17 시행. 2025년 소득분부터 적용(2025 A값 308만 9,062원 + 200만원 미만 감액 없음), 7월 말부터 신청 없이 자동 환급, 부양가족연금도 함께 지급. 2026년 소득은 1월부터 상향 기준 적용"
+    agency: "보건복지부"
+    document: "노령연금 소득 감액 기준 완화 개정 시행 보도자료"
+    url: "https://www.bokjiro.go.kr/ssis-tbu/cms/pc/news/news/1309933_1114.html"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-09
+    result: verified
+  - item: "조기노령연금 소득 있는 업무 종사 시 지급 정지 및 개시연령 이후 5년간 감액표 적용"
+    value: "소득 있는 업무(A값 초과) 종사 시 조기노령연금 지급 정지. 노령연금 개시연령 이후 5년간은 감액 구간표 적용"
+    agency: "국민연금공단"
+    document: "노령연금 안내(조기노령연금)"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-09
+    result: verified
+  - item: "연기연금(최대 5년, 연 7.2% 가산)과 출생연도별 지급개시연령"
+    value: "연기 최대 5년, 연 7.2%(월 0.6%) 가산, 연기비율 50%~전부. 1953~56 61세 / 1957~60 62세 / 1961~64 63세 / 1965~68 64세 / 1969~ 65세, 조기 56~60세"
+    agency: "국민연금공단"
+    document: "노령연금 안내"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-09
+    result: verified
+  - item: "본문 가정 사례의 감액액(약 27만 1천원, 한도 적용 40만원)"
+    value: "공단 구간 계산식을 직접 대입한 계산값(600만원 → 약 270,973원, 700만원 → 약 461,298원이나 연금 80만원의 1/2=40만원 한도 적용). 공단 모의계산 결과와 대조하지는 않음. 본문에 '가정 사례'로 명시"
+    agency: "국민연금공단"
+    document: "노령연금 안내(구간 계산식 기준 직접 계산)"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-09
+    result: partial

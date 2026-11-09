@@ -1,0 +1,91 @@
+slug: health-insurance-dependent-retirement
+checkedAt: 2026-11-09
+rows:
+  - item: "임의계속가입 자격(통산 1년 이상, 18개월 중), 개인사업장 대표자 제외"
+    value: "퇴직 전 18개월 중 직장가입자 자격 통산 1년 이상. 개인사업장 대표자 제외"
+    agency: "국민건강보험공단"
+    document: "임의계속가입제도 안내(건강보험 웹진)"
+    url: "https://www.nhis.or.kr/static/alim/paper/oldpaper/202212/sub/18.html"
+    effectiveDate: "2022-12-01"
+    checkedAt: 2026-11-09
+    result: verified
+  - item: "임의계속가입 신청 기한·유지 기간·보험료 기준"
+    value: "지역가입자 된 후 최초 지역보험료 고지 납부기한에서 2개월이 지나기 전 신청, 퇴직 다음 날부터 36개월 이내, 최근 12개월 평균 보수월액 기준 전액 본인 부담, 첫 보험료를 납부기한 2개월 지나도록 미납 시 자격 유지 불가"
+    agency: "법제처 생활법령정보"
+    document: "건강보험 - 임의계속가입자"
+    url: "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1063&ccfNo=2&cciNo=1&cnpClsNo=3"
+    effectiveDate: "2026-11-09"
+    checkedAt: 2026-11-09
+    result: verified
+  - item: "임의계속가입자의 피부양자 전환(별도 탈퇴 없이 자격취득 신고, 사유발생일 소급)"
+    value: "공단 Q&A 안내. 임의계속가입자가 피부양자 자격을 취득하면 자격취득 신고로 사유발생일 소급"
+    agency: "국민건강보험공단"
+    document: "임의계속가입제도 안내(건강보험 웹진)"
+    url: "https://www.nhis.or.kr/static/alim/paper/oldpaper/202212/sub/18.html"
+    effectiveDate: "2022-12-01"
+    checkedAt: 2026-11-09
+    result: partial
+  - item: "피부양자 소득·사업소득·재산 기준(연 2천만원, 사업소득 없음, 재산세 과세표준 5.4억/9억 구간)"
+    value: "소득 합계 연 2천만원 이하, 사업소득 없을 것(예외 있음), 재산세 과세표준 합 5.4억 이하 또는 5.4억 초과 9억 이하이면서 소득 연 1천만원 이하, 기혼자는 부부 모두 충족. 개정 2023.9.11 본문 확인. 현행 시행규칙(시행 2026.9.28)의 별표 1의2 개정 여부는 직접 재확인하지 못함"
+    agency: "국가법령정보센터(보건복지부령)"
+    document: "국민건강보험법 시행규칙 [별표 1의2] 피부양자 자격의 인정 기준"
+    url: "https://www.law.go.kr/LSW/lumLsLinkPop.do?lspttninfSeq=69276&chrClsCd=010202"
+    effectiveDate: "2023-09-11"
+    checkedAt: 2026-11-09
+    result: partial
+  - item: "피부양자 소득 산정 시 근로·연금소득 100분의 30 미적용(전액 반영)"
+    value: "법제처 법령해석은 피부양자 소득요건 산정에서 근로·연금소득에 100분의 30을 적용하지 않는다고 해석. 2019.9.6. 회신(법제처 19-0263), 해석 당시 법령 기준이며 법적 기속력이 없어 현행 적용은 공단 확인 필요"
+    agency: "법제처"
+    document: "법령해석 19-0263 - 피부양자 소득요건 산정"
+    url: "https://www.law.go.kr/LSW/expcInfoP.do?expcSeq=327163&mode=2"
+    effectiveDate: "2019-09-06"
+    checkedAt: 2026-11-09
+    result: partial
+  - item: "연금소득 범위(공적연금 포함·사적연금 제외)와 재산 과세표준·기본공제 5천만원"
+    value: "공단 게재 웹진(전문가 기고) 설명. 공적연금 포함, 사적연금 제외. 재산 기본공제 5천만원. 자동차 4,000만원 초과 시 반영. 현행 기준 일치 여부는 공단 문의 필요"
+    agency: "국민건강보험공단"
+    document: "건강보험 웹진 - 연금소득과 건강보험료"
+    url: "https://www.nhis.or.kr/static/alim/paper/oldpaper/202309/sub/section3_3.html"
+    effectiveDate: "2023-09-01"
+    checkedAt: 2026-11-09
+    result: partial
+  - item: "부과 자료 적용 기간(11월~다음해 10월) 및 소득 감소·퇴직 시 보험료 조정 신청"
+    value: "부과자료는 해당 연도 11월부터 다음 연도 10월까지 적용. 소득 감소·폐업·퇴직 시 조정 신청, 신청 다음 달부터 그해 12월까지 조정"
+    agency: "국민건강보험공단"
+    document: "건강보험 웹진 - 지역가입자 보험료 부과"
+    url: "https://www.nhis.or.kr/static/alim/paper/oldpaper/202312/sub/section4_0.html"
+    effectiveDate: "2023-12-01"
+    checkedAt: 2026-11-09
+    result: partial
+  - item: "2026년 건강보험료율 7.19%, 가입자 월평균 보험료"
+    value: "2026 건강보험료율 7.19%(+0.1%p). 직장가입자 월평균 보험료(본인부담) 16만 699원, 지역가입자 월평균 9만 242원"
+    agency: "보건복지부"
+    document: "2026년도 건강보험료율 결정 보도자료(2025.8.28)"
+    url: "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1487279"
+    effectiveDate: "2025-08-28"
+    checkedAt: 2026-11-09
+    result: verified
+  - item: "2026년 장기요양보험료율(건강보험료의 13.14%)"
+    value: "2026 장기요양보험료율 소득의 0.9448%(건강보험료 대비 13.14%)"
+    agency: "보건복지부"
+    document: "2026년도 장기요양보험료율 결정 보도자료(2025.11.4)"
+    url: "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1487817&tag&nPage=1"
+    effectiveDate: "2025-11-04"
+    checkedAt: 2026-11-09
+    result: verified
+  - item: "2027년 건강보험료율 7.19% 동결, 장기요양보험료(건보료 대비 13.90%)"
+    value: "2027 건강보험료율 7.19% 동결(2026.9.8 건강보험정책심의위원회). 장기요양보험료율 2027 소득 대비 0.9994%, 건보료 대비 13.90%(2026.10.30 발표)"
+    agency: "보건복지부"
+    document: "2027년도 건강보험료율·장기요양보험료율 결정 보도자료"
+    url: "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1491824&tag=&nPage=1"
+    effectiveDate: "2026-09-08"
+    checkedAt: 2026-11-09
+    result: verified
+  - item: "본문 가정 보험료 사례(보수월액 300만원 → 약 24만 4천원)"
+    value: "보수월액 300만원 가정 × 7.19% × 2(전액 본인 부담) + 장기요양 13.14% 직접 계산. 공단 고지액 아님, 본문에 '가정' 명시"
+    agency: "보건복지부"
+    document: "보험료율 보도자료 기준 직접 계산"
+    url: "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1487279"
+    effectiveDate: "2025-08-28"
+    checkedAt: 2026-11-09
+    result: partial
