@@ -2,7 +2,8 @@
 title: "2026 에너지바우처 대상·금액·신청방법 — 노인 세대가 받으려면"
 slug: "energy-voucher-2026"
 category: support
-status: review
+status: published
+approvedAt: 2026-11-09
 type: checklist
 seoTitle: "2026 에너지바우처 대상·금액·신청방법 (신청 12월 31일까지)"
 metaDescription: "2026 에너지바우처는 누가 받을 수 있을까요? 생계·의료·주거·교육급여 수급자 중 65세 이상 등 세대원 조건, 1인 29만 5,200원부터의 금액, 신청기간(12월 31일까지)과 사용기간, 신청 장소를 공식 기준으로 정리했습니다."

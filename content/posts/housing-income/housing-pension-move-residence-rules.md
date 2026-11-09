@@ -2,7 +2,8 @@
 title: "주택연금 가입 후 이사·실거주 요건과 예외 — 집을 비우면 연금이 멈출까?"
 slug: "housing-pension-move-residence-rules"
 category: housing-income
-status: review
+status: published
+approvedAt: 2026-11-09
 type: checklist
 seoTitle: "주택연금 이사·실거주 요건과 예외, 지급정지 사유 2026"
 metaDescription: "주택연금 가입 후 이사하거나 요양병원·자녀집에 장기간 머물면 연금이 정지될까요? 담보주택 변경 조건, 1년 이상 미거주 기준, 2026년 6월 실거주 예외와 임대 가능 여부를 공식 기준으로 정리했습니다."

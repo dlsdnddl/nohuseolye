@@ -2,7 +2,8 @@
 title: "농지연금 가입 조건과 수령 방식 — 60세 이상 농업인, 내 농지로 매달 받는 법"
 slug: "farmland-pension-eligibility-payment"
 category: housing-income
-status: review
+status: published
+approvedAt: 2026-11-09
 type: pillar
 seoTitle: "농지연금 가입 조건·수령 방식 총정리 2026 (60세, 영농 5년)"
 metaDescription: "농지연금은 몇 살부터, 어떤 농지로 가입할 수 있을까요? 60세·영농 5년 조건, 담보농지 요건과 제한 농지, 종신정액형·전후후박형·기간정액형 등 수령 방식 비교와 신청 방법을 공식 기준으로 정리했습니다."

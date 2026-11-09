@@ -2,7 +2,8 @@
 title: "65세 이상 임플란트·틀니 건강보험 혜택 — 평생 2개, 본인부담 30%의 조건"
 slug: "senior-implant-denture-insurance"
 category: support
-status: review
+status: published
+approvedAt: 2026-11-09
 type: comparison
 seoTitle: "65세 이상 임플란트·틀니 건강보험 적용 조건·본인부담률 총정리"
 metaDescription: "만 65세 이상 임플란트는 평생 2개까지, 틀니는 7년에 1번 건강보험이 적용됩니다. 대상 조건, 본인부담 30%, 급여 안 되는 경우(골이식 등), 지르코니아 크라운 급여(2025.2~), 2027년 1월 완전 무치악 확대 예정, 사전등록과 진료 순서, 치과 갈 때 확인할 점을 정리했습니다."

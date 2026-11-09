@@ -2,7 +2,8 @@
 title: "주택연금 가입자 사망 후 배우자 승계와 정산 — 6개월 안에 해야 할 일"
 slug: "housing-pension-spouse-succession"
 category: housing-income
-status: review
+status: published
+approvedAt: 2026-11-09
 type: checklist
 seoTitle: "주택연금 가입자 사망 시 배우자 승계·정산 절차 총정리 2026"
 metaDescription: "주택연금 가입자가 사망하면 배우자는 연금을 계속 받을 수 있을까요? 승계 조건, 6개월 기한, 저당권·신탁방식별 절차, 부부 모두 사망 시 정산과 상속인 부담까지 공식 기준으로 정리했습니다."

@@ -2,7 +2,8 @@
 title: "노인일자리 신청 자격·유형·모집시기 — 공익활동형과 역량활용형(구 사회서비스형) 차이"
 slug: "senior-jobs-eligibility-types"
 category: support
-status: review
+status: published
+approvedAt: 2026-11-09
 type: comparison
 seoTitle: "노인일자리 신청 자격·유형별 활동비·모집시기 총정리 2026"
 metaDescription: "노인일자리는 몇 살부터, 누가 신청할 수 있을까요? 공익활동형·역량활용형(구 사회서비스형)·공동체사업단 차이와 활동비·활동시간, 선발 제외 대상, 신청 방법, 2026년 모집 시기와 2027년 모집 확인법을 공식 자료로 정리했습니다."

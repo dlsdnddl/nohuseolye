@@ -63,7 +63,7 @@ export const categories: CategoryConfig[] = [
     intro: '주택연금·농지연금처럼 보유 자산을 노후 현금흐름으로 바꾸는 방법과 은퇴 후 주거비를 공식 자료 기준으로 정리합니다.',
     seoTitle: '집·노후소득 가이드 — 주택연금·농지연금·은퇴 후 주거비',
     seoDescription: '주택연금 승계·실거주 요건, 농지연금 조건 등 집과 땅을 노후소득으로 활용하는 방법을 공식 자료 기준으로 설명합니다.',
-    state: 'coming-soon',
+    state: 'open',
     minPosts: MIN_PUBLISHED_TO_OPEN,
     pinned: ['housing-pension-calculation'],
   },
@@ -74,7 +74,7 @@ export const categories: CategoryConfig[] = [
     intro: '50~70대가 신청할 수 있는 에너지바우처·노인일자리·건강보험 혜택 등 공공 지원제도를 대상·금액·신청방법 중심으로 정리합니다.',
     seoTitle: '지원금 가이드 — 50~70대 공공 지원제도와 신청방법',
     seoDescription: '에너지바우처, 노인일자리, 임플란트·틀니 건강보험 등 50~70대가 받을 수 있는 공공 지원제도를 공식 자료 기준으로 안내합니다.',
-    state: 'coming-soon',
+    state: 'open',
     minPosts: MIN_PUBLISHED_TO_OPEN,
   },
 ]
