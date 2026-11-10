@@ -28,8 +28,9 @@ npm run build             # dist 생성 (운영 모드: published 글만 포함)
 - 기존 글에서 새 글로 가는 카드: 새 글 frontmatter의 `inboundLinks`(`from`, `question`, `description`)에 적습니다. 새 글이 운영 빌드에 포함될 때만 적용됩니다.
 - 위젯: `[[WIDGET:housing-pension-calc]]`, `[[WIDGET:income-calculator]]` (본문에 한 줄로)
 
-## 현재 글 상태 (2026-11-10)
-- 공개 22편: 기존 14 + 2026-11-09 신규 6 + 2026-11-10 신규 2(`national-pension-income-reduction`, `housing-pension-application-process`)
+## 현재 글 상태 (2026-11-11)
+- 공개 글 17편(sitemap URL은 홈·카테고리 4개 포함 22개): 기존 형식(`legacy-posts.ts`) 8 + Markdown 9
+  - 2026-11-11 신규 1: `national-pension-additional-payment`(국민연금 추납, 확인 11·부분 4). 저장소에는 published로 반영됨. **운영 배포 여부는 `wrangler pages deployment list`로 확인**
 - `review` 유지(운영에 노출되지 않음):
   - `basic-pension-2027-increase`: 별도 재검증 필요
   - `health-insurance-dependent-retirement`: 2026-11-10에 현행 법령 재검증 완료(확인 12·부분 4). 사용자 승인 시 발행 가능

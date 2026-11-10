@@ -2,7 +2,8 @@
 title: "국민연금 추납, 지금 신청하면 얼마나 더 받을까? 신청 조건·납부금액 총정리"
 slug: "national-pension-additional-payment"
 category: pension-asset
-status: review
+status: published
+approvedAt: 2026-11-11
 type: comparison
 seoTitle: "국민연금 추납 2026 — 신청 조건·납부금액·연금 증가액 총정리"
 metaDescription: "국민연금 추납(추후납부)은 누가, 얼마를 내고, 연금이 얼마나 늘까요? 2026년 보험료율 9.5% 기준 납부금액 계산법과 300만·500만·1,000만원 가정 사례, 12월 신청 시 10%가 적용되는 이유를 정리했습니다."
