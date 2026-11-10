@@ -3,11 +3,12 @@
 //  - content/verification/<slug>.yaml    (공식자료 검증표)
 import fs from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import YAML from 'yaml'
 import { categories } from '../../src/data/categories'
 import type { Post, VerificationSheet } from '../../src/types'
 
-export const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..', '..')
+export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..')
 export const CONTENT_DIR = process.env.CONTENT_DIR ? path.resolve(process.env.CONTENT_DIR) : path.join(ROOT, 'content')
 export const PUBLIC_DIR = process.env.PUBLIC_DIR ? path.resolve(process.env.PUBLIC_DIR) : path.join(ROOT, 'public')
 
