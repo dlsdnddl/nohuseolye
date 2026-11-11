@@ -30,7 +30,7 @@ npm run build             # dist 생성 (운영 모드: published 글만 포함)
 
 ## 현재 글 상태 (2026-11-11)
 - 공개 글 17편(sitemap URL은 홈·카테고리 4개 포함 22개): 기존 형식(`legacy-posts.ts`) 8 + Markdown 9
-  - 2026-11-11 신규 1: `national-pension-additional-payment`(국민연금 추납, 확인 11·부분 4). 저장소에는 published로 반영됨. **운영 배포 여부는 `wrangler pages deployment list`로 확인**
+  - 2026-11-11 신규 1: `national-pension-additional-payment`(국민연금 추납, 확인 11·부분 4). 2026-11-11 운영 배포 완료(commit `218e2f1`, hono 4.13.17 포함). 배포 후 운영 22개 URL·내부링크·sitemap/RSS·GA4·AdSense 정상 확인
 - `review` 유지(운영에 노출되지 않음):
   - `basic-pension-2027-increase`: 별도 재검증 필요
   - `health-insurance-dependent-retirement`: 2026-11-10에 현행 법령 재검증 완료(확인 12·부분 4). 사용자 승인 시 발행 가능
@@ -46,7 +46,8 @@ npx wrangler pages deployment list --project-name nohuseolye
 ```
 - `wrangler login`(브라우저 로그인)은 쓰지 않습니다.
 - 배포 후 확인: 신규 URL 200, sitemap/RSS 반영, `noindex` 없음, GA4·AdSense 유지, 기존 글·내부링크 정상, review 글 404.
-- **롤백 대상**: 직전 정상 배포 `22cd9dba-611c-49b5-8ab2-902985f5d9c9` (현재 운영: `44c79c6a-459c-4b23-b92b-844359e27ba6`, commit `2fb13bb`). 더 이전 `6e420247-9c78-439a-86ca-a399ec09f5f8`. `3e9b3c5a...`는 구버전이라 사용 금지.
+- **롤백 대상**: 직전 정상 배포 `44c79c6a-459c-4b23-b92b-844359e27ba6`(commit `2fb13bb`). 현재 운영은 2026-11-11 배포(commit `218e2f1`, 사용자가 Windows 터미널에서 직접 배포해 ID 미기록 → `wrangler pages deployment list`로 확인). 더 이전 `22cd9dba-611c-49b5-8ab2-902985f5d9c9`, `6e420247-9c78-439a-86ca-a399ec09f5f8`.
+- Windows에서는 `export` 대신 PowerShell `$env:CLOUDFLARE_API_TOKEN = "..."`를 씁니다. `npm run deploy:prod`는 프로젝트명이 `webapp`이라 쓰지 않습니다. `3e9b3c5a...`는 구버전이라 사용 금지.
 - 심각한 오류가 있으면 운영 배포를 멈추고 먼저 보고합니다.
 
 ## 미리보기 환경 (`nohuseolye-preview`, 비공개 검토용)
