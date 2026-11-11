@@ -11,12 +11,13 @@ export const Header = () => {
   }))
 
   return (
+    <>
+    {/* 상단 알림 바 — 화면에 고정하지 않음(스크롤하면 사라져 읽는 공간을 넓힘) */}
+    <div class="bg-primary-700 text-white text-center py-2 px-3 text-sm">
+      <span class="opacity-90">📢 2026년 기초연금 선정기준액 단독가구 247만원으로 상향 — 작년 탈락하셨다면 재신청 가능합니다.</span>
+      <a href="/pension-asset/basic-pension-eligibility" class="ml-2 underline font-semibold hover:opacity-80">바로 확인하기 →</a>
+    </div>
     <header class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
-      {/* 상단 알림 바 */}
-      <div class="bg-primary-700 text-white text-center py-2 text-sm">
-        <span class="opacity-90">📢 2026년 기초연금 선정기준액 단독가구 247만원으로 상향 — 작년 탈락하셨다면 재신청 가능합니다.</span>
-        <a href="/pension-asset/basic-pension-eligibility" class="ml-2 underline font-semibold hover:opacity-80">바로 확인하기 →</a>
-      </div>
 
       <div class="max-w-6xl mx-auto px-4">
         {/* 로고 + 검색 */}
@@ -120,5 +121,6 @@ export const Header = () => {
         </div>
       </div>
     </header>
+    </>
   )
 }

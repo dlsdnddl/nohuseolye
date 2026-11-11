@@ -19,21 +19,13 @@ const footerColumns = () =>
 export const Footer = () => {
   return (
     <footer class="bg-gray-900 text-gray-400 mt-20">
-      {/* 카카오톡 공유 플로팅 버튼 */}
-      <div class="fixed bottom-6 right-6 z-40 flex flex-col gap-3">
-        <button
-          onclick="shareKakao()"
-          class="w-12 h-12 bg-yellow-400 hover:bg-yellow-300 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110"
-          title="카카오톡으로 공유"
-        >
-          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="#3C1E1E">
-            <path d="M12 3C6.48 3 2 6.69 2 11.25c0 2.91 1.82 5.47 4.58 6.96L5.5 21.5l4.32-2.89c.71.1 1.44.14 2.18.14 5.52 0 10-3.69 10-8.25S17.52 3 12 3z"/>
-          </svg>
-        </button>
+      {/* 떠 있는 버튼은 "맨 위로" 하나만 (카카오톡 공유는 글 본문 안의 공유 버튼 사용) */}
+      <div class="fixed bottom-5 right-4 z-40">
         <button
           onclick="window.scrollTo({top:0,behavior:'smooth'})"
-          class="w-12 h-12 bg-primary-700 hover:bg-primary-600 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 text-white"
+          class="w-11 h-11 bg-primary-700/90 hover:bg-primary-600 rounded-full flex items-center justify-center shadow-lg transition-colors text-white"
           title="맨 위로"
+          aria-label="맨 위로"
         >
           <i class="fas fa-chevron-up"></i>
         </button>

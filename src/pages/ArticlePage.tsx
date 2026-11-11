@@ -338,7 +338,7 @@ export const ArticlePage = ({ post, preview = false }: ArticlePageProps) => {
 
         {/* ─── 사이드바 ─── */}
         <aside class="hidden lg:block">
-          <div class="sticky top-24 space-y-6">
+          <div class="sticky top-32 space-y-6">
 
             {/* 목차 */}
             <div class="bg-white border border-gray-100 rounded-2xl p-5">
