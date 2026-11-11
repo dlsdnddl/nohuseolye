@@ -297,15 +297,16 @@ app.get('/privacy', (c) => {
           <span class="text-gray-700">개인정보처리방침</span>
         </nav>
         <h1 class="text-3xl font-extrabold text-gray-900 mb-2">개인정보처리방침</h1>
-        <p class="text-sm text-gray-400 mb-8">최종 업데이트: 2026년 1월 1일</p>
+        <p class="text-sm text-gray-400 mb-8">최종 업데이트: 2026년 11월 11일</p>
         <div class="space-y-8 text-gray-700 leading-relaxed">
           <section>
             <h2 class="text-lg font-bold text-gray-900 mb-3">1. 수집하는 개인정보 항목</h2>
-            <p>본 사이트는 뉴스레터 구독 신청 시 이메일 주소를 수집합니다. 그 외 서비스 이용 과정에서 IP 주소, 쿠키, 방문 기록 등이 자동으로 생성될 수 있습니다.</p>
+            <p>본 사이트는 뉴스레터 구독 신청 시 이메일 주소를 수집하며, 신청 시각과 신청한 페이지 주소가 함께 기록됩니다. 그 외 서비스 이용 과정에서 IP 주소, 쿠키, 방문 기록 등이 자동으로 생성될 수 있습니다.</p>
           </section>
           <section>
             <h2 class="text-lg font-bold text-gray-900 mb-3">2. 개인정보의 수집 및 이용 목적</h2>
             <p>수집된 이메일 주소는 뉴스레터 발송 목적으로만 사용되며, 제3자에게 제공되지 않습니다.</p>
+            <p class="mt-3">구독 신청 정보는 Google LLC가 제공하는 Google 설문지·Google 스프레드시트 서비스에 저장·보관되며(보관 업무 위탁), 사이트 운영자만 열람할 수 있습니다. Google의 개인정보 처리에 대한 자세한 내용은 <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:underline">Google 개인정보처리방침</a>에서 확인할 수 있습니다.</p>
           </section>
           <section>
             <h2 class="text-lg font-bold text-gray-900 mb-3">3. 광고 및 쿠키</h2>
@@ -313,7 +314,7 @@ app.get('/privacy', (c) => {
           </section>
           <section>
             <h2 class="text-lg font-bold text-gray-900 mb-3">4. 개인정보의 보유 및 이용 기간</h2>
-            <p>뉴스레터 구독 해지 시 즉시 이메일 주소를 삭제합니다.</p>
+            <p>뉴스레터 구독 해지 시 즉시 이메일 주소를 삭제합니다. 구독 해지와 이메일 주소 삭제는 <a href="/contact" class="text-primary-600 hover:underline">문의하기</a> 페이지를 통해 요청할 수 있습니다.</p>
           </section>
           <section>
             <h2 class="text-lg font-bold text-gray-900 mb-3">5. 문의</h2>
