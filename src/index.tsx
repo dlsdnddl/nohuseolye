@@ -13,6 +13,7 @@ import { posts, indexablePosts, getPostBySlug, isPreview, latestUpdate } from '.
 import { categories, getCategory } from './data/categories'
 import { verificationSheets } from './generated/content'
 import { SITE_URL, SITE_NAME, articleJsonLd, postPath, postCanonical, xmlEscape, toRfc822 } from './lib/seo'
+import { isNewsletterConfigured, isValidEmail, submitNewsletterEmail } from './lib/newsletter'
 
 type Bindings = { PREVIEW_PASSWORD?: string }
 const app = new Hono<{ Bindings: Bindings }>()
@@ -144,6 +145,35 @@ if (isPreview) {
 // (Cloudflare Pages는 Hosted 접근규칙을 적용할 수 없어, 공개 라우트 자체를 제거)
 app.all('/admin', (c) => renderNotFound(c))
 app.all('/admin/*', (c) => renderNotFound(c))
+
+// ─── 뉴스레터 구독 신청 ────────────────────────────────────────────────────────
+// 푸터 양식(app.js)에서 호출. 이메일을 Google 설문지로 전달해 연결된 스프레드시트에 쌓습니다.
+app.post('/api/subscribe', async (c) => {
+  c.header('X-Robots-Tag', 'noindex, nofollow')
+  c.header('Cache-Control', 'no-store')
+  // 다른 사이트에서 보낸 요청은 받지 않음
+  const origin = c.req.header('origin')
+  if (origin) {
+    let originHost = ''
+    try { originHost = new URL(origin).host } catch { originHost = '' }
+    if (originHost !== (c.req.header('host') || '')) return c.json({ ok: false, error: 'forbidden' }, 403)
+  }
+  let data: any = null
+  try { data = await c.req.json() } catch { data = null }
+  const email = typeof data?.email === 'string' ? data.email.trim() : ''
+  const page = typeof data?.page === 'string' ? data.page.slice(0, 200) : ''
+  // 사람에게 보이지 않는 칸(website)이 채워져 있으면 자동 프로그램으로 보고 저장하지 않음
+  if (typeof data?.website === 'string' && data.website !== '') return c.json({ ok: true })
+  if (!isValidEmail(email)) return c.json({ ok: false, error: 'invalid_email' }, 400)
+  if (!isNewsletterConfigured()) return c.json({ ok: false, error: 'not_configured' }, 503)
+  try {
+    const saved = await submitNewsletterEmail(email, page)
+    if (!saved) return c.json({ ok: false, error: 'save_failed' }, 502)
+  } catch {
+    return c.json({ ok: false, error: 'save_failed' }, 502)
+  }
+  return c.json({ ok: true })
+})
 
 // ─── 준비 중 카테고리 (noindex) ────────────────────────────────────────────────
 const comingSoonPage = (label: string) => (c: any) => {

@@ -1491,33 +1491,68 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // ── 뉴스레터 구독 버튼 — 준비중 안내 처리
+  // ── 뉴스레터 구독 버튼 — /api/subscribe 로 전송 (Google 스프레드시트에 저장)
   var newsletterBtn = document.getElementById('newsletter-btn');
   var newsletterMsg = document.getElementById('newsletter-msg');
   var newsletterEmail = document.getElementById('newsletter-email');
+  var newsletterWebsite = document.getElementById('newsletter-website');
   if (newsletterBtn) {
-    newsletterBtn.addEventListener('click', function() {
+    var setNewsletterMsg = function(text, color) {
+      if (newsletterMsg) {
+        newsletterMsg.textContent = text;
+        newsletterMsg.style.color = color;
+      }
+    };
+    var submitNewsletter = function() {
+      if (newsletterBtn.disabled) return;
       var email = newsletterEmail ? newsletterEmail.value.trim() : '';
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        if (newsletterMsg) {
-          newsletterMsg.textContent = '올바른 이메일 주소를 입력해 주세요.';
-          newsletterMsg.style.color = '#fca5a5';
-        }
+        setNewsletterMsg('올바른 이메일 주소를 입력해 주세요.', '#fca5a5');
         return;
       }
-      // 현재 구독 시스템 준비중 안내
+      var originalText = newsletterBtn.textContent;
       newsletterBtn.disabled = true;
-      newsletterBtn.textContent = '✓ 신청 완료';
-      newsletterBtn.style.background = '#166a47';
-      if (newsletterMsg) {
-        newsletterMsg.textContent = '감사합니다! 뉴스레터 발송 시스템 준비 완료 후 발송드립니다.';
-        newsletterMsg.style.color = '#86efac';
-      }
+      newsletterBtn.textContent = '신청 중…';
       // GA4 이벤트
       if (typeof gtag === 'function') {
         gtag('event', 'newsletter_signup_attempt', { email_provided: true });
       }
-    });
+      fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          page: location.pathname,
+          website: newsletterWebsite ? newsletterWebsite.value : ''
+        })
+      })
+        .then(function(res) { return res.json().catch(function() { return { ok: false }; }); })
+        .then(function(result) {
+          if (!result || !result.ok) throw new Error(result && result.error ? result.error : 'failed');
+          newsletterBtn.textContent = '✓ 신청 완료';
+          newsletterBtn.style.background = '#166a47';
+          setNewsletterMsg('감사합니다! 구독 신청이 완료되었습니다.', '#86efac');
+          if (typeof gtag === 'function') {
+            gtag('event', 'newsletter_signup', { method: 'footer_form' });
+          }
+        })
+        .catch(function(err) {
+          newsletterBtn.disabled = false;
+          newsletterBtn.textContent = originalText;
+          setNewsletterMsg(
+            err && err.message === 'invalid_email'
+              ? '올바른 이메일 주소를 입력해 주세요.'
+              : '신청이 저장되지 않았습니다. 잠시 후 다시 시도해 주세요.',
+            '#fca5a5'
+          );
+        });
+    };
+    newsletterBtn.addEventListener('click', submitNewsletter);
+    if (newsletterEmail) {
+      newsletterEmail.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); submitNewsletter(); }
+      });
+    }
   }
 
   // ── 내부 링크 클릭 GA4 추적

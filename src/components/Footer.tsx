@@ -52,6 +52,8 @@ export const Footer = () => {
               placeholder="이메일 주소 입력"
               class="flex-1 px-4 py-3 rounded-lg bg-white text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
             />
+            {/* 자동 프로그램(스팸) 차단용 칸 — 사람에게는 보이지 않음 */}
+            <input type="text" id="newsletter-website" name="website" tabindex={-1} autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
             <button id="newsletter-btn" class="px-6 py-3 bg-warm-500 hover:bg-warm-600 text-white font-semibold rounded-lg text-sm transition-colors whitespace-nowrap">
               구독하기
             </button>
