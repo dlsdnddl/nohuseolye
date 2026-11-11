@@ -46,9 +46,17 @@ npx wrangler pages deployment list --project-name nohuseolye
 ```
 - `wrangler login`(브라우저 로그인)은 쓰지 않습니다.
 - 배포 후 확인: 신규 URL 200, sitemap/RSS 반영, `noindex` 없음, GA4·AdSense 유지, 기존 글·내부링크 정상, review 글 404.
-- **롤백 대상**: 직전 정상 배포 `44c79c6a-459c-4b23-b92b-844359e27ba6`(commit `2fb13bb`). 현재 운영은 2026-11-11 배포(commit `218e2f1`, 사용자가 Windows 터미널에서 직접 배포해 ID 미기록 → `wrangler pages deployment list`로 확인). 더 이전 `22cd9dba-611c-49b5-8ab2-902985f5d9c9`, `6e420247-9c78-439a-86ca-a399ec09f5f8`.
+- **현재 운영**(2026-11-11): `53342a66-6c2c-455a-bca8-6af00affdf2e`(commit `3f85ce6`, 뉴스레터 구독 저장 포함). commit `93bc8c5`(개인정보처리방침 수정)는 저장소에만 있고 **아직 운영 미배포**.
+- **롤백 대상**: 직전 정상 배포 `de58a3ac-dcb4-469c-882d-5d34104f962d`(commit `218e2f1`, 추납 칼럼 공개·구독 저장 기능 없음). 더 이전 `44c79c6a-459c-4b23-b92b-844359e27ba6`(commit `2fb13bb`), `22cd9dba-611c-49b5-8ab2-902985f5d9c9`, `6e420247-9c78-439a-86ca-a399ec09f5f8`.
 - Windows에서는 `export` 대신 PowerShell `$env:CLOUDFLARE_API_TOKEN = "..."`를 씁니다. `npm run deploy:prod`는 프로젝트명이 `webapp`이라 쓰지 않습니다. `3e9b3c5a...`는 구버전이라 사용 금지.
 - 심각한 오류가 있으면 운영 배포를 멈추고 먼저 보고합니다.
+
+## 뉴스레터 구독 (2026-11-11 추가)
+- 푸터 양식 → `POST /api/subscribe`(`src/index.tsx`) → Google 설문지 → 연결된 Google 스프레드시트 "LuckyU 뉴스레터 구독"에 한 줄씩 저장(타임스탬프·이메일·신청 페이지).
+- 설문지 ID·질문 ID는 `src/lib/newsletter.ts`에 있습니다(비밀값 아님). 설문지를 새로 만들면 이 값만 바꿉니다. 설문지나 질문을 삭제하면 저장이 끊깁니다.
+- 스팸 방지: 숨은 칸(`website`)이 채워진 요청은 저장하지 않고, 다른 사이트 Origin 요청은 403.
+- 이메일을 모으기만 하며 발송 기능은 없습니다. 수집·보관 내용은 `/privacy`에 적혀 있으므로 저장 방식을 바꾸면 방침도 함께 고칩니다.
+- 배포 후 확인: 운영에서 테스트 이메일 1건 신청 → 시트에 쌓이는지 확인 → 테스트 줄은 사용자가 삭제.
 
 ## 미리보기 환경 (`nohuseolye-preview`, 비공개 검토용)
 - `npm run deploy:preview` (Basic Auth, 사용자명 `luckyu`, noindex, `/_review`에서 review 글 확인)
