@@ -47,8 +47,8 @@ npx wrangler pages deployment list --project-name nohuseolye
 - `wrangler login`(브라우저 로그인)은 쓰지 않습니다.
 - 배포 후 확인: 신규 URL 200, sitemap/RSS 반영, `noindex` 없음, GA4·AdSense 유지, 기존 글·내부링크 정상, review 글 404.
 - **한 번에 배포**: `npm run deploy:nohuseolye` (`scripts/deploy-prod.ts`). 점검 → 타입 검사 → 빌드 → `nohuseolye`/`main` 배포 → 배포 목록 출력까지 실행하고, 앞 단계가 실패하면 배포하지 않습니다. 토큰은 환경변수 `CLOUDFLARE_API_TOKEN`, 없으면 `.deploy.local.json`(git 제외)의 `tokenFile`이 가리키는 파일에서 읽으며 화면에 출력하지 않습니다. **사용자가 "배포해줘"라고 할 때만 실행**하고, 배포 후 위 확인 항목을 점검합니다.
-- **현재 운영**(2026-11-11): `c3b839ca-8205-4e42-af56-a35a21b975f3`(commit `1dd8b9e`, 개인정보처리방침에 Google 보관 사실 추가).
-- **롤백 대상**: 직전 정상 배포 `53342a66-6c2c-455a-bca8-6af00affdf2e`(commit `3f85ce6`, 뉴스레터 구독 저장 포함). 더 이전 `de58a3ac-dcb4-469c-882d-5d34104f962d`(commit `218e2f1`, 구독 저장 기능 없음), `44c79c6a-459c-4b23-b92b-844359e27ba6`(commit `2fb13bb`), `22cd9dba-611c-49b5-8ab2-902985f5d9c9`, `6e420247-9c78-439a-86ca-a399ec09f5f8`.
+- **현재 운영**(2026-11-12): `d10fdd9c-4c11-4dd0-97f9-2fc90753b69c`(commit `0229c31`, 글 화면 가독성 정리: 표 글씨·상단 공지 띠 비고정·떠 있는 버튼 1개).
+- **롤백 대상**: 직전 정상 배포 `c3b839ca-8205-4e42-af56-a35a21b975f3`(commit `1dd8b9e`, 화면 정리 전). 더 이전 `53342a66-6c2c-455a-bca8-6af00affdf2e`(commit `3f85ce6`), `de58a3ac-dcb4-469c-882d-5d34104f962d`(commit `218e2f1`, 구독 저장 기능 없음), `44c79c6a-459c-4b23-b92b-844359e27ba6`(commit `2fb13bb`).
 - 롤백 방법: Cloudflare 대시보드 → Workers 및 Pages → `nohuseolye` → 배포 → 되돌릴 배포의 `…` 메뉴 → "이 배포로 롤백".
 - Windows에서는 `export` 대신 PowerShell `$env:CLOUDFLARE_API_TOKEN = "..."`를 씁니다. `npm run deploy:prod`는 프로젝트명이 `webapp`이라 쓰지 않습니다. `3e9b3c5a...`는 구버전이라 사용 금지.
 - 심각한 오류가 있으면 운영 배포를 멈추고 먼저 보고합니다.
