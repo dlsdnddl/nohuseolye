@@ -35,3 +35,7 @@ lerna-debug.log*
 # generated content bundle / preview build
 src/generated/
 dist-preview/
+
+# 배포 토큰 파일 위치(개인 PC 전용) / Claude 개인 설정
+.deploy.local.json
+.claude/settings.local.json
