@@ -28,9 +28,11 @@ npm run build             # dist 생성 (운영 모드: published 글만 포함)
 - 기존 글에서 새 글로 가는 카드: 새 글 frontmatter의 `inboundLinks`(`from`, `question`, `description`)에 적습니다. 새 글이 운영 빌드에 포함될 때만 적용됩니다.
 - 위젯: `[[WIDGET:housing-pension-calc]]`, `[[WIDGET:income-calculator]]` (본문에 한 줄로)
 
-## 현재 글 상태 (2026-11-11)
-- 공개 글 17편(sitemap URL은 홈·카테고리 4개 포함 22개): 기존 형식(`legacy-posts.ts`) 8 + Markdown 9
-  - 2026-11-11 신규 1: `national-pension-additional-payment`(국민연금 추납, 확인 11·부분 4). 2026-11-11 운영 배포 완료(commit `218e2f1`, hono 4.13.17 포함). 배포 후 운영 22개 URL·내부링크·sitemap/RSS·GA4·AdSense 정상 확인
+## 현재 글 상태 (2026-11-12)
+- 공개 글 18편(sitemap URL은 홈·카테고리 4개 포함 23개): 기존 형식(`legacy-posts.ts`) 8 + Markdown 10
+  - 2026-11-11 `national-pension-additional-payment`(국민연금 추납, 확인 11·부분 4)
+  - 2026-11-12 `nursing-hospital-caregiver-cost-coverage`(요양병원 간병비 급여화, 확인 6·부분 6)
+- **갱신 예정(중요)**: `nursing-hospital-caregiver-cost-coverage`는 건강보험정책심의위원회 최종 확정 전에 발행했습니다(사용자 결정: 지금 발행, 발표 후 갱신). 보건복지부가 간병급여 제도화 방안을 확정 발표하면 본문 2번 표(확정/언론 보도 구분), 시행 시기, 본인부담률, 대상 병원·환자, FAQ, 검증표를 공식 발표 기준으로 고치고 `updatedAt`·`verifiedAt`을 갱신합니다. 확인 위치: 보건복지부 보도자료 게시판에서 제목 "간병" 검색.
 - `review` 유지(운영에 노출되지 않음):
   - `basic-pension-2027-increase`: 별도 재검증 필요
   - `health-insurance-dependent-retirement`: 2026-11-10에 현행 법령 재검증 완료(확인 12·부분 4). 사용자 승인 시 발행 가능
@@ -47,8 +49,8 @@ npx wrangler pages deployment list --project-name nohuseolye
 - `wrangler login`(브라우저 로그인)은 쓰지 않습니다.
 - 배포 후 확인: 신규 URL 200, sitemap/RSS 반영, `noindex` 없음, GA4·AdSense 유지, 기존 글·내부링크 정상, review 글 404.
 - **한 번에 배포**: `npm run deploy:nohuseolye` (`scripts/deploy-prod.ts`). 점검 → 타입 검사 → 빌드 → `nohuseolye`/`main` 배포 → 배포 목록 출력까지 실행하고, 앞 단계가 실패하면 배포하지 않습니다. 토큰은 환경변수 `CLOUDFLARE_API_TOKEN`, 없으면 `.deploy.local.json`(git 제외)의 `tokenFile`이 가리키는 파일에서 읽으며 화면에 출력하지 않습니다. **사용자가 "배포해줘"라고 할 때만 실행**하고, 배포 후 위 확인 항목을 점검합니다.
-- **현재 운영**(2026-11-12): `2e8a25ba-5195-47b5-89c4-0263ddac8527`(commit `8316509`, 홈 화면 정리: 퀵링크 버튼 색 통일·뱃지/이모지 축소·중복 CTA 배너 제거, 글 종류 뱃지 이름 변경).
-- **롤백 대상**: 직전 정상 배포 `d10fdd9c-4c11-4dd0-97f9-2fc90753b69c`(commit `0229c31`, 글 화면 정리까지·홈 정리 전). 더 이전 `c3b839ca-8205-4e42-af56-a35a21b975f3`(commit `1dd8b9e`, 화면 정리 전), `53342a66-6c2c-455a-bca8-6af00affdf2e`(commit `3f85ce6`), `de58a3ac-dcb4-469c-882d-5d34104f962d`(commit `218e2f1`, 구독 저장 기능 없음).
+- **현재 운영**(2026-11-12): `f0c4707d-f6a1-4358-b5d7-fbc2fec73e90`(commit `ae8e2fc`, 요양병원 간병비 급여화 칼럼 공개).
+- **롤백 대상**: 직전 정상 배포 `2e8a25ba-5195-47b5-89c4-0263ddac8527`(commit `8316509`, 홈 화면 정리까지). 더 이전 `d10fdd9c-4c11-4dd0-97f9-2fc90753b69c`(commit `0229c31`, 홈 정리 전), `c3b839ca-8205-4e42-af56-a35a21b975f3`(commit `1dd8b9e`, 화면 정리 전), `53342a66-6c2c-455a-bca8-6af00affdf2e`(commit `3f85ce6`).
 - 롤백 방법: Cloudflare 대시보드 → Workers 및 Pages → `nohuseolye` → 배포 → 되돌릴 배포의 `…` 메뉴 → "이 배포로 롤백".
 - Windows에서는 `export` 대신 PowerShell `$env:CLOUDFLARE_API_TOKEN = "..."`를 씁니다. `npm run deploy:prod`는 프로젝트명이 `webapp`이라 쓰지 않습니다. `3e9b3c5a...`는 구버전이라 사용 금지.
 - 심각한 오류가 있으면 운영 배포를 멈추고 먼저 보고합니다.
