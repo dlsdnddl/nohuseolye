@@ -64,6 +64,28 @@ body { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; }
   font-size: 0.9rem;
   color: #374151;
 }
+/* 인용 상자 안: 여러 줄을 한 상자에 담고, 항목은 점 목록으로 */
+.prose-article blockquote p {
+  margin: 0;
+  line-height: 1.7;
+}
+.prose-article blockquote p + p {
+  margin-top: 0.5rem;
+}
+.prose-article blockquote ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.15rem;
+  list-style: disc;
+}
+.prose-article blockquote ul li {
+  display: list-item;
+  padding: 0.2rem 0;
+  font-size: inherit;
+  line-height: 1.7;
+}
+.prose-article blockquote ul li::marker {
+  color: #166a47;
+}
 
 /* 테이블 */
 .prose-article table {

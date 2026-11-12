@@ -534,11 +534,28 @@ function markdownToHtml(markdown: string): string {
     }
 
     // ── 인용구 ───────────────────────────────────────────────────────
+    // 연속된 '> ' 줄은 상자 하나로 묶습니다. 상자 안의 '- ' 줄은 목록으로 출력합니다.
     if (trimmed.startsWith('> ')) {
       if (mode !== 'none') flushMode()
-      const text = trimmed.slice(2)
+      const quoteLines = [trimmed.slice(2).trim()]
+      while (i + 1 < lines.length && lines[i + 1].trim().startsWith('> ')) {
+        i++
+        quoteLines.push(lines[i].trim().slice(2).trim())
+      }
+      const inner: string[] = []
+      let inList = false
+      for (const q of quoteLines) {
+        if (q.startsWith('- ')) {
+          if (!inList) { inner.push('<ul>'); inList = true }
+          inner.push(`<li>${inlineMarkdown(q.slice(2))}</li>`)
+        } else {
+          if (inList) { inner.push('</ul>'); inList = false }
+          inner.push(`<p>${inlineMarkdown(q)}</p>`)
+        }
+      }
+      if (inList) inner.push('</ul>')
       result.push(
-        `<blockquote class="border-l-4 border-primary-400 bg-primary-50 pl-4 pr-3 py-3 rounded-r-xl my-5 text-sm text-gray-600 leading-relaxed">${inlineMarkdown(text)}</blockquote>`
+        `<blockquote class="border-l-4 border-primary-400 bg-primary-50 pl-4 pr-3 py-3 rounded-r-xl my-5 text-sm text-gray-600 leading-relaxed">${inner.join('')}</blockquote>`
       )
       continue
     }
