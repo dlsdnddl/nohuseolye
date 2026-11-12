@@ -6,9 +6,9 @@ interface PostCardProps {
 }
 
 const TYPE_BADGE: Record<string, { label: string; color: string }> = {
-  pillar:     { label: '기둥글',     color: 'bg-blue-100 text-blue-700' },
-  comparison: { label: '비교분석',   color: 'bg-amber-100 text-amber-700' },
-  checklist:  { label: '체크리스트', color: 'bg-green-100 text-green-700' },
+  pillar:     { label: '핵심 가이드', color: 'bg-primary-50 text-primary-700' },
+  comparison: { label: '비교·계산',   color: 'bg-primary-50 text-primary-700' },
+  checklist:  { label: '체크리스트', color: 'bg-primary-50 text-primary-700' },
 }
 
 export const PostCard = ({ post, variant = 'default' }: PostCardProps) => {
@@ -46,12 +46,12 @@ export const PostCard = ({ post, variant = 'default' }: PostCardProps) => {
         class="group block bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
       >
         {/* 썸네일 */}
-        <div class="relative h-44 bg-gradient-to-br from-primary-700 to-primary-900 overflow-hidden">
+        <div class="relative h-24 bg-gradient-to-br from-primary-700 to-primary-900 overflow-hidden">
           <div class="absolute inset-0 flex items-center justify-center opacity-10">
             <i class="fas fa-coins text-9xl text-white"></i>
           </div>
           <div class="absolute top-3 left-3 flex gap-2">
-            <span class={`text-xs font-bold px-2.5 py-1 rounded-full ${badge.color}`}>{badge.label}</span>
+            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-white text-primary-800">{badge.label}</span>
             {post.situation && (
               <span class="text-xs font-semibold bg-white/20 text-white backdrop-blur-sm px-2.5 py-1 rounded-full">
                 {post.situation}
@@ -94,10 +94,10 @@ export const PostCard = ({ post, variant = 'default' }: PostCardProps) => {
             <span class="text-xs text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full whitespace-nowrap">{post.situation}</span>
           )}
         </div>
-        <h3 class="font-bold text-gray-900 text-sm leading-snug group-hover:text-primary-700 transition-colors mb-2 line-clamp-2">
+        <h3 class="font-bold text-gray-900 text-base leading-snug group-hover:text-primary-700 transition-colors mb-2 line-clamp-2">
           {post.title}
         </h3>
-        <p class="text-xs text-gray-500 leading-relaxed line-clamp-2">{post.description}</p>
+        <p class="text-sm text-gray-500 leading-relaxed line-clamp-2">{post.description}</p>
       </div>
       <div class="px-5 pb-4 flex items-center justify-between text-xs text-gray-400">
         <span><i class="fas fa-clock mr-1"></i>{post.readTime}분 읽기</span>

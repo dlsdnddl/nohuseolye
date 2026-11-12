@@ -66,11 +66,11 @@ export const ArticlePage = ({ post, preview = false }: ArticlePageProps) => {
                 {post.categoryLabel}
               </span>
               <span class={`text-xs font-bold px-3 py-1 rounded-full ${
-                post.type === 'pillar' ? 'bg-blue-100 text-blue-700' :
-                post.type === 'comparison' ? 'bg-amber-100 text-amber-700' :
-                'bg-green-100 text-green-700'
+                post.type === 'pillar' ? 'bg-primary-50 text-primary-700' :
+                post.type === 'comparison' ? 'bg-primary-50 text-primary-700' :
+                'bg-primary-50 text-primary-700'
               }`}>
-                {post.type === 'pillar' ? '기둥글' : post.type === 'comparison' ? '비교분석' : '체크리스트'}
+                {post.type === 'pillar' ? '핵심 가이드' : post.type === 'comparison' ? '비교·계산' : '체크리스트'}
               </span>
               {post.situation && (
                 <span class="text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-500">{post.situation}</span>

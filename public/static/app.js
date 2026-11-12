@@ -606,9 +606,9 @@ const ALL_POSTS_DATA = (function () {
 })();
 
 const TYPE_BADGE = {
-  pillar:     { label: '기둥글',     color: 'bg-blue-100 text-blue-700' },
-  comparison: { label: '비교분석',   color: 'bg-amber-100 text-amber-700' },
-  checklist:  { label: '체크리스트', color: 'bg-green-100 text-green-700' },
+  pillar:     { label: '핵심 가이드', color: 'bg-primary-50 text-primary-700' },
+  comparison: { label: '비교·계산',   color: 'bg-primary-50 text-primary-700' },
+  checklist:  { label: '체크리스트', color: 'bg-primary-50 text-primary-700' },
 };
 
 let currentSituation = '은퇴 5년 전';
@@ -656,7 +656,7 @@ function renderSituationPosts() {
               <span class="text-xs font-bold px-2.5 py-1 rounded-full ${badge.color}">${badge.label}</span>
               <span class="text-xs text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full whitespace-nowrap">${post.situation}</span>
             </div>
-            <h3 class="font-bold text-gray-900 text-sm leading-snug group-hover:text-green-700 transition-colors mb-2 line-clamp-2">
+            <h3 class="font-bold text-gray-900 text-base leading-snug group-hover:text-green-700 transition-colors mb-2 line-clamp-2">
               ${post.title}
             </h3>
           </div>

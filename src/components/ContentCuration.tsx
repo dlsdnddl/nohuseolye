@@ -31,7 +31,7 @@ export const ContentCuration = ({ posts }: ContentCurationProps) => {
       {/* ─── 상황별 큐레이션 ─── */}
       <section>
         <div class="text-center mb-10">
-          <p class="text-primary-600 text-sm font-semibold mb-2">🧭 상황별 맞춤 안내</p>
+          <p class="text-primary-600 text-sm font-semibold mb-2">상황별 맞춤 안내</p>
           <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">지금 내 상황에 맞는 글 찾기</h2>
           <p class="text-gray-500 mt-2 text-sm">상황을 클릭하면 관련 글을 모아드립니다</p>
         </div>
@@ -71,11 +71,11 @@ export const ContentCuration = ({ posts }: ContentCurationProps) => {
         </div>
       </section>
 
-      {/* ─── 추천 기둥글 ─── */}
+      {/* ─── 추천 핵심 글 ─── */}
       <section>
         <div class="flex items-center justify-between mb-8">
           <div>
-            <p class="text-primary-600 text-sm font-semibold mb-1">📌 꼭 읽어야 할 기본 정보</p>
+            <p class="text-primary-600 text-sm font-semibold mb-1">꼭 읽어야 할 기본 정보</p>
             <h2 class="text-2xl font-extrabold text-gray-900">편집팀 추천 핵심 글</h2>
           </div>
           <a href="/pension-asset" class="hidden md:flex items-center gap-1 text-sm text-primary-600 font-semibold hover:underline">
@@ -90,48 +90,11 @@ export const ContentCuration = ({ posts }: ContentCurationProps) => {
         </div>
       </section>
 
-      {/* ─── CTA 배너: 2개 나란히 (노후자금 충분지수 진단 + 국민연금 수령액 계산) ─── */}
-      <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-        {/* CTA 1: 노후자금 충분지수 진단 (메인 진단기) */}
-        <div class="bg-gradient-to-br from-primary-800 to-primary-700 rounded-2xl p-7 text-white flex flex-col justify-between gap-5">
-          <div>
-            <p class="text-primary-300 text-xs font-semibold mb-2">🔍 무료 · 1분 진단</p>
-            <h3 class="text-xl font-extrabold mb-2">노후자금 충분지수<br/>지금 진단해보세요</h3>
-            <p class="text-primary-200 text-sm">나이·납부기간·소득 입력만으로<br/>국민연금 수령액과 노후 충분도를 바로 확인</p>
-          </div>
-          {/* href만 사용 — onclick 작은따옴표 이스케이프 문제 우회, JS에서 scroll 처리 */}
-          <a
-            href="/"
-            id="main-diag-cta-btn"
-            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-primary-800 font-bold text-sm rounded-xl hover:bg-primary-50 transition-colors shadow-md"
-          >
-            <i class="fas fa-chart-pie"></i>지금 진단하기
-          </a>
-        </div>
-
-        {/* CTA 2: 국민연금 수령액 계산법 칼럼으로 이동 */}
-        <div class="bg-gradient-to-br from-emerald-700 to-emerald-600 rounded-2xl p-7 text-white flex flex-col justify-between gap-5">
-          <div>
-            <p class="text-emerald-200 text-xs font-semibold mb-2">📋 2026 공식 계산법</p>
-            <h3 class="text-xl font-extrabold mb-2">국민연금 수령액<br/>얼마나 받을 수 있을까?</h3>
-            <p class="text-emerald-100 text-sm">A값 319만원 기준 2026 완벽 계산법<br/>조기·연기수령 손익분기점까지 한눈에</p>
-          </div>
-          <a
-            href="/pension-asset/national-pension-amount-calculation"
-            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-emerald-800 font-bold text-sm rounded-xl hover:bg-emerald-50 transition-colors shadow-md"
-          >
-            <i class="fas fa-calculator"></i>수령액 계산법 보기
-          </a>
-        </div>
-
-      </section>
-
       {/* ─── 최신 업데이트 섹션 ─── */}
       <section>
         <div class="flex items-center justify-between mb-6">
           <div>
-            <p class="text-primary-600 text-sm font-semibold mb-1">🗓 최근 업데이트</p>
+            <p class="text-primary-600 text-sm font-semibold mb-1">최근 업데이트</p>
             <h2 class="text-2xl font-extrabold text-gray-900">새로 추가된 정보</h2>
           </div>
         </div>

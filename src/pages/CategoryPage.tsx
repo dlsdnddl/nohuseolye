@@ -2,9 +2,9 @@ import type { Post } from '../types'
 import type { CategoryConfig } from '../data/categories'
 
 const TYPE_BADGE = {
-  pillar: { label: '기둥글', color: 'bg-blue-100 text-blue-700' },
-  comparison: { label: '비교분석', color: 'bg-amber-100 text-amber-700' },
-  checklist: { label: '체크리스트', color: 'bg-green-100 text-green-700' },
+  pillar: { label: '핵심 가이드', color: 'bg-primary-50 text-primary-700' },
+  comparison: { label: '비교·계산', color: 'bg-primary-50 text-primary-700' },
+  checklist: { label: '체크리스트', color: 'bg-primary-50 text-primary-700' },
 } as const
 
 const STATUS_BADGE: Record<string, string> = {
