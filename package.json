@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vite",
     "dev:sandbox": "wrangler pages dev dist --ip 0.0.0.0 --port 3000",
-    "build": "tsx scripts/build-content.ts && vite build && tsx scripts/copy-post-images.ts && tsx scripts/verify-dist.ts",
+    "build": "tsx scripts/build-content.ts && npm run css:build && vite build && tsx scripts/copy-post-images.ts && tsx scripts/verify-dist.ts",
     "preview": "wrangler pages dev dist",
     "deploy": "npm run build && wrangler pages deploy dist",
     "deploy:prod": "npm run build && wrangler pages deploy dist --project-name webapp",
@@ -14,9 +14,10 @@
     "content:check:review": "tsx scripts/content-check.ts --strict-review",
     "content:new": "tsx scripts/new-post.ts",
     "content:build": "tsx scripts/build-content.ts",
-    "build:preview": "CONTENT_MODE=preview tsx scripts/build-content.ts && OUT_DIR=dist-preview vite build && OUT_DIR=dist-preview tsx scripts/copy-post-images.ts && OUT_DIR=dist-preview tsx scripts/verify-dist.ts",
+    "build:preview": "CONTENT_MODE=preview tsx scripts/build-content.ts && npm run css:build && OUT_DIR=dist-preview vite build && OUT_DIR=dist-preview tsx scripts/copy-post-images.ts && OUT_DIR=dist-preview tsx scripts/verify-dist.ts",
     "deploy:preview": "npm run build:preview && wrangler pages deploy dist-preview --project-name nohuseolye-preview --branch main",
-    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.scripts.json"
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.scripts.json",
+    "css:build": "tailwindcss -c tailwind.config.cjs -i src/styles/tailwind.css -o public/static/tailwind.css --minify"
   },
   "dependencies": {
     "hono": "^4.13.17"
@@ -27,6 +28,7 @@
     "@hono/vite-cloudflare-pages": "^0.4.3",
     "@hono/vite-dev-server": "^0.18.2",
     "@types/node": "^26.6.6",
+    "tailwindcss": "3.4",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^6.3.5",

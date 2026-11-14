@@ -6,6 +6,7 @@ import { HeroDiagnosis } from './components/HeroDiagnosis'
 import { QuickLinks } from './components/QuickLinks'
 import { ContentCuration } from './components/ContentCuration'
 import { AdSlot } from './components/AdSlot'
+import { PostCard } from './components/PostCard'
 import { ArticlePage } from './pages/ArticlePage'
 import { CategoryPage } from './pages/CategoryPage'
 import { ReviewIndex, ReviewDetail } from './pages/ReviewPage'
@@ -57,6 +58,17 @@ app.use('*', async (c, next) => {
     const url = new URL(c.req.url)
     url.host = 'www.luckyu.co.kr'
     return c.redirect(url.toString(), 301)
+  }
+  await next()
+})
+
+// ─── 주소 끝 '/' 정리 (SEO: 같은 글의 주소를 하나로) ───────────────────────────
+// /care/ → /care 처럼 끝의 '/'를 뗀 주소로 301 이동. 홈('/')은 그대로.
+app.use('*', async (c, next) => {
+  const url = new URL(c.req.url)
+  if (url.pathname.length > 1 && url.pathname.endsWith('/')) {
+    const cleanPath = url.pathname.replace(/\/+$/, '') || '/'
+    return c.redirect(cleanPath + url.search, 301)
   }
   await next()
 })
@@ -251,6 +263,72 @@ app.get('/:category/:slug', (c) => {
 })
 
 // ─── 정보 페이지 (애드센스·신뢰도용) ─────────────────────────────────────────────
+// ─── 사이트 검색 ───────────────────────────────────────────────────────────────
+// 헤더 검색창(GET /search?q=)과 홈의 JSON-LD SearchAction이 가리키는 주소.
+// 공개 글의 제목·설명·태그·본문에서 찾습니다. 검색 결과 페이지는 색인하지 않습니다.
+app.get('/search', (c) => {
+  const q = (c.req.query('q') || '').trim().slice(0, 50)
+  const words = q.toLowerCase().split(/\s+/).filter(Boolean)
+  const results = words.length === 0 ? [] : posts
+    .map(p => {
+      const title = p.title.toLowerCase()
+      const meta = `${p.description} ${(p.tags || []).join(' ')}`.toLowerCase()
+      const body = p.content.toLowerCase()
+      if (!words.every(w => title.includes(w) || meta.includes(w) || body.includes(w))) return null
+      const score = words.reduce((s, w) => s + (title.includes(w) ? 3 : 0) + (meta.includes(w) ? 2 : 0) + (body.includes(w) ? 1 : 0), 0)
+      return { post: p, score }
+    })
+    .filter((r): r is { post: (typeof posts)[number]; score: number } => r !== null)
+    .sort((a, b) => b.score - a.score || b.post.updatedAt.localeCompare(a.post.updatedAt))
+    .map(r => r.post)
+
+  c.header('X-Robots-Tag', 'noindex, follow')
+  return c.render(
+    <>
+      <Header />
+      <main class="max-w-6xl mx-auto px-4 py-10">
+        <h1 class="text-2xl font-extrabold text-gray-900 mb-2">
+          {q ? <>'{q}' 검색 결과</> : '검색'}
+        </h1>
+        <p class="text-sm text-gray-500 mb-6">
+          {q ? `${results.length}개의 글을 찾았습니다.` : '찾고 싶은 내용을 입력해 주세요.'}
+        </p>
+        <form action="/search" method="get" role="search" class="relative max-w-xl mb-8">
+          <input
+            type="search"
+            name="q"
+            value={q}
+            aria-label="사이트 검색"
+            placeholder="예: 국민연금, 기초연금, 주택연금"
+            class="w-full pl-10 pr-24 py-3 text-base border border-gray-300 rounded-full bg-white focus:outline-none focus:border-primary-400"
+          />
+          <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          <button type="submit" class="absolute right-1.5 top-1/2 -translate-y-1/2 px-5 py-2 text-sm font-semibold text-white bg-primary-700 hover:bg-primary-600 rounded-full transition-colors">
+            검색
+          </button>
+        </form>
+        {results.length > 0 ? (
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {results.map(post => <PostCard key={post.id} post={post} variant="default" />)}
+          </div>
+        ) : q ? (
+          <div class="bg-white border border-gray-100 rounded-2xl p-8 text-center">
+            <p class="text-gray-700 font-semibold mb-2">찾는 글이 없습니다.</p>
+            <p class="text-sm text-gray-500 mb-5">검색어를 짧게 바꾸거나 아래 분야에서 찾아보세요.</p>
+            <div class="flex flex-wrap justify-center gap-2">
+              {categories.filter(cat => cat.state === 'open' || isPreview).map(cat => (
+                <a href={`/${cat.slug}`} class="px-4 py-2 text-sm font-semibold text-primary-700 bg-primary-50 hover:bg-primary-100 rounded-full transition-colors">{cat.label}</a>
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </main>
+      <Footer />
+    </>,
+    { title: q ? `'${q}' 검색 결과` : '검색', noindex: true }
+  )
+})
+
 app.get('/about', (c) => {
   return c.render(
     <>

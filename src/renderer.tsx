@@ -77,12 +77,13 @@ export const renderer = jsxRenderer(({ children, title, description, ogImage, js
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-        {/* Tailwind */}
-        <script src="https://cdn.tailwindcss.com"></script>
         {/* FontAwesome */}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
         {/* Custom CSS */}
         <link rel="stylesheet" href="/static/style.css" />
+        {/* Tailwind — 빌드 때 생성(npm run css:build). 색상·글꼴 설정은 tailwind.config.cjs */}
+        {/* 예전 CDN 방식과 적용 순서를 맞추려고 style.css 뒤에 둡니다 */}
+        <link rel="stylesheet" href="/static/tailwind.css" />
         {/* Google Search Console 소유권 확인 */}
         <meta name="google-site-verification" content="a57r9VKSo4eR77ebK5nrIlr0-mCJYnpZSn-Oovxrte4" />
         {/* 네이버 서치어드바이저 소유권 확인 */}
@@ -101,38 +102,6 @@ export const renderer = jsxRenderer(({ children, title, description, ogImage, js
         {!PREVIEW && <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5237218812452624" crossorigin="anonymous"></script>}
         {/* RSS 자동 발견 (네이버·구글 등) */}
         {!PREVIEW && <link rel="alternate" type="application/rss+xml" title="노후설계 가이드 새 글" href="https://www.luckyu.co.kr/rss.xml" />}
-        <script dangerouslySetInnerHTML={{__html: `
-          tailwind.config = {
-            theme: {
-              extend: {
-                colors: {
-                  primary: {
-                    50: '#f0faf5',
-                    100: '#dcf4e8',
-                    200: '#bbe9d4',
-                    300: '#87d8b5',
-                    400: '#4bbf8d',
-                    500: '#28a56e',
-                    600: '#1a8558',
-                    700: '#166a47',
-                    800: '#145439',
-                    900: '#124530',
-                    DEFAULT: '#1a5c3e',
-                  },
-                  warm: {
-                    50: '#fdf8f0',
-                    100: '#faefd9',
-                    500: '#d97706',
-                    600: '#b45309',
-                  }
-                },
-                fontFamily: {
-                  sans: ['Noto Sans KR', 'sans-serif'],
-                }
-              }
-            }
-          }
-        `}} />
       </head>
       <body class="font-sans bg-gray-50 text-gray-800 antialiased">
         {children}

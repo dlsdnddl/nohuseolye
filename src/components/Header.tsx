@@ -35,15 +35,17 @@ export const Header = () => {
 
           {/* 검색바 (데스크탑) */}
           <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
-            <div class="relative w-full">
+            <form action="/search" method="get" role="search" class="relative w-full">
               <input
                 type="search"
                 id="search-input"
+                name="q"
+                aria-label="사이트 검색"
                 placeholder="국민연금, 기초연금, 주택연금 검색..."
                 class="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-full bg-gray-50 focus:outline-none focus:border-primary-400 focus:bg-white transition-all"
               />
               <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-            </div>
+            </form>
           </div>
 
           {/* 우측 액션 */}
@@ -111,14 +113,16 @@ export const Header = () => {
 
       {/* 모바일 검색 패널 */}
       <div id="mobile-search-panel" class="hidden bg-white border-t border-gray-100 px-4 py-3 md:hidden">
-        <div class="relative">
+        <form action="/search" method="get" role="search" class="relative">
           <input
             type="search"
+            name="q"
+            aria-label="사이트 검색"
             placeholder="검색어를 입력하세요..."
             class="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-full bg-gray-50 focus:outline-none focus:border-primary-400"
           />
           <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-        </div>
+        </form>
       </div>
     </header>
     </>
