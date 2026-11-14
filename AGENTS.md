@@ -28,11 +28,12 @@ npm run build             # dist 생성 (운영 모드: published 글만 포함)
 - 기존 글에서 새 글로 가는 카드: 새 글 frontmatter의 `inboundLinks`(`from`, `question`, `description`)에 적습니다. 새 글이 운영 빌드에 포함될 때만 적용됩니다.
 - 위젯: `[[WIDGET:housing-pension-calc]]`, `[[WIDGET:income-calculator]]` (본문에 한 줄로)
 
-## 현재 글 상태 (2026-11-12)
-- 공개 글 18편(sitemap URL은 홈·카테고리 4개 포함 23개): 기존 형식(`legacy-posts.ts`) 8 + Markdown 10
+## 현재 글 상태 (2026-11-14)
+- 공개 글 19편(sitemap URL은 홈·카테고리 4개 포함 24개): 기존 형식(`legacy-posts.ts`) 8 + Markdown 11
   - 2026-11-11 `national-pension-additional-payment`(국민연금 추납, 확인 11·부분 4)
   - 2026-11-12 `nursing-hospital-caregiver-cost-coverage`(요양병원 간병비 급여화, 확인 6·부분 6)
 - **갱신 예정(중요)**: `nursing-hospital-caregiver-cost-coverage`는 건강보험정책심의위원회 최종 확정 전에 발행했습니다(사용자 결정: 지금 발행, 발표 후 갱신). 보건복지부가 간병급여 제도화 방안을 확정 발표하면 본문 2번 표(확정/언론 보도 구분), 시행 시기, 본인부담률, 대상 병원·환자, FAQ, 검증표를 공식 발표 기준으로 고치고 `updatedAt`·`verifiedAt`을 갱신합니다. 확인 위치: 보건복지부 보도자료 게시판에서 제목 "간병" 검색.
+- **갱신 예정(중요)**: `changes-2027-pension-welfare`(2026-11-14 발행, 확인 10·부분 3, 공식 출처 확인 2026-11-12)는 두 번 갱신이 필요합니다. ① 12월 초 국회 예산안 처리·기초연금법 개정 결과가 나오면 3번 섹션(기초연금 개편, 노인일자리)을 고칩니다. ② 2027년 1월 발표(국민연금·기초연금 물가 인상률, A값, 기초연금 선정기준액)가 나오면 1번 표와 4번 섹션을 고칩니다. 무치악 임플란트 세부 기준이 나오면 이 글과 `senior-implant-denture-insurance`를 함께 고칩니다.
 - `review` 유지(운영에 노출되지 않음):
   - `basic-pension-2027-increase`: 별도 재검증 필요
   - `health-insurance-dependent-retirement`: 2026-11-10에 현행 법령 재검증 완료(확인 12·부분 4). 사용자 승인 시 발행 가능
@@ -49,8 +50,8 @@ npx wrangler pages deployment list --project-name nohuseolye
 - `wrangler login`(브라우저 로그인)은 쓰지 않습니다.
 - 배포 후 확인: 신규 URL 200, sitemap/RSS 반영, `noindex` 없음, GA4·AdSense 유지, 기존 글·내부링크 정상, review 글 404.
 - **한 번에 배포**: `npm run deploy:nohuseolye` (`scripts/deploy-prod.ts`). 점검 → 타입 검사 → 빌드 → `nohuseolye`/`main` 배포 → 배포 목록 출력까지 실행하고, 앞 단계가 실패하면 배포하지 않습니다. 토큰은 환경변수 `CLOUDFLARE_API_TOKEN`, 없으면 `.deploy.local.json`(git 제외)의 `tokenFile`이 가리키는 파일에서 읽으며 화면에 출력하지 않습니다. **사용자가 "배포해줘"라고 할 때만 실행**하고, 배포 후 위 확인 항목을 점검합니다.
-- **현재 운영**(2026-11-12): `bcca1f57-400f-48ef-9a2a-00b1d7c9b02c`(commit `ab9c85d`, 인용 상자 묶음 수정).
-- **롤백 대상**: 직전 정상 배포 `f0c4707d-f6a1-4358-b5d7-fbc2fec73e90`(commit `ae8e2fc`, 간병비 급여화 칼럼 공개). 더 이전 `2e8a25ba-5195-47b5-89c4-0263ddac8527`(commit `8316509`, 홈 화면 정리까지), `d10fdd9c-4c11-4dd0-97f9-2fc90753b69c`(commit `0229c31`), `c3b839ca-8205-4e42-af56-a35a21b975f3`(commit `1dd8b9e`, 화면 정리 전).
+- **현재 운영**(2026-11-14): `aa84915d-c5c7-4a4a-9ff9-3bfcbe5fab1a`(commit `7673f7a`, 2027년 달라지는 제도 칼럼 공개).
+- **롤백 대상**: 직전 정상 배포 `bcca1f57-400f-48ef-9a2a-00b1d7c9b02c`(commit `ab9c85d`, 인용 상자 수정까지). 더 이전 `f0c4707d-f6a1-4358-b5d7-fbc2fec73e90`(commit `ae8e2fc`), `2e8a25ba-5195-47b5-89c4-0263ddac8527`(commit `8316509`), `d10fdd9c-4c11-4dd0-97f9-2fc90753b69c`(commit `0229c31`).
 - 본문 작성 참고: 연속된 `> ` 줄은 인용 상자 하나로 묶이고, 상자 안의 `> - ` 줄은 점 목록으로 출력됩니다(용어 설명 상자에 사용).
 - 롤백 방법: Cloudflare 대시보드 → Workers 및 Pages → `nohuseolye` → 배포 → 되돌릴 배포의 `…` 메뉴 → "이 배포로 롤백".
 - Windows에서는 `export` 대신 PowerShell `$env:CLOUDFLARE_API_TOKEN = "..."`를 씁니다. `npm run deploy:prod`는 프로젝트명이 `webapp`이라 쓰지 않습니다. `3e9b3c5a...`는 구버전이라 사용 금지.
