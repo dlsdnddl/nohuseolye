@@ -28,8 +28,9 @@ npm run build             # dist 생성 (운영 모드: published 글만 포함)
 - 기존 글에서 새 글로 가는 카드: 새 글 frontmatter의 `inboundLinks`(`from`, `question`, `description`)에 적습니다. 새 글이 운영 빌드에 포함될 때만 적용됩니다.
 - 위젯: `[[WIDGET:housing-pension-calc]]`, `[[WIDGET:income-calculator]]` (본문에 한 줄로)
 
-## 현재 글 상태 (2026-11-14)
-- 공개 글 19편(sitemap URL은 홈·카테고리 4개 포함 24개): 기존 형식(`legacy-posts.ts`) 8 + Markdown 11
+## 현재 글 상태 (2026-11-15)
+- 공개 글 20편(sitemap URL은 홈·카테고리 4개 포함 25개): 기존 형식(`legacy-posts.ts`) 8 + Markdown 12
+  - 2026-11-15 `long-term-care-home-benefit-limit-2027`(2027년 장기요양 재가급여 한도액, 확인 9·부분 3). 2027년 고시가 나오면 시행일 확인. `long-term-care-grade-application`(2026년 수치)은 1월에 2027년 수치로 갱신 필요
   - 2026-11-11 `national-pension-additional-payment`(국민연금 추납, 확인 11·부분 4)
   - 2026-11-12 `nursing-hospital-caregiver-cost-coverage`(요양병원 간병비 급여화, 확인 6·부분 6)
 - **갱신 예정(중요)**: `nursing-hospital-caregiver-cost-coverage`는 건강보험정책심의위원회 최종 확정 전에 발행했습니다(사용자 결정: 지금 발행, 발표 후 갱신). 보건복지부가 간병급여 제도화 방안을 확정 발표하면 본문 2번 표(확정/언론 보도 구분), 시행 시기, 본인부담률, 대상 병원·환자, FAQ, 검증표를 공식 발표 기준으로 고치고 `updatedAt`·`verifiedAt`을 갱신합니다. 확인 위치: 보건복지부 보도자료 게시판에서 제목 "간병" 검색.
@@ -50,8 +51,8 @@ npx wrangler pages deployment list --project-name nohuseolye
 - `wrangler login`(브라우저 로그인)은 쓰지 않습니다.
 - 배포 후 확인: 신규 URL 200, sitemap/RSS 반영, `noindex` 없음, GA4·AdSense 유지, 기존 글·내부링크 정상, review 글 404.
 - **한 번에 배포**: `npm run deploy:nohuseolye` (`scripts/deploy-prod.ts`). 점검 → 타입 검사 → 빌드 → `nohuseolye`/`main` 배포 → 배포 목록 출력까지 실행하고, 앞 단계가 실패하면 배포하지 않습니다. 토큰은 환경변수 `CLOUDFLARE_API_TOKEN`, 없으면 `.deploy.local.json`(git 제외)의 `tokenFile`이 가리키는 파일에서 읽으며 화면에 출력하지 않습니다. **사용자가 "배포해줘"라고 할 때만 실행**하고, 배포 후 위 확인 항목을 점검합니다.
-- **현재 운영**(2026-11-14): `f4650bb9-af9e-4ef9-9703-0155e0a98716`(commit `2411ecb`, 사이트 검색·주소 끝 / 정리·Tailwind 빌드 전환).
-- **롤백 대상**: 직전 정상 배포 `aa84915d-c5c7-4a4a-9ff9-3bfcbe5fab1a`(commit `7673f7a`, 2027년 제도 칼럼 공개·Tailwind CDN 방식). 더 이전 `bcca1f57-400f-48ef-9a2a-00b1d7c9b02c`(commit `ab9c85d`), `f0c4707d-f6a1-4358-b5d7-fbc2fec73e90`(commit `ae8e2fc`), `2e8a25ba-5195-47b5-89c4-0263ddac8527`(commit `8316509`).
+- **현재 운영**(2026-11-15): `10e2e37b-4cc0-4fe2-8982-27e400391dfa`(commit `e613080`, 2027년 장기요양 재가급여 한도액 칼럼 공개).
+- **롤백 대상**: 직전 정상 배포 `f4650bb9-af9e-4ef9-9703-0155e0a98716`(commit `2411ecb`, 검색·주소 정리·Tailwind 빌드 전환). 더 이전 `aa84915d-c5c7-4a4a-9ff9-3bfcbe5fab1a`(commit `7673f7a`, Tailwind CDN 방식), `bcca1f57-400f-48ef-9a2a-00b1d7c9b02c`(commit `ab9c85d`), `f0c4707d-f6a1-4358-b5d7-fbc2fec73e90`(commit `ae8e2fc`).
 - 화면 스타일: Tailwind는 CDN이 아니라 빌드 때 `public/static/tailwind.css`(git 제외)로 만듭니다(`npm run css:build`, `npm run build`에 포함). 색상·글꼴 설정은 `tailwind.config.cjs`. 클래스 이름을 문자열로 조립하면(`"bg-" + color`) CSS에 빠지니 전체 이름을 그대로 씁니다.
 - 사이트 검색: `GET /search?q=`(noindex). 끝에 `/`가 붙은 주소는 `/` 없는 주소로 301 이동합니다.
 - 본문 작성 참고: 연속된 `> ` 줄은 인용 상자 하나로 묶이고, 상자 안의 `> - ` 줄은 점 목록으로 출력됩니다(용어 설명 상자에 사용).
