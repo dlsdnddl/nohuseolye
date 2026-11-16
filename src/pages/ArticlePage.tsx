@@ -437,6 +437,9 @@ function inlineMarkdown(text: string): string {
   return text
     .replace(/\[(.+?)\]\((https?:\/\/[^\)]+)\)/g,
       '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-primary-600 underline hover:text-primary-800">$1</a>')
+    // 사이트 내부 링크: [글 제목](/category/slug) — 같은 창에서 엽니다. '//'로 시작하는 주소는 제외
+    .replace(/\[([^\]]+?)\]\((\/(?!\/)[^\s\)]*)\)/g,
+      '<a href="$2" class="text-primary-600 underline hover:text-primary-800" data-link-position="body" data-content-type="related-article">$1</a>')
     .replace(/\*\*(.+?)\*\*/g,
       '<strong class="font-semibold text-gray-900">$1</strong>')
 }
