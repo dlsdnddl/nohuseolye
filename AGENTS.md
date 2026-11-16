@@ -63,8 +63,8 @@ npx wrangler pages deployment list --project-name nohuseolye
 - `wrangler login`(브라우저 로그인)은 쓰지 않습니다.
 - 배포 후 확인: 신규 URL 200, sitemap/RSS 반영, `noindex` 없음, GA4·AdSense 유지, 기존 글·내부링크 정상, review 글 404.
 - **한 번에 배포**: `npm run deploy:nohuseolye` (`scripts/deploy-prod.ts`). 점검 → 타입 검사 → 빌드 → `nohuseolye`/`main` 배포 → 배포 목록 출력까지 실행하고, 앞 단계가 실패하면 배포하지 않습니다. 토큰은 환경변수 `CLOUDFLARE_API_TOKEN`, 없으면 `.deploy.local.json`(git 제외)의 `tokenFile`이 가리키는 파일에서 읽으며 화면에 출력하지 않습니다. **사용자가 "배포해줘"라고 할 때만 실행**하고, 배포 후 위 확인 항목을 점검합니다.
-- **현재 운영**(2026-11-16): `d6bc07ad-6f34-4786-b5e2-62bec9dcb977`(commit `ec10d1d`, 본문 내부 링크 클릭 가능하게 수정).
-- **롤백 대상**: 직전 정상 배포 `46e9f344-c0df-4317-8e2f-787bad4a3632`(commit `c09caed`, 1964년생 칼럼 공개). 더 이전 `10e2e37b-4cc0-4fe2-8982-27e400391dfa`(commit `e613080`), `f4650bb9-af9e-4ef9-9703-0155e0a98716`(commit `2411ecb`), `aa84915d-c5c7-4a4a-9ff9-3bfcbe5fab1a`(commit `7673f7a`, Tailwind CDN 방식).
+- **현재 운영**(2026-11-16): `ec43a1d2-480f-4141-a13a-f199af4e60d2`(commit `c637a26`, 1966년생 칼럼 공개).
+- **롤백 대상**: 직전 정상 배포 `d6bc07ad-6f34-4786-b5e2-62bec9dcb977`(commit `ec10d1d`, 본문 내부 링크 클릭 가능하게 수정). 더 이전 `46e9f344-c0df-4317-8e2f-787bad4a3632`(commit `c09caed`), `10e2e37b-4cc0-4fe2-8982-27e400391dfa`(commit `e613080`), `f4650bb9-af9e-4ef9-9703-0155e0a98716`(commit `2411ecb`), `aa84915d-c5c7-4a4a-9ff9-3bfcbe5fab1a`(commit `7673f7a`, Tailwind CDN 방식).
 - 화면 스타일: Tailwind는 CDN이 아니라 빌드 때 `public/static/tailwind.css`(git 제외)로 만듭니다(`npm run css:build`, `npm run build`에 포함). 색상·글꼴 설정은 `tailwind.config.cjs`. 클래스 이름을 문자열로 조립하면(`"bg-" + color`) CSS에 빠지니 전체 이름을 그대로 씁니다.
 - 사이트 검색: `GET /search?q=`(noindex). 끝에 `/`가 붙은 주소는 `/` 없는 주소로 301 이동합니다.
 - 본문 작성 참고: 연속된 `> ` 줄은 인용 상자 하나로 묶이고, 상자 안의 `> - ` 줄은 점 목록으로 출력됩니다(용어 설명 상자에 사용).
