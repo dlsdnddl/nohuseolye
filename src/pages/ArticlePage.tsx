@@ -25,7 +25,7 @@ export const ArticlePage = ({ post, preview = false }: ArticlePageProps) => {
   ]
 
   // content에서 '이 글이 필요한 분' 섹션과 '3줄 요약' 섹션 추출
-  const { targetLines, summaryLines, bodyContent } = parseContentSections(post.content)
+  const { leadContent, targetLines, summaryLines, bodyContent } = parseContentSections(post.content)
 
   return (
     <div class="max-w-6xl mx-auto px-4 py-10">
@@ -109,6 +109,11 @@ export const ArticlePage = ({ post, preview = false }: ArticlePageProps) => {
                 fetchpriority="high"
               />
             </figure>
+          )}
+
+          {/* 첫머리 답 문단 (첫 소제목 앞에 쓴 내용) */}
+          {leadContent && (
+            <div class="prose-article mb-6" dangerouslySetInnerHTML={{ __html: markdownToHtml(leadContent) }} />
           )}
 
           {/* 이 글이 필요한 분 + 3줄 요약 */}
@@ -402,6 +407,7 @@ function parseContentSections(content: string) {
   const targetLines: string[] = []
   const summaryLines: string[] = []
   const bodyLines: string[] = []
+  const leadLines: string[] = []
 
   type Section = 'none' | 'target' | 'summary' | 'body'
   let section: Section = 'none'
@@ -420,12 +426,18 @@ function parseContentSections(content: string) {
     } else if (section === 'summary') {
       const m = trimmed.match(/^\d+\.\s+(.+)/)
       if (m) summaryLines.push(m[1])
+      // 요약 목록 뒤에 쓴 안내 상자·문단은 본문 맨 앞에 출력
+      else if (trimmed !== "" || bodyLines.length > 0) bodyLines.push(line)
     } else if (section === 'body') {
       bodyLines.push(line)
+    } else if (section === 'none') {
+      // 첫 소제목 앞의 내용(답을 먼저 주는 문단)
+      leadLines.push(line)
     }
   }
 
   return {
+    leadContent: leadLines.join('\n').trim(),
     targetLines,
     summaryLines,
     bodyContent: bodyLines.join('\n'),
