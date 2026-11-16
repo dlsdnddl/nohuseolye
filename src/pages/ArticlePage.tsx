@@ -27,6 +27,14 @@ export const ArticlePage = ({ post, preview = false }: ArticlePageProps) => {
   // content에서 '이 글이 필요한 분' 섹션과 '3줄 요약' 섹션 추출
   const { leadContent, targetLines, summaryLines, bodyContent } = parseContentSections(post.content)
 
+  // 글 중간에 넣는 '이어서 읽기' 카드: 다음 질문 카드의 첫 번째, 없으면 관련 글의 첫 번째
+  const midNext = post.nextQuestions?.[0]
+  const midCard = midNext
+    ? buildMidCard(midNext.href, midNext.question, midNext.description)
+    : relatedPosts[0]
+      ? buildMidCard(`/${relatedPosts[0].category}/${relatedPosts[0].slug}`, relatedPosts[0].title)
+      : ''
+
   return (
     <div class="max-w-6xl mx-auto px-4 py-10">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -154,7 +162,7 @@ export const ArticlePage = ({ post, preview = false }: ArticlePageProps) => {
           </div>
 
           {/* 본문 */}
-          <article class="prose-article" dangerouslySetInnerHTML={{ __html: markdownToHtml(bodyContent) }} />
+          <article class="prose-article" dangerouslySetInnerHTML={{ __html: markdownToHtml(bodyContent, midCard) }} />
 
           {/* 본문 중간 CTA */}
           {relatedPosts.length > 0 && (
@@ -444,6 +452,21 @@ function parseContentSections(content: string) {
   }
 }
 
+// ─── 글 중간 '이어서 읽기' 카드 ────────────────────────────────────────────
+const escapeHtml = (t: string) =>
+  t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+
+function buildMidCard(href: string, title: string, description?: string): string {
+  return `<a href="${escapeHtml(href)}" data-link-position="mid-article" data-content-type="next-step" class="mid-next-card not-prose flex items-center gap-4 my-10 p-5 bg-primary-50 border border-primary-200 rounded-2xl hover:bg-primary-100 transition-colors group">
+  <span class="flex-1 min-w-0">
+    <span class="block text-xs font-bold text-primary-700 mb-1">이어서 읽기</span>
+    <span class="block text-base font-bold text-gray-900 group-hover:text-primary-800">${escapeHtml(title)}</span>
+    ${description ? `<span class="block text-sm text-gray-600 mt-1">${escapeHtml(description)}</span>` : ''}
+  </span>
+  <i class="fas fa-arrow-right text-primary-600 flex-shrink-0 group-hover:translate-x-1 transition-transform"></i>
+</a>`
+}
+
 // ─── 인라인 마크다운 (bold, 링크) ─────────────────────────────────────────
 function inlineMarkdown(text: string): string {
   return text
@@ -457,9 +480,14 @@ function inlineMarkdown(text: string): string {
 }
 
 // ─── 마크다운 → HTML 변환 (본문 전용) ─────────────────────────────────────
-function markdownToHtml(markdown: string): string {
+function markdownToHtml(markdown: string, midCard = ''): string {
   const lines = markdown.split('\n')
   const result: string[] = []
+
+  // 글 중간 카드 위치: 소제목(##)이 4개 이상이면 절반쯤 지난 소제목 바로 앞
+  const h2Total = lines.filter(l => /^## .+/.test(l.trim())).length
+  const midCardAt = midCard && h2Total >= 4 ? Math.ceil(h2Total / 2) + 1 : 0
+  let h2Count = 0
 
   type Mode = 'none' | 'table' | 'ul' | 'ol' | 'p'
   let mode: Mode = 'none'
@@ -487,6 +515,8 @@ function markdownToHtml(markdown: string): string {
     // ── H2 ──────────────────────────────────────────────────────────
     if (/^## .+/.test(trimmed)) {
       if (mode !== 'none') flushMode()
+      h2Count++
+      if (h2Count === midCardAt) result.push(midCard)
       const text = trimmed.slice(3)
       result.push(
         `<h2 class="text-xl font-bold text-gray-900 mt-12 mb-4 pb-2 border-b-2 border-primary-100">${inlineMarkdown(text)}</h2>`
@@ -544,6 +574,8 @@ function markdownToHtml(markdown: string): string {
         result.push(buildIncomeCalculatorWidget())
       } else if (widgetId === 'housing-pension-calc') {
         result.push(buildHousingPensionCalcWidget())
+      } else if (widgetId === 'pension-birth-picker') {
+        result.push(buildPensionBirthPickerWidget())
       }
       continue
     }
@@ -580,16 +612,17 @@ function markdownToHtml(markdown: string): string {
       if (mode !== 'ul') {
         if (mode !== 'none') flushMode()
         mode = 'ul'
-        result.push('<ul class="space-y-2 my-4">')
+        result.push('<ul class="checklist space-y-1 my-4">')
       }
       const checked = trimmed[3] === 'x'
       const text = trimmed.slice(6)
+      // 눌러서 체크할 수 있고, 체크 상태는 app.js 가 이 기기에 저장합니다
       result.push(
-        `<li class="flex items-start gap-2 text-sm text-gray-700">
-          <span class="flex-shrink-0 w-4 h-4 mt-0.5 rounded border-2 ${checked ? 'bg-primary-600 border-primary-600' : 'border-gray-300'} flex items-center justify-center">
-            ${checked ? '<i class="fas fa-check text-white text-xs"></i>' : ''}
-          </span>
-          <span>${inlineMarkdown(text)}</span>
+        `<li class="text-base text-gray-700">
+          <label class="flex items-start gap-3 py-2 cursor-pointer">
+            <input type="checkbox" class="checklist-item flex-shrink-0 w-5 h-5 mt-0.5 accent-primary-600 cursor-pointer"${checked ? ' checked' : ''}>
+            <span>${inlineMarkdown(text)}</span>
+          </label>
         </li>`
       )
       continue
@@ -641,6 +674,39 @@ function markdownToHtml(markdown: string): string {
   if (mode !== 'none') flushMode()
 
   return result.join('\n')
+}
+
+// ─── 출생연도·생월로 국민연금 시점 찾기 위젯 HTML ───────────────────────────
+// 계산은 app.js 의 birthPickerUpdate() 가 합니다. 근거: 국민연금공단 지급연령표, 국민연금법 제12조·제54조
+function buildPensionBirthPickerWidget(): string {
+  const years = Array.from({ length: 14 }, (_, i) => 1961 + i)
+  const months = Array.from({ length: 12 }, (_, i) => i + 1)
+  return `
+<div class="my-8 rounded-2xl border-2 border-primary-100 overflow-hidden shadow-md" id="birth-picker-widget">
+  <div class="bg-primary-700 px-5 py-4">
+    <p class="text-primary-100 text-xs font-semibold">국민연금공단 지급 나이 기준 · 참고용</p>
+    <p class="text-white font-extrabold text-lg leading-tight">내 출생연도·생월로 수령 시점 찾기</p>
+  </div>
+  <div class="bg-white px-5 py-5">
+    <div class="grid grid-cols-2 gap-3">
+      <label class="block">
+        <span class="block text-sm font-bold text-gray-700 mb-1">태어난 해</span>
+        <select id="bp-year" class="w-full border border-gray-300 rounded-lg px-3 py-3 text-base bg-white">
+          ${years.map(y => `<option value="${y}">${y}년</option>`).join('')}
+        </select>
+      </label>
+      <label class="block">
+        <span class="block text-sm font-bold text-gray-700 mb-1">태어난 달</span>
+        <select id="bp-month" class="w-full border border-gray-300 rounded-lg px-3 py-3 text-base bg-white">
+          <option value="">달 선택</option>
+          ${months.map(m => `<option value="${m}">${m}월</option>`).join('')}
+        </select>
+      </label>
+    </div>
+    <div id="bp-result" class="mt-4" aria-live="polite"></div>
+    <p class="text-xs text-gray-500 mt-4 leading-relaxed">가입기간이 10년 이상인 경우의 시점입니다. 생일이 1일인 분은 한 달 차이가 날 수 있고, 연금은 본인이 청구해야 지급됩니다. 정확한 날짜는 국민연금공단(1355)에서 확인하세요. 배우자나 가족의 출생연도로 바꿔서 볼 수 있습니다.</p>
+  </div>
+</div>`
 }
 
 // ─── 주택연금 월지급금 계산기 위젯 HTML ──────────────────────────────────────

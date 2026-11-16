@@ -28,7 +28,7 @@ const STATUSES = ['draft', 'review', 'published']
 const TYPES = ['pillar', 'comparison', 'checklist']
 const SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
-const KNOWN_WIDGETS = ['income-calculator', 'housing-pension-calc']
+const KNOWN_WIDGETS = ['income-calculator', 'housing-pension-calc', 'pension-birth-picker']
 const PLACEHOLDER_RE = /TODO|TBD|\bXXX\b|OOO|\[\[확인필요\]\]|\(검증 ?필요\)|\{\{/
 // 공식 출처로 인정하는 도메인(접미사). 목록 밖이면 warn — 2차 출처가 섞이지 않도록 점검용.
 const OFFICIAL_SUFFIXES = ['.go.kr', '.or.kr', '.re.kr', '.kr']

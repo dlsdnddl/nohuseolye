@@ -1431,6 +1431,10 @@ document.addEventListener('DOMContentLoaded', function() {
     calcIncome();
   }
 
+  // 체크리스트(눌러서 체크, 이 기기에 저장)와 출생연도 고르기 도구
+  initChecklist();
+  initBirthPicker();
+
   // 주택연금 가격 입력 이벤트 (oninput 속성 보조 - 이스케이프 우회)
   var hpPriceEl = document.getElementById('hp-price');
   if (hpPriceEl) {
@@ -1583,3 +1587,95 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+
+// ── 체크리스트: 눌러서 체크하고, 체크 상태를 이 기기(브라우저)에 저장 ──────────
+function initChecklist() {
+  var boxes = document.querySelectorAll('.checklist-item');
+  if (!boxes.length) return;
+  var key = 'luckyu-checklist:' + location.pathname;
+  var saved = [];
+  try { saved = JSON.parse(localStorage.getItem(key) || '[]') || []; } catch (e) { saved = []; }
+  boxes.forEach(function(box, i) {
+    if (typeof saved[i] === 'boolean') box.checked = saved[i];
+    box.addEventListener('change', function() {
+      var state = [];
+      boxes.forEach(function(b) { state.push(b.checked); });
+      try { localStorage.setItem(key, JSON.stringify(state)); } catch (e) { /* 저장이 막힌 환경에서는 화면에서만 체크 */ }
+    });
+  });
+}
+
+// ── 출생연도·생월로 국민연금 시점 찾기 ───────────────────────────────────────
+// 근거: 국민연금공단 지급연령표(법률 제8541호 부칙 제8조), 국민연금법 제12조(60세 자격 상실)·제54조(다음 달부터 지급)
+function birthPickerNormalAge(year) {
+  if (year <= 1956) return 61;
+  if (year <= 1960) return 62;
+  if (year <= 1964) return 63;
+  if (year <= 1968) return 64;
+  return 65;
+}
+
+var BIRTH_PICKER_POSTS = {
+  1964: '/pension-asset/national-pension-1964-born',
+  1966: '/pension-asset/national-pension-1966-born',
+  1967: '/pension-asset/early-pension-1967',
+  1968: '/pension-asset/early-pension-1968'
+};
+
+function birthPickerUpdate() {
+  var yearEl = document.getElementById('bp-year');
+  var monthEl = document.getElementById('bp-month');
+  var out = document.getElementById('bp-result');
+  if (!yearEl || !monthEl || !out) return;
+  var y = parseInt(yearEl.value, 10);
+  var m = parseInt(monthEl.value, 10);
+  var hasMonth = !isNaN(m);
+  var normal = birthPickerNormalAge(y);
+  var early = normal - 5;
+
+  var firstPay;
+  if (hasMonth) {
+    var py = y + normal, pm = m + 1;
+    if (pm > 12) { pm = 1; py += 1; }
+    firstPay = py + '년 ' + pm + '월분부터';
+  } else {
+    firstPay = (y + normal) + '년 (달을 고르면 첫 지급 달이 나옵니다)';
+  }
+  var monthText = hasMonth ? ' ' + m + '월' : '';
+  var rows = [
+    ['정상 수령 나이', '만 ' + normal + '세'],
+    ['첫 지급 달', firstPay],
+    ['조기 수령 청구 가능', '만 ' + early + '세 · ' + (y + early) + '년' + monthText + '부터'],
+    ['의무 납부 종료', '만 60세 · ' + (y + 60) + '년' + (hasMonth ? ' (보통 ' + m + '월분까지)' : '')],
+    ['늦춰 받기(연기) 최대', '만 ' + (normal + 5) + '세 · ' + (y + normal + 5) + '년']
+  ];
+  var html = '<dl class="divide-y divide-gray-100 border border-gray-200 rounded-xl overflow-hidden">';
+  rows.forEach(function(r, i) {
+    html += '<div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3 ' + (i === 1 ? 'bg-primary-50' : 'bg-white') + '">' +
+      '<dt class="text-sm text-gray-600">' + r[0] + '</dt>' +
+      '<dd class="text-base font-bold ' + (i === 1 ? 'text-primary-800' : 'text-gray-900') + '">' + r[1] + '</dd></div>';
+  });
+  html += '</dl>';
+  var link = BIRTH_PICKER_POSTS[y];
+  if (link && link !== location.pathname) {
+    html += '<a href="' + link + '" data-link-position="birth-picker" data-content-type="related-article" class="mt-3 inline-flex items-center gap-2 text-sm font-bold text-primary-700 underline hover:text-primary-900">' +
+      y + '년생 글 자세히 보기 <i class="fas fa-arrow-right text-xs"></i></a>';
+  }
+  out.innerHTML = html;
+}
+
+function initBirthPicker() {
+  var yearEl = document.getElementById('bp-year');
+  var monthEl = document.getElementById('bp-month');
+  if (!yearEl || !monthEl) return;
+  // 출생연도 글에서는 그 해를 미리 골라 둡니다
+  var hit = location.pathname.match(/(19[67][0-9])/);
+  if (hit && yearEl.querySelector('option[value="' + hit[1] + '"]')) yearEl.value = hit[1];
+  yearEl.addEventListener('change', function() {
+    birthPickerUpdate();
+    if (typeof gtag === 'function') gtag('event', 'birth_picker_use', { birth_year: yearEl.value });
+  });
+  monthEl.addEventListener('change', birthPickerUpdate);
+  birthPickerUpdate();
+}

@@ -294,3 +294,8 @@ code {
 .faq-visible {
   display: block !important;
 }
+
+/* 체크리스트: 체크한 항목은 흐리게 */
+.checklist input:checked + span { color: #6b7280; text-decoration: line-through; }
+/* 글 중간 '이어서 읽기' 카드와 도구 안의 글자는 본문 링크 스타일을 따르지 않게 */
+.prose-article a.mid-next-card { text-decoration: none; }
