@@ -1,0 +1,67 @@
+slug: national-pension-age-by-birth-year
+checkedAt: 2026-11-17
+rows:
+  - item: "출생연도별 지급개시연령표(노령연금·조기노령연금)"
+    value: "노령연금 지급연령 상향조정(법률 제8541호 부칙 제8조): 1953-56년생 61세/56세, 1957-60년생 62세/57세, 1961-64년생 63세/58세, 1965-68년생 64세/59세, 1969년생 이후 65세/60세. 가입기간 10년 이상이면 지급개시연령 이후 평생 지급. 1952년생 이전은 공단 표에 없어 본문에 싣지 않음"
+    agency: "국민연금공단"
+    document: "노령연금 안내 — 노령연금 지급연령 상향조정"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-17
+    result: verified
+  - item: "1960~1974년생 정상 수령 시작·조기 수령 가능·의무 납부 종료 연도 표"
+    value: "위 지급개시연령표와 법 제12조(60세가 된 날의 다음 날 자격 상실)에 출생연도를 더한 직접 계산. 예: 1963년생 63세 → 2026년, 1969년생 65세 → 2034년, 1966년생 60세 → 2026년 납부 종료. 개별 출생연도 글(1964~1969년생)의 값과 대조해 일치 확인"
+    agency: "국민연금공단 / 국가법령정보센터"
+    document: "노령연금 안내, 국민연금법 제12조"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-17
+    result: verified
+  - item: "첫 지급 시점(도달 월의 다음 달분, 매월 25일)과 본인 청구, 처리기간, 시효 5년"
+    value: "국민연금법 제54조: 지급 사유가 생긴 달의 다음 달부터 지급, 매월 25일. 공단 청구방법: 본인 청구, 처리기간 30일 이내. 법 제115조: 시효 5년, 최근 5년 이내 급여분 소급"
+    agency: "국가법령정보센터 / 국민연금공단"
+    document: "국민연금법 제54조·제115조, 노령연금 안내 — 청구방법"
+    url: "https://www.law.go.kr/법령/국민연금법"
+    effectiveDate: "2026-10-20"
+    checkedAt: 2026-11-16
+    result: verified
+  - item: "의무 가입 종료(60세)와 임의계속가입(65세까지)"
+    value: "국민연금법 제12조: 60세가 된 날의 다음 날 자격 상실. 제13조: 65세가 될 때까지 신청하면 임의계속가입자가 될 수 있음"
+    agency: "국가법령정보센터"
+    document: "국민연금법 제12조, 제13조"
+    url: "https://www.law.go.kr/법령/국민연금법"
+    effectiveDate: "2026-10-20"
+    checkedAt: 2026-11-16
+    result: verified
+  - item: "조기노령연금 지급률(5년 일찍 70% ~ 1년 일찍 94%)"
+    value: "공단 예시는 '1966년생(조기 지급개시 59세)': 59세 70%, 60세 76%, 61세 82%, 62세 88%, 63세 94%. 다른 출생연도에 '정상보다 N년 일찍' 구조로 일반화한 것은 직접 적용 → 본문에 공단 예시(1966년생) 기준과 1355 확인 표기"
+    agency: "국민연금공단"
+    document: "노령연금 안내 — 조기노령연금 연령별 지급률 예시"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-17
+    result: partial
+  - item: "조기 수령 소득 기준(A값)과 연기연금(연 7.2%, 최대 5년)"
+    value: "조기노령연금은 소득이 있는 업무에 종사하지 않을 것: 월평균소득금액이 A값(2026년 3,193,511원) 초과 시 해당. 연기제도: 최대 5년, 1년당 7.2% 가산"
+    agency: "국민연금공단"
+    document: "노령연금 안내 — 조기노령연금, 소득이 있는 업무, 노령연금 연기제도"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-17
+    result: verified
+  - item: "2026년 출생연도별 상황표"
+    value: "연도별 표에서 2026년에 해당하는 값을 옮긴 것(1963년생 수령 시작, 1966년생 납부 종료, 1967년생 조기 가능 등). '지금 챙길 일' 칸은 개별 글의 안내를 요약한 것으로 공단의 개별 권고가 아님"
+    agency: "국민연금공단"
+    document: "노령연금 안내 기준 직접 정리"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-17
+    result: partial
+  - item: "기초연금 만 65세"
+    value: "basic-pension-eligibility 글의 기존 안내(만 65세 이상)를 따름. 이 글에서 복지부 원문을 다시 확인하지 않음"
+    agency: "보건복지부"
+    document: "기초연금 자격조건(사이트 내 기존 글)"
+    url: "https://www.luckyu.co.kr/pension-asset/basic-pension-eligibility"
+    effectiveDate: "2026-01-01"
+    checkedAt: 2026-11-17
+    result: partial

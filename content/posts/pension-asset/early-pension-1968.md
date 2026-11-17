@@ -87,7 +87,7 @@ reviewNotes: |
 
 > 이 글은 2026년 11월 16일에 국민연금공단 안내와 국민연금법 원문을 다시 확인해 새로 썼습니다. 금액 기준(A값 등)은 2026년 값이며, 2027년 값은 1월에 발표됩니다.
 
-다른 출생연도: [1967년생](/pension-asset/early-pension-1967) · [1966년생](/pension-asset/national-pension-1966-born) · [1964년생](/pension-asset/national-pension-1964-born)
+다른 출생연도: [1967년생](/pension-asset/early-pension-1967) · [1966년생](/pension-asset/national-pension-1966-born) · [1964년생](/pension-asset/national-pension-1964-born) · [출생연도별 한눈에 보기](/pension-asset/national-pension-age-by-birth-year)
 
 ## 1. 1968년생은 64세? 65세? — 핵심 시점
 

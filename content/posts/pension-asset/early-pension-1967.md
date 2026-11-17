@@ -81,7 +81,7 @@ reviewNotes: |
 
 **1967년생의 국민연금 정상 수령 나이는 만 64세이고, 2031년부터 받습니다.** 생일이 있는 달의 다음 달분부터 매월 25일에 지급됩니다. 조기 수령은 만 59세가 되는 2026년부터 가능하고, 의무 납부는 만 60세가 되는 2027년에 끝납니다.
 
-다른 출생연도: [1966년생](/pension-asset/national-pension-1966-born) · [1968년생](/pension-asset/early-pension-1968) · [1964년생](/pension-asset/national-pension-1964-born)
+다른 출생연도: [1966년생](/pension-asset/national-pension-1966-born) · [1968년생](/pension-asset/early-pension-1968) · [1964년생](/pension-asset/national-pension-1964-born) · [출생연도별 한눈에 보기](/pension-asset/national-pension-age-by-birth-year)
 
 ## 이 글이 필요한 분
 - **1967년생**으로 국민연금을 몇 년 몇 월부터 받는지 알고 싶은 분

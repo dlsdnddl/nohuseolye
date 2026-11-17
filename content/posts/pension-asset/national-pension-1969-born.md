@@ -81,7 +81,7 @@ reviewNotes: |
 
 **1969년생의 국민연금 정상 수령 나이는 만 65세이고, 2034년부터 받습니다.** 1968년생(만 64세)보다 1년 늦습니다. 조기 수령은 만 60세가 되는 2029년부터 가능하고, 의무 납부도 같은 2029년에 끝납니다.
 
-다른 출생연도: [1968년생](/pension-asset/early-pension-1968) · [1967년생](/pension-asset/early-pension-1967) · [1966년생](/pension-asset/national-pension-1966-born) · [1965년생](/pension-asset/national-pension-1965-born)
+다른 출생연도: [1968년생](/pension-asset/early-pension-1968) · [1967년생](/pension-asset/early-pension-1967) · [1966년생](/pension-asset/national-pension-1966-born) · [1965년생](/pension-asset/national-pension-1965-born) · [출생연도별 한눈에 보기](/pension-asset/national-pension-age-by-birth-year)
 
 ## 이 글이 필요한 분
 - **1969년생**으로 국민연금을 몇 살, 몇 월부터 받는지 알고 싶은 분
