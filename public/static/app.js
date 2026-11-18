@@ -1617,6 +1617,7 @@ function birthPickerNormalAge(year) {
 }
 
 var BIRTH_PICKER_POSTS = {
+  1963: '/pension-asset/national-pension-1963-born',
   1964: '/pension-asset/national-pension-1964-born',
   1965: '/pension-asset/national-pension-1965-born',
   1966: '/pension-asset/national-pension-1966-born',
