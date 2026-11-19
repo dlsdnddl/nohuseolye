@@ -14,14 +14,25 @@ export const ContentCuration = ({ posts }: ContentCurationProps) => {
   ]
 
   const featuredPosts = posts.filter(p => p.featured).slice(0, 4)
-  // 최신 publishedAt 기준 내림차순 정렬 후 상위 6개 표시
-  const recentPosts = [...posts]
-    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
-    .slice(0, 6)
+  // "새로 추가된 정보" 칸: 최신 publishedAt 기준 상위 5개
+  const sortedByDate = [...posts].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+  const recentPosts = sortedByDate.slice(0, 5)
+
+  // 상황별 칸은 아래 두 칸(추천·최근)과 겹치지 않는 글, 출생연도별 개별 글이 아닌 글을 먼저 보여줌.
+  // 나머지 글은 뒤로 미룰 뿐 빼지 않음("글 더보기"로 볼 수 있음). 같은 규칙이 app.js renderSituationPosts()에도 있음.
+  const shownElsewhere = new Set([...recentPosts, ...featuredPosts].map(p => p.id))
+  const isCohortPost = (p: Post) => /^(national-pension-\d{4}-born|early-pension-\d{4})$/.test(p.slug)
+  const firstSituation = '은퇴 5년 전'
+  const situationMatched = sortedByDate.filter(p => p.situation === firstSituation)
+  const situationPosts = [
+    ...situationMatched.filter(p => !shownElsewhere.has(p.id) && !isCohortPost(p)),
+    ...situationMatched.filter(p => !shownElsewhere.has(p.id) && isCohortPost(p)),
+    ...situationMatched.filter(p => shownElsewhere.has(p.id)),
+  ].slice(0, 6)
 
   // 클라이언트 상황별 필터(app.js)가 사용할 공개 글 목록 — 서버 데이터에서 자동 생성 (하드코딩 제거)
   const clientPosts = JSON.stringify(
-    posts.map(p => ({ id: p.id, slug: p.slug, situation: p.situation ?? '', type: p.type, title: p.title, category: p.category, readTime: p.readTime }))
+    sortedByDate.map(p => ({ id: p.id, slug: p.slug, situation: p.situation ?? '', type: p.type, title: p.title, category: p.category, readTime: p.readTime }))
   ).replace(/</g, '\u003c')
 
   return (
@@ -52,8 +63,8 @@ export const ContentCuration = ({ posts }: ContentCurationProps) => {
         </div>
 
         {/* 상황별 포스트 카드 */}
-        <div id="situation-posts" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {recentPosts.map(post => (
+        <div id="situation-posts" data-shown-elsewhere={[...shownElsewhere].join(',')} class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {situationPosts.map(post => (
             <PostCard key={post.id} post={post} variant="default" />
           ))}
         </div>
@@ -100,7 +111,7 @@ export const ContentCuration = ({ posts }: ContentCurationProps) => {
         </div>
 
         <div class="bg-white rounded-2xl border border-gray-100 divide-y divide-gray-50">
-          {recentPosts.slice(0, 5).map(post => (
+          {recentPosts.map(post => (
             <PostCard key={post.id} post={post} variant="compact" />
           ))}
         </div>

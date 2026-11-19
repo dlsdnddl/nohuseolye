@@ -640,7 +640,18 @@ function renderSituationPosts() {
     ? ALL_POSTS_DATA.filter(p => p.situation === currentSituation)
     : ALL_POSTS_DATA;
 
-  const toShow = filtered.length > 0 ? filtered : ALL_POSTS_DATA;
+  // 홈 아래 "추천 핵심 글"·"새로 추가된 정보"에 이미 나온 글과 출생연도별 개별 글은 뒤로 미룸
+  // (빼지 않음 → "글 더보기"로 볼 수 있음). 같은 규칙이 ContentCuration.tsx에도 있음.
+  const shownElsewhere = new Set((container.dataset.shownElsewhere || '').split(',').filter(Boolean));
+  const isElsewhere = p => shownElsewhere.has(String(p.id));
+  const isCohort = p => /^(national-pension-\d{4}-born|early-pension-\d{4})$/.test(p.slug);
+  const ordered = [
+    ...filtered.filter(p => !isElsewhere(p) && !isCohort(p)),
+    ...filtered.filter(p => !isElsewhere(p) && isCohort(p)),
+    ...filtered.filter(isElsewhere),
+  ];
+
+  const toShow = ordered.length > 0 ? ordered : ALL_POSTS_DATA;
   const sliced = toShow.slice(0, displayCount);
 
   container.style.opacity = '0.4';
