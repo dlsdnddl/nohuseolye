@@ -41,7 +41,8 @@ npm run build             # dist 생성 (운영 모드: published 글만 포함)
   - 공식 출처 검증과 확인 날짜 표시는 그대로 유지합니다.
 
 ## 현재 글 상태 (2026-11-16)
-- 공개 글 28편(sitemap URL은 홈·카테고리 4개 포함 33개): 기존 형식(`legacy-posts.ts`) 6 + Markdown 22
+- 공개 글 29편(sitemap URL은 홈·카테고리 4개 포함 34개): 기존 형식(`legacy-posts.ts`) 6 + Markdown 23
+  - 2026-11-20 `national-pension-survivor-pension`(국민연금 유족연금, 확인 7·부분 3). 기존 방식. 다음 새 글은 AI 개요 방식 차례. 배우자 지급정지 소득 기준(3,193,511원)은 2026년 값이라 2027년 1월 갱신 대상. `national-pension-income-reduction`에서 이어서 읽기 카드 연결
   - 2026-11-19 `support/unemployment-benefit-retirement-60`(정년퇴직 실업급여, 확인 10·부분 3). AI 개요 방식. 다음 새 글은 기존 방식 차례. 하한액은 2026년 최저임금 기준이라 2027년 1월 갱신 대상
   - 2026-11-19 홈 "상황별" 칸: 아래 "추천 핵심 글"·"새로 추가된 정보"에 나온 글과 출생연도별 개별 글을 뒤로 미뤄 중복 노출을 없앰(`ContentCuration.tsx`, `app.js` `renderSituationPosts()` 같은 규칙)
   - 2026-11-17 `national-pension-1969-born`(1969년생 국민연금 수령 시기, 확인 7·부분 7). AI 개요 방식. 다음 새 글은 기존 방식 차례
