@@ -41,7 +41,9 @@ npm run build             # dist 생성 (운영 모드: published 글만 포함)
   - 공식 출처 검증과 확인 날짜 표시는 그대로 유지합니다.
 
 ## 현재 글 상태 (2026-11-16)
-- 공개 글 29편(sitemap URL은 홈·카테고리 4개 포함 34개): 기존 형식(`legacy-posts.ts`) 6 + Markdown 23
+- 공개 글 31편(sitemap URL은 홈·카테고리 4개 포함 36개): 기존 형식(`legacy-posts.ts`) 6 + Markdown 25
+  - 2026-11-21 `national-pension-1970-born`(1970년생 국민연금 수령 시기, 확인 8·부분 4). AI 개요 방식. 다음 새 글은 기존 방식 차례. 2030년까지 연도별 보험료율 표 포함. A값은 2026년 값이라 1월 갱신 대상. 출생연도 고르기 도구(`app.js` `BIRTH_PICKER_POSTS`)와 모음 페이지 표에 1970년 연결, 1969년생 글에서 이어서 읽기 카드
+  - 2026-11-21 `health-insurance-dependent-retirement`(퇴직 후 건강보험 임의계속·피부양자·지역가입자, 확인 12·부분 4) 발행. 기존 방식. 11-20 시행규칙(2026.9.28 시행본) 변경 없음 재확인. 정년퇴직 실업급여 글에서 이어서 읽기 카드
   - 2026-11-20 `national-pension-survivor-pension`(국민연금 유족연금, 확인 7·부분 3). 기존 방식. 다음 새 글은 AI 개요 방식 차례. 배우자 지급정지 소득 기준(3,193,511원)은 2026년 값이라 2027년 1월 갱신 대상. `national-pension-income-reduction`에서 이어서 읽기 카드 연결
   - 2026-11-19 `support/unemployment-benefit-retirement-60`(정년퇴직 실업급여, 확인 10·부분 3). AI 개요 방식. 다음 새 글은 기존 방식 차례. 하한액은 2026년 최저임금 기준이라 2027년 1월 갱신 대상
   - 2026-11-19 홈 "상황별" 칸: 아래 "추천 핵심 글"·"새로 추가된 정보"에 나온 글과 출생연도별 개별 글을 뒤로 미뤄 중복 노출을 없앰(`ContentCuration.tsx`, `app.js` `renderSituationPosts()` 같은 규칙)
@@ -58,7 +60,6 @@ npm run build             # dist 생성 (운영 모드: published 글만 포함)
 - **갱신 예정(중요)**: `changes-2027-pension-welfare`(2026-11-14 발행, 확인 10·부분 3, 공식 출처 확인 2026-11-12)는 두 번 갱신이 필요합니다. ① 12월 초 국회 예산안 처리·기초연금법 개정 결과가 나오면 3번 섹션(기초연금 개편, 노인일자리)을 고칩니다. ② 2027년 1월 발표(국민연금·기초연금 물가 인상률, A값, 기초연금 선정기준액)가 나오면 1번 표와 4번 섹션을 고칩니다. 무치악 임플란트 세부 기준이 나오면 이 글과 `senior-implant-denture-insurance`를 함께 고칩니다.
 - `review` 유지(운영에 노출되지 않음):
   - `basic-pension-2027-increase`: 별도 재검증 필요
-  - `health-insurance-dependent-retirement`: 2026-11-10에 현행 법령 재검증 완료(확인 12·부분 4). 사용자 승인 시 발행 가능
 - 다음 칼럼은 사용자가 주제를 알려주면 시작합니다.
 
 ## 운영 배포 (Cloudflare Pages, 프로젝트 `nohuseolye`)
