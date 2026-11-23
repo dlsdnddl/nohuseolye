@@ -1636,7 +1636,8 @@ var BIRTH_PICKER_POSTS = {
   1968: '/pension-asset/early-pension-1968',
   1969: '/pension-asset/national-pension-1969-born',
   1970: '/pension-asset/national-pension-1970-born',
-  1971: '/pension-asset/national-pension-1971-born'
+  1971: '/pension-asset/national-pension-1971-born',
+  1972: '/pension-asset/national-pension-1972-born'
 };
 
 function birthPickerUpdate() {

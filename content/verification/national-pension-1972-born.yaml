@@ -1,0 +1,107 @@
+slug: national-pension-1972-born
+checkedAt: 2026-11-23
+rows:
+  - item: "출생연도별 지급개시연령(1969년 이후 출생자 노령연금 65세, 조기 60세)"
+    value: "공단 노령연금 안내: '1969년 이후 출생자부터는 65세(조기노령연금의 경우 60세)'. 노령연금 지급연령 상향조정(법률 제8541호 부칙 제8조). 1972년생은 2037년 만 65세, 2032년 만 60세"
+    agency: "국민연금공단"
+    document: "노령연금 안내 — 노령연금의 종류"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-22
+    result: verified
+  - item: "연도별 보험료율(2026년 9.5%~2032년 12.5%, 2033년~ 13%, 사업장가입자 본인 4.75%~6.25%), 60세 이후 임의계속가입 시 13% 전액 본인 부담(월 300만원 기준 39만원)"
+    value: "국민연금법 부칙(법률 제20903호) 제4조제1항: 사업장 기여금·부담금 각각 2026년 1만분의 475 … 2031년 600, 2032년 625. 제2항: 지역·임의·임의계속가입자 2026년 1천분의 95 … 2031년 120, 2032년 125. 본칙 제88조 1천분의 130(2033년~). 300만원 사례는 직접 계산"
+    agency: "국가법령정보센터"
+    document: "국민연금법 제88조, 부칙(법률 제20903호) 제4조"
+    url: "https://www.law.go.kr/법령/국민연금법/(20903,20250402)"
+    effectiveDate: "2026-01-01"
+    checkedAt: 2026-11-20
+    result: verified
+  - item: "임의계속가입(65세까지 신청, 노령연금 수급 중 제외, 전액 본인 부담)"
+    value: "국민연금법 제13조(2026-11-22 원문 확인), 공단 임의계속가입자 안내(사업장임의계속가입자도 보험료 전액 본인부담)"
+    agency: "국가법령정보센터"
+    document: "국민연금법 제13조, 임의계속가입자 안내"
+    url: "https://www.law.go.kr/법령/국민연금법/제13조"
+    effectiveDate: "2026-10-20"
+    checkedAt: 2026-11-22
+    result: verified
+  - item: "조기노령연금 연령별 지급률(1972년생, 조기 60세 기준 적용)"
+    value: "공단 예시는 1966년생(조기 59세 기준) 59세 70%~63세 94%뿐. 1972년생(조기 60세)에 같은 구조(1년당 6%포인트)를 적용한 60세 70%~64세 94%는 직접 적용 → 본문에 같은 구조·공단 확인 표기"
+    agency: "국민연금공단"
+    document: "노령연금 안내 — 조기노령연금 연령별 지급률 예시"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-22
+    result: partial
+  - item: "조기노령연금 요건, 소득 있는 업무 기준(2026년 A값 3,193,511원), 소득 발생 시 지급 정지"
+    value: "법 제61조제2항, 시행령 제45조(월평균소득금액이 A값 초과). 공단 예상연금월액표 유의사항에도 2026년 A값 3,193,511원 표기(2026-11-22 확인)"
+    agency: "국민연금공단"
+    document: "노령연금 안내 — 조기노령연금, 소득이 있는 업무"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-22
+    result: verified
+  - item: "지급 시작 달과 지급일, 1972년생 생월별 첫 지급 달 표"
+    value: "국민연금법 제54조: 지급 사유가 생긴 날이 속하는 달의 다음 달부터 지급, 매월 25일(토요일·공휴일이면 전날). 1972년생 만 65세 도달 월(2037년 1~12월)에 적용한 직접 계산: 1월생 2037년 2월분 … 12월생 2038년 1월분"
+    agency: "국가법령정보센터"
+    document: "국민연금법 제54조"
+    url: "https://www.law.go.kr/법령/국민연금법"
+    effectiveDate: "2026-10-20"
+    checkedAt: 2026-11-16
+    result: verified
+  - item: "의무 가입 종료(60세)"
+    value: "국민연금법 제12조: 60세가 된 날의 다음 날에 자격 상실. 1972년생은 2032년에 만 60세"
+    agency: "국가법령정보센터"
+    document: "국민연금법 제12조"
+    url: "https://www.law.go.kr/법령/국민연금법"
+    effectiveDate: "2026-10-20"
+    checkedAt: 2026-11-16
+    result: verified
+  - item: "연기연금(최대 5년, 연 7.2%)"
+    value: "지급개시연령 도달일로부터 최대 5년 연기, 매 1년당 7.2%(월 0.6%) 가산. 1972년생 최대 만 70세(2042년). 금액표는 100만원 가정 직접 계산"
+    agency: "국민연금공단"
+    document: "노령연금 안내 — 노령연금 연기제도"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-17
+    result: verified
+  - item: "청구 방법·서류·처리기간"
+    value: "본인 청구 원칙, 전국 지사·홈페이지·모바일·정부24·우편·팩스. 신분증, 예금계좌, 혼인관계증명서 상세(공단 자료로 갈음 가능). 처리기간 30일 이내"
+    agency: "국민연금공단"
+    document: "노령연금 안내 — 청구방법, 업무처리 절차"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-17
+    result: verified
+  - item: "마지막 납부 달(만 60세 생일이 있는 달분까지)"
+    value: "법 제12조의 자격 상실일에서 추론. 공단 안내로 따로 확인하지 못함 → 본문에 '보통', '공단(1355) 확인'으로 표기"
+    agency: "국가법령정보센터"
+    document: "국민연금법 제12조 기준 추론"
+    url: "https://www.law.go.kr/법령/국민연금법"
+    effectiveDate: "2026-10-20"
+    checkedAt: 2026-11-16
+    result: partial
+  - item: "조기수령 손익 비교(누적 수령액이 같아지는 시점)"
+    value: "지급률만으로 한 직접 계산(정상 65세 기준). 60세 70%: 140개월 → 만 76세 8개월. 61세 76%: 152개월 → 만 77세 8개월. 62세 82%: 164개월 → 만 78세 8개월. 물가·세금·건강보험료 미반영"
+    agency: "국민연금공단"
+    document: "조기노령연금 지급률 기준 직접 계산"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-22
+    result: partial
+  - item: "생일이 1일인 경우의 첫 지급 달"
+    value: "한 달 차이가 날 수 있다는 점은 공식 문서로 확인하지 못함 → 본문에 '공단(1355) 확인'으로 안내"
+    agency: "국민연금공단"
+    document: "노령연금 안내 — 청구방법(해당 내용 명시 없음)"
+    url: "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0056M0.do"
+    effectiveDate: "2026-06-17"
+    checkedAt: 2026-11-22
+    result: partial
+  - item: "기초연금 신청 가능 나이(만 65세)"
+    value: "기초연금 자격조건 글(basic-pension-eligibility)의 기존 안내(만 65세 이상)를 따름. 이 글에서 재확인하지 않음 → 본문은 기초연금 글로 연결"
+    agency: "보건복지부"
+    document: "기초연금 안내(기존 글 인용)"
+    url: "https://www.mohw.go.kr"
+    effectiveDate: "2026-01-01"
+    checkedAt: 2026-11-23
+    result: partial
