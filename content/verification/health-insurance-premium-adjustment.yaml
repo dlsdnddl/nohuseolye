@@ -1,0 +1,107 @@
+slug: health-insurance-premium-adjustment
+checkedAt: 2026-11-24
+rows:
+  - item: "소득 자료 반영 시기: 1~10월분 전전년도(연금소득은 전년도), 11~12월분 전년도"
+    value: "국민건강보험법 시행령 제41조제3항 [시행 2026.10.1.]"
+    agency: "국가법령정보센터"
+    document: "국민건강보험법 시행령 제41조"
+    url: "https://www.law.go.kr/법령/국민건강보험법시행령"
+    effectiveDate: "2026-10-01"
+    checkedAt: 2026-11-24
+    result: verified
+  - item: "재산은 6월 1일 기준 자료로 11월~다음 해 10월 부과, 국세청 전년도 소득 자료 매년 11월 반영"
+    value: "공단 '지역보험료 조정의 취지' 페이지"
+    agency: "국민건강보험공단"
+    document: "지역보험료 조정의 취지"
+    url: "https://www.nhis.or.kr/nhis/policy/wbhada09500m01.do"
+    effectiveDate: "2026-11-24"
+    checkedAt: 2026-11-24
+    result: verified
+  - item: "조정 근거와 구조: 사업소득등 감소·증가 시 증명서류 첨부 신청, 조정 후 소득 발생 시 다음 달 1일부터 1개월 내 신고, 정산, 부족액 추가징수 12회 이내 분할, 초과액 지급·상계"
+    value: "국민건강보험법 시행령 제41조의2제1항~제7항"
+    agency: "국가법령정보센터"
+    document: "국민건강보험법 시행령 제41조의2"
+    url: "https://www.law.go.kr/법령/국민건강보험법시행령"
+    effectiveDate: "2026-10-01"
+    checkedAt: 2026-11-24
+    result: verified
+  - item: "조정 대상(휴·폐업, 퇴직, 해촉 등 사업·근로소득 감소), 이자·배당·연금·기타소득 조정 불가"
+    value: "공단 '지역보험료 조정의 취지', '소득 조정·정산 신청 및 조회' 페이지"
+    agency: "국민건강보험공단"
+    document: "지역보험료 조정의 취지, 소득 조정·정산 신청 및 조회"
+    url: "https://www.nhis.or.kr/nhis/policy/wbhada09500m01.do"
+    effectiveDate: "2026-11-24"
+    checkedAt: 2026-11-24
+    result: verified
+  - item: "조정기간(신청 다음 달~그해 12월)과 예외(매월 1일, 11·12·1월 그 달 1일~납부마감일, 10월, 7.1~8.10 소득금액증명, 소급 자격변동 3개월)"
+    value: "공단 '소득 조정·정산 신청 및 조회' — 자세히 알아보기"
+    agency: "국민건강보험공단"
+    document: "소득 조정·정산 신청 및 조회"
+    url: "https://www.nhis.or.kr/nhis/minwon/minwonServiceBoard.do?articleNo=10945804&mode=view"
+    effectiveDate: "2024-12-31"
+    checkedAt: 2026-11-24
+    result: verified
+  - item: "보험료 납부기한: 그 달 보험료를 다음 달 10일까지"
+    value: "국민건강보험법 제78조제1항 [시행 2026.10.8.]"
+    agency: "국가법령정보센터"
+    document: "국민건강보험법 제78조"
+    url: "https://www.law.go.kr/법령/국민건강보험법"
+    effectiveDate: "2026-10-08"
+    checkedAt: 2026-11-24
+    result: verified
+  - item: "11월분은 12월 10일 전까지 신청해도 11월분부터 조정될 수 있음"
+    value: "공단 예외 문구(11월에 그 달 1일부터 그 달 보험료 납부마감일 사이)와 법 제78조를 합쳐 읽은 해석. 공단이 날짜를 직접 적어 두지 않아 본문에 '11월 안 신청이 확실, 애매하면 공단 확인'으로 안내"
+    agency: "국민건강보험공단"
+    document: "소득 조정·정산 신청 및 조회, 국민건강보험법 제78조"
+    url: "https://www.nhis.or.kr/nhis/minwon/minwonServiceBoard.do?articleNo=10945804&mode=view"
+    effectiveDate: "2024-12-31"
+    checkedAt: 2026-11-24
+    result: partial
+  - item: "신청 방법(온라인은 소득 감소만·증빙 없이, 방문 즉시 조정, 팩스 7일 이내 통보, 우편), 서류(소득 정산부과 동의서, 신분증 사본, 퇴직·휴폐업·해촉증명, 7월 1일 이후 발급 소득금액증명), 해촉 실시간 소득(2025.9~) 연계"
+    value: "공단 '소득 조정·정산 신청 및 조회', '보험료 조정 절차' 페이지"
+    agency: "국민건강보험공단"
+    document: "소득 조정·정산 신청 및 조회, 보험료 조정 절차"
+    url: "https://www.nhis.or.kr/nhis/policy/wbhada09700m01.do"
+    effectiveDate: "2026-11-24"
+    checkedAt: 2026-11-24
+    result: verified
+  - item: "정산(다음 해 11월 국세청 확인소득), 취소 90일·정산 후 불가, 정산 보험료 재조정 불가, 피부양자 소급 상실·경감·본인부담상한제 환수 가능, 소득 감소해도 추가 부과 가능"
+    value: "공단 '소득 조정·정산 신청 및 조회' — 정의/목적, 신청취소, 유의사항"
+    agency: "국민건강보험공단"
+    document: "소득 조정·정산 신청 및 조회"
+    url: "https://www.nhis.or.kr/nhis/minwon/minwonServiceBoard.do?articleNo=10945804&mode=view"
+    effectiveDate: "2024-12-31"
+    checkedAt: 2026-11-24
+    result: verified
+  - item: "재산 조정(매각·상속·수용, 원인 발생 다음 달부터, 국토부 2개월 전 자료 일괄), 전월세 실제와 다름, 무상거주, 자동차 보험료 2024년 2월분부터 폐지"
+    value: "공단 '지역보험료 조정의 취지' 페이지"
+    agency: "국민건강보험공단"
+    document: "지역보험료 조정의 취지"
+    url: "https://www.nhis.or.kr/nhis/policy/wbhada09500m01.do"
+    effectiveDate: "2026-11-24"
+    checkedAt: 2026-11-24
+    result: verified
+  - item: "지역가입자 근로·연금소득 100분의 50 반영"
+    value: "국민건강보험법 시행규칙 제44조제2항·제3항 [시행 2026.9.28.]"
+    agency: "국가법령정보센터"
+    document: "국민건강보험법 시행규칙 제44조"
+    url: "https://www.law.go.kr/법령/국민건강보험법시행규칙"
+    effectiveDate: "2026-09-28"
+    checkedAt: 2026-11-24
+    result: verified
+  - item: "예시: 2025년 연봉 6,000만원 → 월 250만원 × 7.19% ≈ 17만 9,750원(소득 부분)"
+    value: "시행규칙 제44조(100분의 50)와 2026년 보험료율 7.19%(퇴직 후 건강보험 글 검증표, 보건복지부 보도자료)로 직접 계산. 비과세 제외 근로소득 가정, 재산·장기요양 제외"
+    agency: "국가법령정보센터·보건복지부"
+    document: "직접 계산"
+    url: "https://www.law.go.kr/법령/국민건강보험법시행규칙"
+    effectiveDate: "2026-09-28"
+    checkedAt: 2026-11-24
+    result: partial
+  - item: "해가 바뀌면 1월에 다시 신청 필요할 수 있음"
+    value: "공단 조정기간 '그 해 12월까지'와 1월 예외 문구에서 추론. 다음 해 자동 연장 여부는 공단 안내에 없어 본문에 '공단에 확인'으로 안내"
+    agency: "국민건강보험공단"
+    document: "소득 조정·정산 신청 및 조회"
+    url: "https://www.nhis.or.kr/nhis/minwon/minwonServiceBoard.do?articleNo=10945804&mode=view"
+    effectiveDate: "2024-12-31"
+    checkedAt: 2026-11-24
+    result: partial
